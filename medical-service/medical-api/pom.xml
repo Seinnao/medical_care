@@ -11,6 +11,15 @@
 
     <artifactId>medical-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.whz</groupId>
+            <artifactId>medical-entity</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+
     <build>
     </build>
 </project>
