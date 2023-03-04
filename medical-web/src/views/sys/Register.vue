@@ -2,8 +2,8 @@
   <div class="box">
     <div class="content">
       <div class="main">
-        <h1>医疗服务平台</h1>
-        <p>专注于患者健康的平台</p>
+        <h1>欢迎注册！</h1>
+        <p>感谢您使用本平台</p>
         <el-form ref="loginForm" :model="dataForm"
                  @keyup.enter.native="login()"
                  label-width="0"
@@ -28,31 +28,34 @@
                 v-model="dataForm.password">
             </el-input>
           </el-form-item>
+
+          <el-form-item>
+            <el-input
+                class="login_input"
+                placeholder="再次输入密码"
+                prefix-icon="el-icon-lock"
+                type="password"
+                clearable
+                v-model="dataForm.password">
+            </el-input>
+          </el-form-item>
+
           <el-form-item prop="captcha" class="login_item">
             <el-input class="login_input"
                       v-model="dataForm.captcha"
                       prefix-icon="el-icon-key"
-                      placeholder="请输入验证码"
+                      placeholder="请输入手机号"
                       clearable>
-              <template slot="append">
-                <div style="height: 2.7vw;">
-                  <img :src="captchaPath"
-                       class="myLogin"
-                       style="height: 100%;object-fit: contain;"
-                       alt="点击重新加载"
-                       @click="getCaptcha()">
-                </div>
-              </template>
             </el-input>
           </el-form-item>
 
           <el-button type="text"
                      style="margin: 10px 0;height: 10px"
-                     @click="toRegister()"
-          >没有账号去注册</el-button>
+                     @click="toLogin"
+          >返回登录</el-button>
 
           <el-form-item class="login_item">
-            <el-button type="primary" class="login" @click="login()" style="margin-top:10px">登录</el-button>
+            <el-button type="primary" class="login" @click="login()" style="margin-top:10px">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -62,8 +65,9 @@
 
 <script>
 import {getUUID} from "@/utils";
+import router from "@/router";
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       captchaPath: '',
@@ -98,8 +102,8 @@ export default {
         }
       })
     },
-    toRegister(){
-      this.$router.replace({name: 'register'});
+    toLogin(){
+      this.$router.replace({name: 'login'});
     }
   },
   created() {
