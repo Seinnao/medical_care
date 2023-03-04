@@ -1,0 +1,24 @@
+package com.whz.service;
+
+import java.awt.image.BufferedImage;
+
+/**
+ * @author 文辉正
+ * @since 2023/3/4 19:57
+ */
+public interface CaptchaService {
+
+    /**
+     * 获取图片验证码
+     */
+    BufferedImage getCaptcha(String uuid);
+
+    /**
+     * 验证码效验
+     * @param uuid  uuid
+     * @param code  验证码
+     * @return true：成功  false：失败
+     */
+    boolean validate(String uuid, String code);
+
+}
