@@ -95,6 +95,24 @@ export default {
     login() {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
+          this.http.post("/user-service/user/login",
+              {
+                username:this.dataForm.userName,
+                password:this.dataForm.password,
+              }
+          ).then(res => {
+            console.log(res)
+            if(res.data.code === 200 ){
+              localStorage.setItem("user", JSON.stringify(res.data))  // 存储用户信息到浏览器
+              localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储用户信息到浏览器
+              // 动态设置当前用户的路由
+              setRoutes()
+              this.$router.push("/")  //加截主页
+              this.$message.success("登录成功")
+            } else {
+              this.$message.error(res.data.msg)
+            }
+          })
         }
       })
     },

@@ -5,11 +5,10 @@
         <h1>欢迎注册！</h1>
         <p>感谢您使用本平台</p>
         <el-form ref="loginForm" :model="dataForm"
-                 @keyup.enter.native="login()"
+                 @keyup.enter.native="register()"
                  label-width="0"
-                 :rules="dataRule"
                  class="login_from">
-          <el-form-item prop="userName" class="login_item">
+          <el-form-item prop="userName" class="register_item">
             <el-input
                 class="login_input"
                 placeholder="请输入账号"
@@ -18,9 +17,8 @@
                 v-model="dataForm.userName">
             </el-input>
           </el-form-item>
-          <el-form-item prop="password" class="login_item">
+          <el-form-item prop="password" class="register_item">
             <el-input
-                class="login_input"
                 placeholder="请输入密码"
                 prefix-icon="el-icon-lock"
                 type="password"
@@ -29,20 +27,18 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item>
+          <el-form-item prop="re_password" class="register_item">
             <el-input
-                class="login_input"
                 placeholder="再次输入密码"
                 prefix-icon="el-icon-lock"
                 type="password"
                 clearable
-                v-model="dataForm.password">
+                v-model="dataForm.re_password">
             </el-input>
           </el-form-item>
 
-          <el-form-item prop="captcha" class="login_item">
-            <el-input class="login_input"
-                      v-model="dataForm.captcha"
+          <el-form-item prop="tel" class="register_item">
+            <el-input v-model="dataForm.tel"
                       prefix-icon="el-icon-key"
                       placeholder="请输入手机号"
                       clearable>
@@ -54,8 +50,8 @@
                      @click="toLogin"
           >返回登录</el-button>
 
-          <el-form-item class="login_item">
-            <el-button type="primary" class="login" @click="login()" style="margin-top:10px">注册</el-button>
+          <el-form-item class="register_item">
+            <el-button type="primary" class="login" @click="register()" style="margin-top:10px">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -74,31 +70,16 @@ export default {
       dataForm:{
         userName: '',
         password: '',
-        captcha: '',
-        uuid: '',
-      },
-      dataRule:{
-        userName: [
-          {required: true, message: '帐号不能为空', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '密码不能为空', trigger: 'blur'}
-        ],
-        captcha: [
-          {required: true, message: '验证码不能为空', trigger: 'blur'}
-        ]
+        re_password: '',
+        tel: '',
       },
     }
   },
   methods: {
-    getCaptcha() {
-      console.log("获取验证码！");
-      this.dataForm.uuid = getUUID();
-      this.captchaPath = `${this.http.getBaseURL()}/user-service/captcha?uuid=${getUUID()}`
-    },
-    login() {
+    register() {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
+
         }
       })
     },
@@ -178,14 +159,9 @@ export default {
   font-size: 1vw;
 }
 
-.box .content .main .login_item {
+.box .content .main .register_item {
   font-size: 1vw;
-  height: 2.7vw;
-}
-
-.box .content .main .login_input {
-  font-size: 1vw;
-  height: 3vw;
+  height: 2vw;
 }
 
 .box .content .main .login {

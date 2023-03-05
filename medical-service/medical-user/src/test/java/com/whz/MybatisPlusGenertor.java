@@ -13,7 +13,7 @@ import java.util.Collections;
 public class MybatisPlusGenertor {
 
     public static void main(String[] args) {
-        String url = "jdbc:mysql://192.168.88.131:3306/medicine?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
+        String url = "jdbc:mysql://192.168.88.131:3306/medicine_platform?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
         FastAutoGenerator.create(url, "root", "wfz123")
                 .globalConfig(builder -> {
                     builder.author("文辉正") // 设置作者
@@ -25,15 +25,14 @@ public class MybatisPlusGenertor {
                 .packageConfig(builder -> {
                     builder.parent("com.whz") // 设置父包名
                             //app manager
-                            .moduleName("common") // 设置父包模块名
+                            //.moduleName("/") // 设置父包模块名
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml
-                                    , "medical-service\\medical-user\\src\\main\\resources\\mapper\\common")); // 设置mapperXml生成路径
+                                    , "medical-service\\medical-user\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("medicine_map_sick_and_drug") // 设置需要生成的表名
-                            .addInclude("medicine_map_sick_and_symptom")
+                    builder.addInclude("sys_role_menu") // 设置需要生成的表名
                             //.addInclude("medicine_symptom")
-                            .addTablePrefix("medicine_", "c_"); // 设置过滤表前缀
+                            .addTablePrefix("sys_"); // 设置过滤表前缀
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();
