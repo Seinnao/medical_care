@@ -22,6 +22,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements ID
 
     @Override
     public List<Dict> selectList(QueryWrapper<Dict> queryWrapper) {
-        return null;
+        return this.baseMapper.selectList(queryWrapper);
     }
+
 }

@@ -5,14 +5,8 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/',
-        name: 'Home',
-        component: () => import('@/views/sys/HomePage')
-    },
-    {
         path: '/hello',
-        name: 'Hello',
-        component: () => import('@/components/HelloWorld')
+        name: 'Hello', component: () => import('@/components/HelloWorld')
     },
     {
         path: '/login',
@@ -23,8 +17,7 @@ const routes = [
         path: '/register',
         name: 'register',
         component: () => import('@/views/sys/Register')
-    },
-]
+    },]
 
 const router = new VueRouter({
     mode: 'history',
@@ -35,8 +28,7 @@ const router = new VueRouter({
 // 重置路由
 export const resetRouter = () => {
     router.matcher = new VueRouter({
-        mode: 'history',
-        routes
+        mode: 'history', routes
     })
 }
 
@@ -44,24 +36,40 @@ export const resetRouter = () => {
 export const setRoutes = () => {
     const storeMenus = localStorage.getItem("menus");
 
+    console.log(storeMenus)
+
     if (storeMenus) {
         // 拼装动态路由
         const manageRoute = {
-            path: '/', name: 'Manage', component: () => import('../views/sys/HomePage'), redirect: "/home", children: [
-                {path: 'person', name: '个人信息', component: () => import('../views/sys/HomePage')},
-                {path: 'password', name: '修改密码', component: () => import('../views/sys/HomePage')},
-            ]
+            path: '/',
+            name: 'HomePage',
+            component: () => import('../views/sys/HomePage'),
+            redirect: "/home",
+            children: [{
+                path: 'person',
+                name: '个人信息',
+                component: () => import('../views/sys/Home')
+            }, {path: 'password', name: '修改密码', component: () => import('../views/sys/HomePage')},]
         }
+
         const menus = JSON.parse(storeMenus)//动态加截菜单，来自于数据库
 
         menus.forEach(item => {
             if (item.path) {  // 当且仅当path不为空的时候才去设置路由
-                let itemMenu = { path: item.path.replace("/", ""), name: item.name, component: () => import('../views/' + item.pagePath + '.vue')}
+                let itemMenu = {
+                    path: item.path.replace("/", ""),
+                    name: item.name,
+                    component: () => import('../views/' + item.pagePath + '.vue')
+                }
                 manageRoute.children.push(itemMenu)
-            } else if(item.children.length) {
+            } else if (item.children.length) {
                 item.children.forEach(item => {
                     if (item.path) {
-                        let itemMenu = { path: item.path.replace("/", ""), name: item.name, component: () => import('../views/' + item.pagePath + '.vue')}
+                        let itemMenu = {
+                            path: item.path.replace("/", ""),
+                            name: item.name,
+                            component: () => import('../views/' + item.pagePath + '.vue')
+                        }
                         manageRoute.children.push(itemMenu)
                     }
                 })

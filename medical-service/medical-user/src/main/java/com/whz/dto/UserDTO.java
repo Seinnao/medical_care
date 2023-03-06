@@ -21,6 +21,9 @@ public class UserDTO {
     private Integer id;
     private String username;
     private String password;
+    private String tel;
+    private String uid;
+    private String captcha;
     private String nickname;
     private String avatarUrl;
     private String role;

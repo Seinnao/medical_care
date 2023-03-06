@@ -19,6 +19,7 @@ http.interceptors.request.use( config =>{
 })
 //响应拦截
 http.interceptors.response.use( response =>{
+
     return response;
     },error =>{
     return Promise.reject(error)

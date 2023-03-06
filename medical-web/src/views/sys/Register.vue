@@ -8,13 +8,13 @@
                  @keyup.enter.native="register()"
                  label-width="0"
                  class="login_from">
-          <el-form-item prop="userName" class="register_item">
+          <el-form-item prop="username" class="register_item">
             <el-input
                 class="login_input"
                 placeholder="请输入账号"
                 prefix-icon="el-icon-user"
                 clearable
-                v-model="dataForm.userName">
+                v-model="dataForm.username">
             </el-input>
           </el-form-item>
           <el-form-item prop="password" class="register_item">
@@ -33,7 +33,7 @@
                 prefix-icon="el-icon-lock"
                 type="password"
                 clearable
-                v-model="dataForm.re_password">
+                v-model="dataForm.rePassword">
             </el-input>
           </el-form-item>
 
@@ -60,35 +60,61 @@
 </template>
 
 <script>
-import {getUUID} from "@/utils";
-import router from "@/router";
+import {isTel} from "@/utils";
 export default {
   name: "Register",
   data() {
     return {
-      captchaPath: '',
       dataForm:{
-        userName: '',
+        username: '',
         password: '',
-        re_password: '',
+        rePassword: '',
         tel: '',
       },
     }
   },
   methods: {
     register() {
-      this.$refs['loginForm'].validate((valid) => {
-        if (valid) {
+      if(!this.dataForm.username){
+        this.$message.error("用户名不能为空")
+        return
+      }
 
+      if(!this.dataForm.password){
+        this.$message.error("请输入密码")
+        return
+      }
+
+      if(this.dataForm.password !== this.dataForm.rePassword){
+        this.$message.error("两次密码不匹配")
+        return
+      }
+
+      if(!isTel(this.dataForm.tel)){
+        console.log(this.dataForm)
+        this.$message.error("电话号码有误")
+        return
+      }
+
+      this.http.post('/user-service/user/register',this.dataForm).then(res =>{
+        if(res.data.code === 200){
+          this.$message({
+            message: '注册成功',
+            type: 'success'
+          })
+          this.toLogin()
+        }else {
+          this.$message.error(res.data.msg)
         }
       })
+
     },
     toLogin(){
       this.$router.replace({name: 'login'});
     }
   },
   created() {
-    this.getCaptcha()
+
   }
 }
 </script>

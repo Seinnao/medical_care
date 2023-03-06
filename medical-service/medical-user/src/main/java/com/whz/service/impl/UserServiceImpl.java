@@ -7,12 +7,11 @@ import com.whz.entity.Menu;
 import com.whz.entity.User;
 import com.whz.exception.ServiceException;
 import com.whz.mapper.UserMapper;
-import com.whz.service.IMenuService;
-import com.whz.service.IRoleMenuService;
-import com.whz.service.IRoleService;
-import com.whz.service.IUserService;
+import com.whz.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.whz.utils.MD5Util;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -38,13 +37,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private IRoleMenuService roleMenuService;
 
+    @Resource
+    private CaptchaService captchaService;
+
+    @Resource
+    private MD5Util md5Util;
 
     @Override
     public UserDTO login(UserDTO userDTO) {
+        if(!captchaService.validate(userDTO)){
+            throw new ServiceException("验证码错误");
+        }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", userDTO.getUsername());
-        queryWrapper.eq("password", userDTO.getPassword());
+        queryWrapper.eq("password", md5Util.getMd5AndSalt(userDTO.getPassword()));
         User one = this.getOne(queryWrapper);
+
         if(one != null){
             BeanUtil.copyProperties(one, userDTO, true);//将one上相同属性拷贝到userDTO
             String role = one.getRole(); // ROLE_ADMIN
@@ -55,6 +63,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }else{
             throw new ServiceException("用户名或密码错误");
         }
+
+    }
+
+    @Override
+    public void doRegister(UserDTO userDTO) {
+        if(null == userDTO.getUsername()){
+            throw new ServiceException("输入数据异常");
+        }
+        List<User> list = this.list(new QueryWrapper<User>().eq("username", userDTO.getUsername()));
+        if(!list.isEmpty()){
+            throw new ServiceException("该账号已经被注册");
+        }
+        User user = User.builder()
+                .username(userDTO.getUsername())
+                .password(md5Util.getMd5AndSalt(userDTO.getPassword()))
+                .phone(userDTO.getTel())
+                .role("ROLE_USER")
+                .build();
+        this.save(user);//存数据库
     }
 
     /**

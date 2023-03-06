@@ -23,4 +23,9 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
     public List<Integer> selectByRoleId(Integer roleId) {
         return this.baseMapper.selectByRoleId(roleId);
     }
+
+    @Override
+    public void deleteByRoleId(Integer roleId) {
+        this.baseMapper.deleteByRoleId(roleId);
+    }
 }

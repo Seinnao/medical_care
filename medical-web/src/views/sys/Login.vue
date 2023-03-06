@@ -9,13 +9,13 @@
                  label-width="0"
                  :rules="dataRule"
                  class="login_from">
-          <el-form-item prop="userName" class="login_item">
+          <el-form-item prop="username" class="login_item">
             <el-input
                 class="login_input"
                 placeholder="请输入账号"
                 prefix-icon="el-icon-user"
                 clearable
-                v-model="dataForm.userName">
+                v-model="dataForm.username">
             </el-input>
           </el-form-item>
           <el-form-item prop="password" class="login_item">
@@ -61,17 +61,18 @@
 </template>
 
 <script>
-import {getUUID} from "@/utils";
+import {getUID} from "@/utils";
+import {setRoutes} from "@/router";
 export default {
   name: "Login",
   data() {
     return {
       captchaPath: '',
       dataForm:{
-        userName: '',
+        username: '',
         password: '',
         captcha: '',
-        uuid: '',
+        uid: '',
       },
       dataRule:{
         userName: [
@@ -89,28 +90,25 @@ export default {
   methods: {
     getCaptcha() {
       console.log("获取验证码！");
-      this.dataForm.uuid = getUUID();
-      this.captchaPath = `${this.http.getBaseURL()}/user-service/captcha?uuid=${getUUID()}`
+      this.dataForm.uid = getUID();
+      this.captchaPath = `${this.http.getBaseURL()}/user-service/user/captcha?uid=${this.dataForm.uid}`
     },
     login() {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
-          this.http.post("/user-service/user/login",
-              {
-                username:this.dataForm.userName,
-                password:this.dataForm.password,
-              }
+          this.http.post("/user-service/user/login",this.dataForm
           ).then(res => {
-            console.log(res)
             if(res.data.code === 200 ){
-              localStorage.setItem("user", JSON.stringify(res.data))  // 存储用户信息到浏览器
-              localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储用户信息到浏览器
+              console.log(res.data.data)
+              localStorage.setItem("user", JSON.stringify(res.data.data))  // 存储用户信息到浏览器
+              localStorage.setItem("menus", JSON.stringify(res.data.data.menus))  // 存储用户信息到浏览器
               // 动态设置当前用户的路由
               setRoutes()
               this.$router.push("/")  //加截主页
               this.$message.success("登录成功")
             } else {
               this.$message.error(res.data.msg)
+              this.getCaptcha()
             }
           })
         }
