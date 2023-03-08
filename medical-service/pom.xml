@@ -8,6 +8,7 @@
         <module>medical-gateway</module>
         <module>medical-entity</module>
         <module>medical-user</module>
+        <module>medical-file</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

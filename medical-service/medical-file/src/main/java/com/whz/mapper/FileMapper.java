@@ -1,7 +1,7 @@
 package com.whz.mapper;
 
-import com.whz.entity.File;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.whz.entity.File;
 
 /**
  * <p>

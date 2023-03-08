@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from "@/store";
 
 Vue.use(VueRouter)
 
@@ -28,7 +29,8 @@ const router = new VueRouter({
 // 重置路由
 export const resetRouter = () => {
     router.matcher = new VueRouter({
-        mode: 'history', routes
+        mode: 'history',
+        routes
     })
 }
 
@@ -48,8 +50,12 @@ export const setRoutes = () => {
             children: [{
                 path: 'person',
                 name: '个人信息',
-                component: () => import('../views/sys/Home')
-            }, {path: 'password', name: '修改密码', component: () => import('../views/sys/HomePage')},]
+                component: () => import('../views/user/Person')
+            }, {
+                path: 'password',
+                name: '修改密码',
+                component: () => import('../views/user/Password')
+            }]
         }
 
         const menus = JSON.parse(storeMenus)//动态加截菜单，来自于数据库
@@ -93,7 +99,7 @@ setRoutes()
 //全局钩子
 router.beforeEach((to, from, next) => {
     localStorage.setItem("currentPathName", to.name)  // 设置当前的路由名称
-    //store.commit("setPath")
+    store.commit("setPath")
     if (!to.matched.length) {
         const menus = localStorage.getItem("menus")
         if (!menus) {

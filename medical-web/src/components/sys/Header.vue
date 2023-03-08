@@ -10,8 +10,8 @@
     </div>
     <el-dropdown style="width: 150px; cursor: pointer; text-align: right">
       <div style="display: inline-block">
-        <!--        <img :src="user.avatarUrl" alt=""-->
-        <!--             style="width: 30px; border-radius: 50%; position: relative; top: 10px; right: 5px">-->
+                <img :src="user.avatarUrl" alt=""
+                     style="width: 30px; border-radius: 50%; position: relative; top: 10px; right: 5px">
         <span>{{ user.nickname }}</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
       </div>
       <el-dropdown-menu slot="dropdown" style="width: 100px; text-align: center">
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     currentPathName () {
-      // return this.$store.state.currentPathName;   //需要监听的数据
+      return this.$store.state.currentPathName;   //需要监听的数据
     }
   },
   data() {
@@ -47,12 +47,12 @@ export default {
   },
   methods: {
     collapse() {
-      // this.$parent.$parent.$parent.$parent.collapse()  // 通过4个 $parent 找到父组件，从而调用其折叠方法
+      this.$parent.$parent.$parent.$parent.collapse()  // 通过4个 $parent 找到父组件，从而调用其折叠方法
       this.$emit("asideCollapse")
     },
     logout() {
-      // this.$store.commit("logout")
-      // this.$message.success("退出成功")
+      this.$store.commit("logout")
+      this.$message.success("退出成功")
     }
   }
 }

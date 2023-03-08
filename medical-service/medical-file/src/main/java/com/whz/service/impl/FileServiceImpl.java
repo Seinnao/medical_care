@@ -1,9 +1,9 @@
 package com.whz.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.whz.entity.File;
 import com.whz.mapper.FileMapper;
 import com.whz.service.IFileService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

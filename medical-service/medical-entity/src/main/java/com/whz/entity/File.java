@@ -30,7 +30,7 @@ public class File implements Serializable {
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id")
     private Integer id;
 
     /**

@@ -99,9 +99,11 @@ export default {
           this.http.post("/user-service/user/login",this.dataForm
           ).then(res => {
             if(res.data.code === 200 ){
-              console.log(res.data.data)
+              //console.log(res.data.data)
+
+              localStorage.setItem("menus", JSON.stringify(res.data.data.menus))  // 存储菜单信息到浏览器
               localStorage.setItem("user", JSON.stringify(res.data.data))  // 存储用户信息到浏览器
-              localStorage.setItem("menus", JSON.stringify(res.data.data.menus))  // 存储用户信息到浏览器
+
               // 动态设置当前用户的路由
               setRoutes()
               this.$router.push("/")  //加截主页
