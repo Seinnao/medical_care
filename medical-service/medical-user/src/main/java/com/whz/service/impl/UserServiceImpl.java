@@ -89,9 +89,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      * @param roleFlag 权限
      */
     private List<Menu> getRoleMenus(String roleFlag) {
-        Integer roleId = roleService.selectByFlag(roleFlag);
+        Long roleId = roleService.selectByFlag(roleFlag);
         // 当前角色的所有菜单id集合
-        List<Integer> menuIds = roleMenuService.selectByRoleId(roleId);
+        List<Long> menuIds = roleMenuService.selectByRoleId(roleId);
         // 查出系统所有的菜单(树形)
         List<Menu> menus = menuService.findMenus("");
         // new一个最后筛选完成之后的list

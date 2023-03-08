@@ -5,6 +5,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whz.entity.File;
+import com.whz.exception.ServiceException;
 import com.whz.mapper.FileMapper;
 import com.whz.utils.FastDfsUtils;
 import com.whz.utils.R;
@@ -45,7 +46,7 @@ public class FileController {
      * @throws IOException
      */
     @PostMapping("/upload")
-    public String upload(@RequestParam MultipartFile file) throws IOException {
+    public R upload(@RequestParam MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
         String type = FileUtil.extName(originalFilename);
 
@@ -72,7 +73,7 @@ public class FileController {
         saveFile.setMd5(md5);
         fileMapper.insert(saveFile);
 
-        return url;
+        return R.ok().put("url",url);
     }
 
     /**
@@ -114,16 +115,20 @@ public class FileController {
     }
 
     @DeleteMapping("/{id}")
-    public R delete(@PathVariable Integer id) {
+    public R delete(@PathVariable String id) {
         File files = fileMapper.selectById(id);
         files.setIsDelete(true);
-        dfsUtils.deleteFile(files.getUrl());
-        fileMapper.updateById(files);
+        try {
+            dfsUtils.deleteFile(files.getUrl());
+        } catch (Exception e) {
+            throw new ServiceException("文件删除失败！");
+        }
+        fileMapper.deleteById(files.getId());
         return R.ok();
     }
 
     @PostMapping("/del/batch")
-    public R deleteBatch(@RequestBody List<Integer> ids) {
+    public R deleteBatch(@RequestBody List<String> ids) {
         // select * from sys_file where id in (id,id,id...)
         QueryWrapper<File> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("id", ids);
@@ -131,8 +136,12 @@ public class FileController {
         for (File file : files) {
             file.setIsDelete(true);
             //文件删除
-            dfsUtils.deleteFile(file.getUrl());
-            fileMapper.updateById(file);
+            try {
+                dfsUtils.deleteFile(file.getUrl());
+            } catch (Exception e) {
+                throw new ServiceException("文件删除失败！");
+            }
+            fileMapper.deleteById(file.getId());
         }
         return R.ok();
     }

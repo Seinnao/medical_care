@@ -39,13 +39,13 @@ public class MenuController {
     }
 
     @DeleteMapping("/{id}")
-    public R delete(@PathVariable Integer id) {
+    public R delete(@PathVariable String id) {
         menuService.removeById(id);
         return R.ok();
     }
 
     @PostMapping("/del/batch")
-    public R deleteBatch(@RequestBody List<Integer> ids) {
+    public R deleteBatch(@RequestBody List<String> ids) {
         menuService.removeByIds(ids);
         return R.ok();
     }
@@ -61,7 +61,7 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public R findOne(@PathVariable Integer id) {
+    public R findOne(@PathVariable String id) {
         return R.ok().put(menuService.getById(id));
     }
 

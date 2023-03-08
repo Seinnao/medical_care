@@ -29,7 +29,7 @@
     <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
+<!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
       <el-table-column prop="name" label="文件名称"></el-table-column>
       <el-table-column prop="type" label="文件类型"></el-table-column>
       <el-table-column prop="size" label="文件大小(kb)"></el-table-column>
@@ -113,14 +113,15 @@ export default {
     },
     changeEnable(row) {
       this.http.post("file-service/file/update", row).then(({data}) => {
-        if (data.code === '200') {
+        if (data.code === 200) {
           this.$message.success("操作成功")
         }
       })
     },
     del(id) {
       this.http.delete("file-service/file/" + id).then(({data}) => {
-        if (data.code === '200') {
+        console.log(data)
+        if (data.code === 200) {
           this.$message.success("删除成功")
           this.load()
         } else {
@@ -135,7 +136,7 @@ export default {
     delBatch() {
       let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
       this.http.post("file-service/file/del/batch", ids).then(({data}) => {
-        if (data.code === '200') {
+        if (data.code === 200) {
           this.$message.success("批量删除成功")
           this.load()
         } else {
@@ -166,13 +167,14 @@ export default {
         data: form,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then(({ data }) => {
-        if (data && data.code === 200) {
+        if (data.code === 200) {
           console.log(data);
           this.$message({
             message: '操作成功',
             type: 'success',
             duration: 1500,
           })
+          this.load()
         } else {
           this.$message.error(data.msg)
         }

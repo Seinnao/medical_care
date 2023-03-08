@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface RoleMapper extends BaseMapper<Role> {
 
-    int selectByFlag(@Param("flag") String flag);
+    Long selectByFlag(@Param("flag") String flag);
 
 }

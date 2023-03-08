@@ -20,12 +20,12 @@ import java.util.List;
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
 
     @Override
-    public List<Integer> selectByRoleId(Integer roleId) {
+    public List<Long> selectByRoleId(Long roleId) {
         return this.baseMapper.selectByRoleId(roleId);
     }
 
     @Override
-    public void deleteByRoleId(Integer roleId) {
+    public void deleteByRoleId(Long roleId) {
         this.baseMapper.deleteByRoleId(roleId);
     }
 }

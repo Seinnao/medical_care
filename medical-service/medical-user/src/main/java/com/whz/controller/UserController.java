@@ -127,12 +127,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public R delete(@PathVariable Integer id) {
+    public R delete(@PathVariable String id) {
         return R.ok().put(userService.removeById(id));
     }
 
     @PostMapping("/del/batch")
-    public R deleteBatch(@RequestBody List<Integer> ids) {
+    public R deleteBatch(@RequestBody List<String> ids) {
         return R.ok().put(userService.removeByIds(ids));
     }
 

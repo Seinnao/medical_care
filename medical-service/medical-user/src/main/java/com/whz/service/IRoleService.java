@@ -15,9 +15,9 @@ import java.util.List;
  */
 public interface IRoleService extends IService<Role> {
 
-    Integer selectByFlag(String roleFlag);
+    Long selectByFlag(String roleFlag);
 
-    void setRoleMenu(Integer roleId, List<Integer> menuIds);
+    void setRoleMenu(Long roleId, List<Long> menuIds);
 
-    List<Integer> getRoleMenu(Integer roleId);
+    List<Long> getRoleMenu(Long roleId);
 }

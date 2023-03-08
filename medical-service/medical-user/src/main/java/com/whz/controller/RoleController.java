@@ -71,13 +71,13 @@ public class RoleController {
      * @param menuIds 菜单id数组
      */
     @PostMapping("/roleMenu/{roleId}")
-    public R roleMenu(@PathVariable Integer roleId, @RequestBody List<Integer> menuIds) {
+    public R roleMenu(@PathVariable Long roleId, @RequestBody List<Long> menuIds) {
         roleService.setRoleMenu(roleId, menuIds);
         return R.ok();
     }
 
     @GetMapping("/roleMenu/{roleId}")
-    public R getRoleMenu(@PathVariable Integer roleId) {
+    public R getRoleMenu(@PathVariable Long roleId) {
         return R.ok().put( roleService.getRoleMenu(roleId));
     }
 

@@ -33,20 +33,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     IMenuService menuService;
 
     @Override
-    public Integer selectByFlag(String flag) {
+    public Long selectByFlag(String flag) {
         return this.baseMapper.selectByFlag(flag);
     }
 
     @Transactional
     @Override
-    public void setRoleMenu(Integer roleId, List<Integer> menuIds) {
+    public void setRoleMenu(Long roleId, List<Long> menuIds) {
 
         // 先删除当前角色id所有的绑定关系
         roleMenuService.deleteByRoleId(roleId);
 
         // 再把前端传过来的菜单id数组绑定到当前的这个角色id上去
-        List<Integer> menuIdsCopy = CollUtil.newArrayList(menuIds);
-        for (Integer menuId : menuIds) {
+        List<Long> menuIdsCopy = CollUtil.newArrayList(menuIds);
+        for (Long menuId : menuIds) {
             Menu menu = menuService.getById(menuId);
             if (menu.getPid() != null && !menuIdsCopy.contains(menu.getPid())) { // 二级菜单 并且传过来的menuId数组里面没有它的父级id
                 // 那么我们就得补上这个父级id
@@ -64,7 +64,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
-    public List<Integer> getRoleMenu(Integer roleId) {
+    public List<Long> getRoleMenu(Long roleId) {
         return roleMenuService.selectByRoleId(roleId);
     }
 }

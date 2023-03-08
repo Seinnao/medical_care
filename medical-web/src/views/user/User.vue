@@ -28,7 +28,7 @@
               :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
+<!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
       <el-table-column prop="username" label="用户名" width="140"></el-table-column>
       <el-table-column label="角色">
         <template v-slot="scope">
