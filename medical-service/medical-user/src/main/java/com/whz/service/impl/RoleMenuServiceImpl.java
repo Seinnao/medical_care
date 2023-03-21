@@ -20,7 +20,7 @@ import java.util.List;
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
 
     @Override
-    public List<Long> selectByRoleId(Long roleId) {
+    public List<String> selectByRoleId(Long roleId) {
         return this.baseMapper.selectByRoleId(roleId);
     }
 

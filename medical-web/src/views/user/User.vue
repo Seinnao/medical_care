@@ -27,18 +27,18 @@
               v-loading="loading"
               :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" align="center" width="55"></el-table-column>
 <!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
-      <el-table-column prop="username" label="用户名" width="140"></el-table-column>
-      <el-table-column label="角色">
+      <el-table-column prop="username" align="center" label="用户名" width="140"></el-table-column>
+      <el-table-column align="center" label="角色">
         <template v-slot="scope">
           <span v-if="scope.row.role">{{ roles.find(v => v.flag === scope.row.role) ? roles.find(v => v.flag === scope.row.role).name : ''  }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
-      <el-table-column prop="email" label="邮箱"></el-table-column>
-      <el-table-column prop="phone" label="电话"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
+      <el-table-column prop="nickname" align="center" label="昵称" width="120"></el-table-column>
+      <el-table-column prop="email" align="center" label="邮箱" width="150"></el-table-column>
+      <el-table-column prop="phone" align="center" label="电话"></el-table-column>
+      <el-table-column prop="address" align="center" label="地址"></el-table-column>
       <el-table-column label="操作"  width="200" align="center">
         <template slot-scope="scope">
           <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
@@ -133,17 +133,17 @@ export default {
           address: this.address,
         }
       }).then(res => {
-        this.tableData = res.data.data.records
-        this.total = res.data.data.total
+        this.tableData = res.data.records
+        this.total = res.data.total
         this.loading = false;
       })
       this.http.get("/user-service/role").then(res => {
-        this.roles = res.data.data
+        this.roles = res.data
       })
     },
     save() {
       this.http.post("/user-service/user", this.form).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
@@ -162,7 +162,7 @@ export default {
     },
     del(id) {
       this.http.delete("/user-service/user/" + id).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("删除成功")
           this.load()
         } else {
@@ -177,7 +177,7 @@ export default {
     delBatch() {
       let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
       this.http.post("/user-service/user/del/batch", ids).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("批量删除成功")
           this.load()
         } else {

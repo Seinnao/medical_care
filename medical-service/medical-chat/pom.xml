@@ -9,38 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>medical-user</artifactId>
+    <artifactId>medical-chat</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.whz</groupId>
             <artifactId>medical-entity</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <!--mybatis-plus代码生成器依赖-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.5.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--FreeMarker是一款模板引擎-->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.31</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--验证码生成的依赖-->
-        <dependency>
-            <groupId>com.github.axet</groupId>
-            <artifactId>kaptcha</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-
 
     </dependencies>
 
@@ -63,4 +40,6 @@
             </plugin>
         </plugins>
     </build>
+
+
 </project>

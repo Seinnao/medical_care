@@ -1,10 +1,11 @@
-<template>
+<template xmlns="">
   <el-card style="width: 500px;">
     <el-form label-width="80px" size="small">
       <el-upload
           class="avatar-uploader"
-          action="http://localhost:9090/file/upload"
+          action=""
           :show-file-list="false"
+          :http-request="filesRequest"
           :on-success="handleAvatarSuccess"
       >
         <img v-if="form.avatarUrl" :src="form.avatarUrl" class="avatar">
@@ -44,26 +45,26 @@ export default {
   },
   created() {
     this.getUser().then(res => {
-      console.log(res)
+     // console.log(data)
       this.form = res
     })
   },
   methods: {
     async getUser() {
-      return (await this.http.get("user-server/user/username/" + this.user.username)).data
+      return (await this.http.get("user-service/user/username/" + this.user.username)).data
     },
     save() {
-      this.http.post("user-server/user", this.form).then(res => {
-        if (res.data.code === 200) {
+      this.http.post("user-service/user", this.form).then(res => {
+        if (res.code === 200) {
           this.$message.success("保存成功")
 
           // 触发父级更新User的方法
           this.$emit("refreshUser")
 
           // 更新浏览器存储的用户信息
-          this.getUser().then(res => {
-            res.token = JSON.parse(localStorage.getItem("user")).token
-            localStorage.setItem("user", JSON.stringify(res))
+          this.getUser().then(data => {
+            data.token = JSON.parse(localStorage.getItem("user")).token
+            localStorage.setItem("user", JSON.stringify(data))
           })
 
         } else {
@@ -71,7 +72,25 @@ export default {
         }
       })
     },
+    filesRequest(data){
+      const form = new FormData()
+      form.append('file', data.file);
+      //console.log('22222222222222',form)
+      this.http({
+        url: 'file-service/file/upload',
+        method:'post',
+        data: form,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then((res) => {
+        if (res.code === 200) {
+          this.form.avatarUrl = res.url
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     handleAvatarSuccess(res) {
+      //console.log('111111111',res)
       this.form.avatarUrl = res
     }
   }

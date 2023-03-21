@@ -39,8 +39,13 @@ export default {
       user: {}
     }
   },
+  created() {
+    // 从后台获取最新的User数据
+    this.getUser()
+  },
   methods: {
     collapse() {  // 点击收缩按钮触发
+      console.log("5555555555555")
       this.isCollapse = !this.isCollapse
       if (this.isCollapse) {  // 收缩
         this.sideWidth = 64
@@ -56,7 +61,7 @@ export default {
       let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
       if (username) {
         // 从后台获取User数据
-        this.request.get("/user/username/" + username).then(res => {
+        this.http.get("user-service/user/username/" + username).then(res => {
           // 重新赋值后台的最新User数据
           this.user = res.data
         })

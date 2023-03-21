@@ -97,14 +97,14 @@ export default {
       }
 
       this.http.post('/user-service/user/register',this.dataForm).then(res =>{
-        if(res.data.code === 200){
+        if(res.code === 200){
           this.$message({
             message: '注册成功',
             type: 'success'
           })
           this.toLogin()
         }else {
-          this.$message.error(res.data.msg)
+          this.$message.error(res.msg)
         }
       })
 

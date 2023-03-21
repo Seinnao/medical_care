@@ -65,7 +65,9 @@ public class UserController {
     public R findByUsername(@PathVariable String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
-        return R.ok().put(userService.getOne(queryWrapper));
+        User one = userService.getOne(queryWrapper);
+        one.setPassword("");//不暴露密码
+        return R.ok().put(one);
     }
 
 

@@ -47,7 +47,8 @@ export default {
   },
   methods: {
     collapse() {
-      this.$parent.$parent.$parent.$parent.collapse()  // 通过4个 $parent 找到父组件，从而调用其折叠方法
+      //console.log("44444444444444444")
+      //this.$parent.$parent.$parent.$parent.collapse()  // 通过4个 $parent 找到父组件，从而调用其折叠方法
       this.$emit("asideCollapse")
     },
     logout() {

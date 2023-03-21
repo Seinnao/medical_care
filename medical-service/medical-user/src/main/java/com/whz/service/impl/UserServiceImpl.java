@@ -2,16 +2,15 @@ package com.whz.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.whz.dto.UserDTO;
 import com.whz.entity.Menu;
 import com.whz.entity.User;
 import com.whz.exception.ServiceException;
 import com.whz.mapper.UserMapper;
 import com.whz.service.*;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.whz.utils.MD5Util;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -59,6 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             // 设置用户的菜单列表
             List<Menu> roleMenus = getRoleMenus(role);
             userDTO.setMenus(roleMenus);
+            userDTO.setPassword("");
             return userDTO;
         }else{
             throw new ServiceException("用户名或密码错误");
@@ -91,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private List<Menu> getRoleMenus(String roleFlag) {
         Long roleId = roleService.selectByFlag(roleFlag);
         // 当前角色的所有菜单id集合
-        List<Long> menuIds = roleMenuService.selectByRoleId(roleId);
+        List<String> menuIds = roleMenuService.selectByRoleId(roleId);
         // 查出系统所有的菜单(树形)
         List<Menu> menus = menuService.findMenus("");
         // new一个最后筛选完成之后的list

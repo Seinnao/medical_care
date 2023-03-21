@@ -138,19 +138,19 @@ export default {
           name: this.name,
         }
       }).then(res => {
-        this.tableData = res.data.data.records
-        this.total = res.data.data.total
+        this.tableData = res.data.records
+        this.total = res.data.total
         this.loading = false;
       })
 
-      this.http.get("/user-service/menu/ids").then(r => {
-        this.ids = r.data
+      this.http.get("/user-service/menu/ids").then(res => {
+        this.ids = res.data
       })
 
     },
     save() {
       this.http.post("/user-service/role", this.form).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
@@ -161,7 +161,7 @@ export default {
     },
     saveRoleMenu() {
       this.http.post("/user-service/role/roleMenu/" + this.roleId, this.$refs.tree.getCheckedKeys()).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("绑定成功")
           this.menuDialogVis = false
 
@@ -171,7 +171,7 @@ export default {
           }
 
         } else {
-          this.$message.error(res.data.msg)
+          this.$message.error(res.msg)
         }
       })
     },
@@ -185,7 +185,7 @@ export default {
     },
     del(id) {
       this.http.delete("/user-service/role/" + id).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("删除成功")
           this.load()
         } else {
@@ -200,7 +200,7 @@ export default {
     delBatch() {
       let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
       this.http.post("/user-service/role/del/batch", ids).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("批量删除成功")
           this.load()
         } else {
@@ -228,7 +228,7 @@ export default {
 
       // 请求菜单数据
       this.http.get("/user-service/menu").then(res => {
-        this.menuData = res.data.data
+        this.menuData = res.data
 
         // 把后台返回的菜单数据处理成 id数组
         this.expends = this.menuData.map(v => v.id)
@@ -236,8 +236,8 @@ export default {
 
       this.menuDialogVis = true
       this.http.get("/user-service/role/roleMenu/" + this.roleId).then(res => {
-        this.checks = res.data.data
-        this.$refs.tree.setCheckedKeys(res.data.data)
+        this.checks = res.data
+        this.$refs.tree.setCheckedKeys(res.data)
         this.ids.forEach(id => {
           if (!this.checks.includes(id)) {
             this.$refs.tree.setChecked(id, false)

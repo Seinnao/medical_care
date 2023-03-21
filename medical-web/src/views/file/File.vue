@@ -29,27 +29,26 @@
     <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-<!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
-      <el-table-column prop="name" label="文件名称"></el-table-column>
-      <el-table-column prop="type" label="文件类型"></el-table-column>
-      <el-table-column prop="size" label="文件大小(kb)"></el-table-column>
-      <el-table-column label="预览">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="preview(scope.row.url)">预览</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="下载">
+      <el-table-column prop="name" align="center" label="文件名称"></el-table-column>
+      <el-table-column prop="type" align="center" label="文件类型" width="80"></el-table-column>
+      <el-table-column prop="size" align="center" label="文件大小(kb)"></el-table-column>
+<!--      <el-table-column label="预览">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-button type="primary" @click="preview(scope.row.url)">预览</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+      <el-table-column align="center" label="下载" width="100">
         <template slot-scope="scope">
           <el-button type="primary" @click="download(scope.row.url)">下载</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="启用">
+      <el-table-column align="center" label="启用" width="100">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.enable" active-color="#13ce66" inactive-color="#ccc"
                      @change="changeEnable(scope.row)"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
           <el-popconfirm
               class="ml-5"
@@ -106,22 +105,21 @@ export default {
           pageSize: this.pageSize,
           name: this.name,
         }
-      }).then(({data}) => {
-        this.tableData = data.data.records
-        this.total = data.total
+      }).then(res => {
+        this.tableData = res.data.records
+        this.total = res.total
       })
     },
     changeEnable(row) {
-      this.http.post("file-service/file/update", row).then(({data}) => {
-        if (data.code === 200) {
+      this.http.post("file-service/file/update", row).then(res => {
+        if (res.code === 200) {
           this.$message.success("操作成功")
         }
       })
     },
     del(id) {
-      this.http.delete("file-service/file/" + id).then(({data}) => {
-        console.log(data)
-        if (data.code === 200) {
+      this.http.delete("file-service/file/" + id).then(res => {
+        if (res.code === 200) {
           this.$message.success("删除成功")
           this.load()
         } else {
@@ -135,8 +133,8 @@ export default {
     },
     delBatch() {
       let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
-      this.http.post("file-service/file/del/batch", ids).then(({data}) => {
-        if (data.code === 200) {
+      this.http.post("file-service/file/del/batch", ids).then(res => {
+        if (res.code === 200) {
           this.$message.success("批量删除成功")
           this.load()
         } else {
@@ -166,9 +164,8 @@ export default {
         method:'post',
         data: form,
         headers: { 'Content-Type': 'multipart/form-data' }
-      }).then(({ data }) => {
-        if (data.code === 200) {
-          console.log(data);
+      }).then(res => {
+        if (res.code === 200) {
           this.$message({
             message: '操作成功',
             type: 'success',
@@ -176,7 +173,7 @@ export default {
           })
           this.load()
         } else {
-          this.$message.error(data.msg)
+          this.$message.error(res.msg)
         }
       })
     },

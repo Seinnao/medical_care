@@ -64,7 +64,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
-    public List<Long> getRoleMenu(Long roleId) {
+    public List<String> getRoleMenu(Long roleId) {
         return roleMenuService.selectByRoleId(roleId);
     }
 }

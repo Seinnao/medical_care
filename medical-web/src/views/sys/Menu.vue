@@ -25,19 +25,19 @@
               v-loading="loading"
               :header-cell-class-name="'headerBg'"
               row-key="id" default-expand-all @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="path" label="路径"></el-table-column>
-      <el-table-column prop="pagePath" label="页面路径"></el-table-column>
+      <el-table-column align="center" type="selection" width="55"></el-table-column>
+<!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
+      <el-table-column prop="name" align="center" label="名称"></el-table-column>
+      <el-table-column prop="path" align="center" label="路径"></el-table-column>
+      <el-table-column prop="pagePath" align="center" label="页面路径"></el-table-column>
       <el-table-column label="图标" class-name="fontSize18" align="center" label-class-name="fontSize12">
         <template slot-scope="scope">
           <span :class="scope.row.icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
-      <el-table-column prop="sortNum" label="顺序"></el-table-column>
-      <el-table-column label="操作"  width="300" align="center">
+      <el-table-column prop="description" align="center" label="描述"></el-table-column>
+      <el-table-column prop="sortNum" align="center" label="顺序"></el-table-column>
+      <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
           <el-button type="primary" @click="handleAdd(scope.row.id)" v-if="!scope.row.pid && !scope.row.path">新增子菜单 <i class="el-icon-plus"></i></el-button>
           <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
@@ -117,18 +117,18 @@ export default {
           name: this.name,
         }
       }).then(res => {
-        this.tableData = res.data.data;
+        this.tableData = res.data;
         this.loading = false;
       })
 
       // 请求图标的数据
       this.http.get("user-service/menu/icons").then(res => {
-        this.options = res.data.data
+        this.options = res.data
       })
     },
     save() {
       this.http.post("user-service/menu", this.form).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
@@ -150,7 +150,7 @@ export default {
     },
     del(id) {
       this.http.delete("user-service/menu/" + id).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("删除成功")
           this.load()
         } else {
@@ -165,7 +165,7 @@ export default {
     delBatch() {
       let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
       this.http.post("user-service/menu/del/batch", ids).then(res => {
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           this.$message.success("批量删除成功")
           this.load()
         } else {

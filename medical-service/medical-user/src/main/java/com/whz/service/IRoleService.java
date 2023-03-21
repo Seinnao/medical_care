@@ -19,5 +19,5 @@ public interface IRoleService extends IService<Role> {
 
     void setRoleMenu(Long roleId, List<Long> menuIds);
 
-    List<Long> getRoleMenu(Long roleId);
+    List<String> getRoleMenu(Long roleId);
 }
