@@ -115,7 +115,7 @@ export default {
               this.$router.push("home")  //加截主页
               this.$message.success("登录成功")
             } else {
-              this.$message.error(res.data.msg)
+              this.$message.error(res.msg)
               this.getCaptcha()
             }
           })

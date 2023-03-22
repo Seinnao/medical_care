@@ -98,12 +98,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         List<Menu> roleMenus = new ArrayList<>();
         // 筛选当前用户角色的菜单
         for (Menu menu : menus) {
-            if (menuIds.contains(menu.getId())) {
+            if (menuIds.contains(menu.getId()+"")) {
                 roleMenus.add(menu);
             }
             List<Menu> children = menu.getChildren();
             // removeIf()  移除 children 里面不在 menuIds集合中的 元素
-            children.removeIf(child -> !menuIds.contains(child.getId()));
+            children.removeIf(child -> !menuIds.contains(child.getId()+""));
         }
         return roleMenus;
     }
