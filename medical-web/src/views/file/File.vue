@@ -34,7 +34,7 @@
       <el-table-column prop="size" align="center" label="文件大小(kb)"></el-table-column>
       <el-table-column label="预览" width="100" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="preview(imagesUrl(scope.row.url))">预览</el-button>
+          <el-button type="primary" @click="preview(scope.row)">预览</el-button>
         </template>
       </el-table-column>
       <el-table-column align="center" label="下载" width="100">
@@ -184,8 +184,12 @@ export default {
     download(url) {
       window.open(`api/file-service/file/download/${url}`)
     },
-    preview(url) {
-      window.open(url)
+    preview(data) {
+      if(data.type === 'png' || data.type === 'jpg' || data.type === 'jpeg' || data.type === 'gif'){
+        window.open(this.imagesUrl(data.url))
+      }else {
+        this.$message.error("该文件类型不支持预览")
+      }
     },
   }
 }

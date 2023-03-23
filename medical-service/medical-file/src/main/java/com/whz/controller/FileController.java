@@ -98,6 +98,10 @@ public class FileController {
         //根据url获取文件名
         File file = fileMapper.selectOne(new QueryWrapper<File>().eq("url", url));
 
+        if(null == file){
+            throw new ServiceException("地址数据错误！");
+        }
+
         response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));
         response.setContentType("application/octet-stream");
         // 读取文件的字节流

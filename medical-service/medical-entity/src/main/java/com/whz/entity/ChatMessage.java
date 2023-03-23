@@ -1,4 +1,4 @@
-package com.whz.dto;
+package com.whz.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

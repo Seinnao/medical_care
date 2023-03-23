@@ -1,6 +1,6 @@
 package com.whz.controller;
 
-import com.whz.dto.ChatMessage;
+import com.whz.entity.ChatMessage;
 import com.whz.storage.ChatData;
 import com.whz.storage.SessionMap;
 import com.whz.utils.JsonUtils;

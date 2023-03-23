@@ -2,14 +2,13 @@ package com.whz.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.whz.entity.File;
+import com.whz.exception.ServiceException;
 import com.whz.mapper.FileMapper;
 import com.whz.utils.FastDfsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
@@ -39,6 +38,10 @@ public class ImageController {
 
         //根据url获取文件名
         File file = fileMapper.selectOne(new QueryWrapper<File>().eq("url", url));
+
+        if(null == file){
+            throw new ServiceException("地址数据错误！");
+        }
 
         response.setHeader("Cache-Control", "no-store, no-cache");
 
