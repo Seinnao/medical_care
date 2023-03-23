@@ -34,7 +34,7 @@ export const resetRouter = () => {
 export const setRoutes = () => {
     const storeMenus = localStorage.getItem("menus");
 
-    console.log(storeMenus)
+    //console.log(storeMenus)
 
     if (storeMenus) {
         // 拼装动态路由
@@ -77,7 +77,6 @@ export const setRoutes = () => {
                 })
             }
         })
-
         // console.log("menus",menus);
         // console.log("manageRoute",manageRoute);
         // 获取当前的路由对象名称数组

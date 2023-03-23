@@ -1,5 +1,8 @@
 package com.whz.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +16,11 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("chat_message")
 public class ChatMessage {
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
 
     private String from;//发送者
     private String to;//接收者

@@ -1,11 +1,15 @@
 <template>
-  <el-menu :default-openeds="opens" style="min-height: 100%; overflow-x: hidden"
+  <el-menu style="min-height: 100%; overflow-x: hidden"
            background-color="rgb(48, 65, 86)"
            text-color="#fff"
            active-text-color="#ffd04b"
            :collapse-transition="false"
            :collapse="isCollapse"
+           :default-active="$route.path.replace('/','')"
            router>
+<!--     unique-opened
+:default-openeds="opens"
+-->
     <div style="height: 60px; line-height: 60px; text-align: center">
       <img src="@/assets/logo.png" alt="" style="width: 20px; position: relative; top: 5px;">
       <b style="color: white; margin-left: 1px" v-show="logoTextShow">医疗服务平台</b>
@@ -45,9 +49,14 @@ export default {
   data() {
     return {
       menus: localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")) : [],
-      opens: localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")).map(v => v.id + '') : []
+      //opens: localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")).map(v => v.id + '') : []
     }
   },
+  methods:{
+    getOpen(){
+
+    }
+  }
 }
 </script>
 

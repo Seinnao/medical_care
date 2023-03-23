@@ -107,6 +107,7 @@ export default {
                 id:user.id,
                 username:user.username,
                 nickname:user.nickname,
+                avatarUrl:user.avatarUrl,
                 role:user.role
               }))  // 存储用户信息到浏览器
 
