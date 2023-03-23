@@ -5,22 +5,16 @@ let rec; //断线重连后，延迟5秒重新创建WebSocket连接  rec用来存
 
 let wsUri = `ws://${location.host}/api/chat-service/socket`;
 
-function setParam(username){
-    if(username){
-        wsUri += `/${username}`;
-    }
-}
-
-function createWebSocket(callback) {
+function createWebSocket(callback,username) {
     if (websock == null || typeof websock !== WebSocket) {
-        initWebSocket(callback);
+        initWebSocket(callback,username);
     }
 }
 
-function initWebSocket(callback) {
+function initWebSocket(callback,username) {
     global_callback = callback;
     // 初始化websocket
-    websock = new WebSocket(wsUri);
+    websock = new WebSocket(wsUri+'/'+username);
     websock.onmessage = function (e) {
         websocketonmessage(e);
     };
@@ -106,4 +100,4 @@ function websocketOpen(e) {
     //heartCheck.start(); //发送心跳 看个人项目需求
 }
 
-export { sendSock, createWebSocket, closeSock ,setParam};
+export { sendSock, createWebSocket, closeSock};

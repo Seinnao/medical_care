@@ -10,7 +10,7 @@
     </div>
     <el-dropdown style="width: 150px; cursor: pointer; text-align: right">
       <div style="display: inline-block">
-                <img :src="user.avatarUrl" alt=""
+                <img :src="getImagesUrl(user.avatarUrl)" alt=""
                      style="width: 30px; border-radius: 50%; position: relative; top: 10px; right: 5px">
         <span>{{ user.nickname }}</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
       </div>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import {imagesUrl} from "@/utils";
 export default {
   name: "Header",
   props: {
@@ -54,6 +55,9 @@ export default {
     logout() {
       this.$store.commit("logout")
       this.$message.success("退出成功")
+    },
+    getImagesUrl(url){
+      return imagesUrl(url)
     }
   }
 }

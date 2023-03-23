@@ -25,7 +25,7 @@ import Aside from "@/components/sys/Aside";
 import Header from "@/components/sys/Header";
 
 export default {
-  name: "HomePage",
+  name: "Manage",
   components: {
     Aside,
     Header
@@ -64,6 +64,7 @@ export default {
         this.http.get("user-service/user/username/" + username).then(res => {
           // 重新赋值后台的最新User数据
           this.user = res.data
+          //console.log(this.user)
         })
       }
     }

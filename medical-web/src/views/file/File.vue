@@ -32,11 +32,11 @@
       <el-table-column prop="name" align="center" label="文件名称"></el-table-column>
       <el-table-column prop="type" align="center" label="文件类型" width="80"></el-table-column>
       <el-table-column prop="size" align="center" label="文件大小(kb)"></el-table-column>
-<!--      <el-table-column label="预览">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button type="primary" @click="preview(scope.row.url)">预览</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <el-table-column label="预览" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="preview(imagesUrl(scope.row.url))">预览</el-button>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="下载" width="100">
         <template slot-scope="scope">
           <el-button type="primary" @click="download(scope.row.url)">下载</el-button>
@@ -107,7 +107,7 @@ export default {
         }
       }).then(res => {
         this.tableData = res.data.records
-        this.total = res.total
+        this.total = res.data.total
       })
     },
     changeEnable(row) {
@@ -182,7 +182,7 @@ export default {
       this.load()
     },
     download(url) {
-      window.open(url)
+      window.open(`api/file-service/file/download/${url}`)
     },
     preview(url) {
       window.open(url)

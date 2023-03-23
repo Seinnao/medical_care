@@ -51,8 +51,6 @@ export default {
 }
 </script>
 
-
-<
 <style scoped>
 .el-menu-item.is-active {
   background-color: rgb(38, 52, 69) !important;

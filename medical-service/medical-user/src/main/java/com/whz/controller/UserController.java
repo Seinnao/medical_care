@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whz.dto.UserDTO;
+import com.whz.dto.UserPasswordDTO;
 import com.whz.entity.User;
 import com.whz.service.CaptchaService;
 import com.whz.service.IUserService;
@@ -77,35 +78,15 @@ public class UserController {
         return R.ok();
     }
 
-
-//    @PutMapping("/reset")
-//    public R reset(@RequestBody UserPasswordDTO userPasswordDTO) {
-//        if (StrUtil.isBlank(userPasswordDTO.getUsername()) || StrUtil.isBlank(userPasswordDTO.getPhone())) {
-//            throw new ServiceException("参数异常");
-//        }
-//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("username", userPasswordDTO.getUsername());
-//        queryWrapper.eq("phone", userPasswordDTO.getPhone());
-//        List<User> list = userService.list(queryWrapper);
-//        if (CollUtil.isNotEmpty(list)) {
-//            User user = list.get(0);
-//            user.setPassword("123");
-//            userService.updateById(user);
-//        }else{
-//            throw new ServiceException("用户名或电话号码错误！");
-//        }
-//        return R.ok();
-//    }
-
-//    /**
-//     * 修改密码
-//     * @param userPasswordDTO
-//     */
-//    @PostMapping("/password")
-//    public R password(@RequestBody UserPasswordDTO userPasswordDTO) {
-//        userService.updatePassword(userPasswordDTO);
-//        return R.ok();
-//    }
+    /**
+     * 修改密码
+     * @param userPasswordDTO
+     */
+    @PostMapping("/password")
+    public R password(@RequestBody UserPasswordDTO userPasswordDTO) {
+        userService.updatePassword(userPasswordDTO);
+        return R.ok();
+    }
 
 
     // 新增或者更新

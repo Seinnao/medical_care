@@ -41,9 +41,8 @@ public class FastDfsUtils {
     public String uploadFile(byte[] bytes, long fileSize, String extension) {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         StorePath storePath = fastFileStorageClient.uploadFile(byteArrayInputStream, fileSize, extension, null);
-        System.out.println(storePath.getGroup() + "===" + storePath.getPath() + "======" + storePath.getFullPath());
+        //System.out.println(storePath.getGroup() + "===" + storePath.getPath() + "======" + storePath.getFullPath());
         return storePath.getFullPath();
-
     }
 
     /**
@@ -54,8 +53,7 @@ public class FastDfsUtils {
      * @throws IOException
      */
     public String uploadFile(MultipartFile file) throws IOException {
-        StorePath storePath = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()), null);
-        return getResAccessUrl(storePath);
+        return fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()), null).getFullPath();
     }
 
     /**

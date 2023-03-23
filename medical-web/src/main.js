@@ -6,10 +6,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/gloable.css'
 import http from "@/utils/http";
+import {imagesUrl} from "@/utils";
 
 Vue.config.productionTip = false
 Vue.use(ElementUI, { size: "mini" })
 Vue.prototype.http=http
+Vue.prototype.imagesUrl = imagesUrl
 
 new Vue({
   router,

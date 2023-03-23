@@ -1,6 +1,7 @@
 package com.whz.service;
 
 import com.whz.dto.UserDTO;
+import com.whz.dto.UserPasswordDTO;
 import com.whz.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,4 +18,6 @@ public interface IUserService extends IService<User> {
     UserDTO login(UserDTO userDTO);
 
     void doRegister(UserDTO userDTO);
+
+    void updatePassword(UserPasswordDTO userPasswordDTO);
 }

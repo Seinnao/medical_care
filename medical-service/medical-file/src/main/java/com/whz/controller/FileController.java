@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -64,33 +65,46 @@ public class FileController {
             url = dfsUtils.uploadFile(file);
             log.info("上传地址：[{}]",url);
         }
-        // 存储数据库
-        File saveFile = new File();
-        saveFile.setName(originalFilename);
-        saveFile.setType(type);
-        saveFile.setSize(size/1024); // 单位 kb
-        saveFile.setUrl(url);
-        saveFile.setMd5(md5);
-        fileMapper.insert(saveFile);
+
+        //如果文件存在则不加入数据库
+        File twoFile = fileMapper.selectOne(new QueryWrapper<File>().eq("url",url));
+
+        if(null == twoFile){
+            // 存储数据库
+            File saveFile = new File();
+            saveFile.setName(originalFilename);
+            saveFile.setType(type);
+            saveFile.setSize(size/1024); // 单位 kb
+            saveFile.setUrl(url);
+            saveFile.setMd5(md5);
+            fileMapper.insert(saveFile);
+        }
 
         return R.ok().put("url",url);
     }
 
     /**
-     * 文件下载接口   http://localhost:9090/file/{url}
+     * 文件下载接口   http://localhost:8080/file/download/{url}
      * @throws IOException
      */
-    @GetMapping("/{url}")
-    public void download(@PathVariable String url, HttpServletResponse response) throws IOException {
+    @GetMapping("/download/**")
+    public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 设置输出流的格式
         ServletOutputStream os = response.getOutputStream();
-        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(url, "UTF-8"));
+
+        //对路径进行处理
+        String url = request.getRequestURI().replace("/file/download/","");
+
+        //根据url获取文件名
+        File file = fileMapper.selectOne(new QueryWrapper<File>().eq("url", url));
+
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));
         response.setContentType("application/octet-stream");
         // 读取文件的字节流
         try {
             os.write(dfsUtils.downloadFile(url));
         } catch (Exception e) {
-            System.err.println("文件下载失败，文件不存在");
+            log.info("文件下载失败，文件不存在");
         }
         os.flush();
         os.close();
@@ -163,6 +177,8 @@ public class FileController {
         }
         return R.ok().put(fileMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper));
     }
+
+
 
 
 }

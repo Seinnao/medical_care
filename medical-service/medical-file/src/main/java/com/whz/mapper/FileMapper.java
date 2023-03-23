@@ -13,4 +13,6 @@ import com.whz.entity.File;
  */
 public interface FileMapper extends BaseMapper<File> {
 
+
+
 }

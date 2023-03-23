@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.whz.dto.UserDTO;
+import com.whz.dto.UserPasswordDTO;
 import com.whz.entity.Menu;
 import com.whz.entity.User;
 import com.whz.exception.ServiceException;
@@ -82,6 +83,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .role("ROLE_USER")
                 .build();
         this.save(user);//存数据库
+    }
+
+    @Override
+    public void updatePassword(UserPasswordDTO userPasswordDTO) {
+
+        User user = this.getOne(new QueryWrapper<User>()
+                .eq("password", md5Util.getMd5AndSalt(userPasswordDTO.getPassword()))
+                .eq("", userPasswordDTO.getUsername()));
+
+        if(user != null){
+            user.setPassword(md5Util.getMd5AndSalt(userPasswordDTO.getNewPassword()));
+            this.updateById(user);
+        }else{
+            throw new ServiceException("旧密码错误");
+        }
     }
 
     /**

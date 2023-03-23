@@ -68,8 +68,6 @@ public class ChatController {
             forwardMessage(chatData,message);
         }
         //保存到数据库
-
-
     }
 
     private void forwardMessage(ChatData chatData,String message){

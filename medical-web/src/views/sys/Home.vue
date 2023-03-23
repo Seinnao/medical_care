@@ -1,15 +1,25 @@
 <template>
-  <div>主页
-    <div>{{data}}</div>
-    <el-input v-model="text"></el-input>
-    <el-button @click="send">发送</el-button>
+  <div class="content">
+    <el-row :gutter="10" style="margin-bottom: 30px">
+     <el-col :span="18"><el-input v-model="query" placeholder="您有什么问题可以问我!"></el-input></el-col>
+      <el-col :span="6"><el-button type="primary" icon="el-icon-search">搜索</el-button></el-col>
+    </el-row>
+    <el-row :gutter="10">
+     <el-col :span="22">
+       <div style="background-color: #b9b9b9">
+         <h1>标题</h1>
+       </div>
+     </el-col>
+    </el-row>
+    <el-row :gutter="10">
+      <el-col :span="24"><el-skeleton /></el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import { sendSock, createWebSocket, closeSock ,setParam} from '@/utils/webSocket'
+import { sendSock, createWebSocket, closeSock} from '@/utils/webSocket'
 import {timeFormate} from "@/utils";
-
 export default {
   name: "Home",
   created(){
@@ -17,35 +27,31 @@ export default {
   },
   data(){
     return{
-      text:'',
-      data:''
+      query:''
     }
   },
   methods:{
     init(){
-      setParam('小明')
-      createWebSocket(this.callback)
+      //createWebSocket(this.callback,"小明")
     },
-    callback(data){
-      this.data=data
+    search() {
+      // 在这里执行搜索操作
+      console.log('搜索关键词：', this.query);
     },
     send(){
       let obj = {
         from: '小明',
         to: '小花',
         type: 'text',
-        content: '你好呀！',
-        time: new Date()
+        content: '你好呀！'
       }
       sendSock(JSON.stringify(obj))
     }
   },
-  beforeDestroy(){
-    closeSock();
-  }
 }
 </script>
 
 <style scoped>
-
+.content{
+}
 </style>

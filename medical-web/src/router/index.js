@@ -6,10 +6,6 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/hello',
-        name: 'Hello', component: () => import('@/components/HelloWorld')
-    },
-    {
         path: '/login',
         name: 'login',
         component: () => import('@/views/sys/Login')
@@ -44,8 +40,8 @@ export const setRoutes = () => {
         // 拼装动态路由
         const manageRoute = {
             path: '/',
-            name: 'HomePage',
-            component: () => import('../views/sys/HomePage'),
+            name: 'Manage',
+            component: () => import('../views/sys/Manage'),
             redirect: "/home",
             children: [{
                 path: 'person',

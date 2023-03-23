@@ -39,3 +39,7 @@ export function timeFormate(timeStr,formStr){//时间序列化，非常方便格
     }
     return str;
 }
+
+export function imagesUrl(url){
+    return `http://${location.host}/api/file-service/images/${url}`
+}

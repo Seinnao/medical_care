@@ -8,7 +8,7 @@
           :http-request="filesRequest"
           :on-success="handleAvatarSuccess"
       >
-        <img v-if="form.avatarUrl" :src="form.avatarUrl" class="avatar">
+        <img v-if="form.avatarUrl" :src="imagesUrl(form.avatarUrl)" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
 
