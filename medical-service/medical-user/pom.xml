@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.whz</groupId>
-            <artifactId>medical-entity</artifactId>
+            <artifactId>medical-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

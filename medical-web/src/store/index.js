@@ -5,8 +5,9 @@ import router, {resetRouter} from "@/router";
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+    //这里放全局参数
     state: {
-        currentPathName: ''
+        currentPathName: '',
     },
     mutations: {
         setPath (state) {
@@ -20,7 +21,7 @@ const store = new Vuex.Store({
             // 重置路由
             resetRouter()
         }
-    }
+    },
 })
 
 export default store

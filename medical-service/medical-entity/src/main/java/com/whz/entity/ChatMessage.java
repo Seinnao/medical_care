@@ -22,11 +22,11 @@ public class ChatMessage {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
-    private String from;//发送者
-    private String to;//接收者
+    private String come;//发送者
+    private String reach;//接收者
     private String type;
     private String content;
-    private Date time;
+    private Date   time;
     private String mediaUrl; //媒体图片的路径
 
 }

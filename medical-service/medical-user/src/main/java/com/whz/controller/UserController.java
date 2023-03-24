@@ -2,11 +2,15 @@ package com.whz.controller;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whz.dto.UserDTO;
 import com.whz.dto.UserPasswordDTO;
 import com.whz.entity.User;
+import com.whz.exception.ServiceException;
+import com.whz.feign.ChatUserFeign;
 import com.whz.service.CaptchaService;
 import com.whz.service.IUserService;
 import com.whz.utils.R;
@@ -30,7 +34,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements ChatUserFeign {
 
     @Resource
     IUserService userService;
@@ -62,6 +66,7 @@ public class UserController {
         return R.ok().put(dto);
     }
 
+    @Override
     @GetMapping("/username/{username}")
     public R findByUsername(@PathVariable String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -92,21 +97,20 @@ public class UserController {
     // 新增或者更新
     @PostMapping
     public R save(@RequestBody User user) {
-        String username = user.getUsername();
-        if (StrUtil.isBlank(username)) {
-            return R.error("参数错误");
-        }
-        if (StrUtil.isBlank(user.getNickname())) {
-            user.setNickname(username);
-        }
-        if (user.getId() != null) {
-            user.setPassword(null);
-        } else {
-            if (user.getPassword() == null) {
-                user.setPassword("123");
+        User one = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getId, user.getId()));
+
+        if(!user.getNickname().equals(one.getNickname())){
+            User temp = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getNickname, user.getNickname()));
+            if(null != temp){
+                throw new ServiceException("该昵称已经被使用");
             }
         }
-        return R.ok().put(userService.saveOrUpdate(user));
+
+        if(!userService.saveOrUpdate(user)){
+            throw new ServiceException("保存失败");
+        }
+
+        return R.ok();
     }
 
     @DeleteMapping("/{id}")

@@ -71,7 +71,7 @@
     <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="30%" >
       <el-form label-width="80px" size="small">
         <el-form-item label="用户名">
-          <el-input v-model="form.username" autocomplete="off"></el-input>
+          <el-input v-model="form.username" disabled autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色">
           <el-select clearable v-model="form.role" placeholder="请选择角色" style="width: 100%">
@@ -148,7 +148,7 @@ export default {
           this.dialogFormVisible = false
           this.load()
         } else {
-          this.$message.error("保存失败")
+          this.$message.error(res.msg)
         }
       })
     },

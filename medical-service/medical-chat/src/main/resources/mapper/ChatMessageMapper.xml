@@ -2,4 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.whz.mapper.ChatMessageMapper">
 
+    <sql id="Base_Column_List">
+        id,come,reach,type,content,time,mediaUrl
+    </sql>
+
+    <select id="getHistory" resultType="com.whz.entity.ChatMessage">
+    select <include refid="Base_Column_List"/>
+    from chat_message
+    where (reach=#{toNickname} and come=#{nickname})
+       or (reach=#{nickname} and come=#{toNickname})
+    order by time asc
+    </select>
+
 </mapper>

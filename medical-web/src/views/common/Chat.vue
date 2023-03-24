@@ -1,23 +1,24 @@
 <template>
   <div class="chat-content">
+    <el-button @click="doIt">点击</el-button>
     <div class="chat-text" ref="chatText">
       <!-- recordContent 聊天记录数组-->
-      <div v-for="(item,indexc) in recordContent" :key="indexc">
+      <div v-for="(item,index) in recordContent" :key="index">
         <!-- 对方 -->
-        <div class="word" v-if="!item.fromMe">
-          <img src="../../assets/login/login-element.png">
+        <div class="word" v-if="item.come === to.nickname">
+          <img :src="imagesUrl(to.avatarUrl)">
           <div class="info">
-            <p class="time">{{item.nickName}}  {{item.time}}</p>
-            <div class="info-content">{{item.text}}</div>
+            <p class="time">{{to.nickname}}  {{item.time}}</p>
+            <div class="info-content">{{item.content}}</div>
           </div>
         </div>
         <!-- 我的 -->
         <div class="word-my" v-else>
           <div class="info">
-            <p class="time">{{item.nickName}}  {{item.time}}</p>
-            <div class="info-content">{{item.text}}</div>
+            <p class="time">{{user.nickname}}  {{item.time}}</p>
+            <div class="info-content">{{item.content}}</div>
           </div>
-          <img src="../../assets/logo.png">
+          <img :src="imagesUrl(user.avatarUrl)">
         </div>
       </div>
       <div class="text-bottom"></div>
@@ -45,38 +46,69 @@
 </template>
 
 <script>
+import { sendSock, createWebSocket, closeSock} from "@/utils/webSocket"
 export default {
   name: "Chat",
   data() {
     return {
-      friendName: 'John',
+      to: {nickname:"小花",avatarUrl:"group1/M00/00/00/wKhYg2Qd3DOAc8QrABLXzlpi1xU485.jpg"},
+      user:{},
       recordContent: [],
       newMessage: ''
     }
   },
+  created() {
+    this.init();
+  },
   methods: {
+    init(){
+      this.user = JSON.parse(localStorage.getItem("user"));
+      //查历史记录
+
+      //
+      createWebSocket(this.callback, this.user.nickname)
+    },
+    callback(data) {
+      this.recordContent.push(data)
+      //滚动到最后
+      this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
+    },
+    doIt(){
+      this.to = {nickname:"圣耀",avatarUrl:"group1/M00/00/00/wKhYg2QcM2KAbkwWAAH6x2Bh11k242.jpg"}
+    },
     sendMessage() {
       if (this.newMessage) {
-        this.recordContent.push({
-          text: this.newMessage,
-          fromMe: true,
-          time: new Date().toLocaleTimeString(),
-          nickName:'小明'
-        })
-
-        this.recordContent.push({
-          text: this.newMessage,
-          fromMe: false,
-          nickName:'小化',
-          time: new Date().toLocaleTimeString()
-        })
-
-        //滚动到最后
-        this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
-
+        let message = {
+          come: this.user.nickname,
+          reach: this.to.nickname,
+          content: this.newMessage,
+          time: new Date(),
+          type:'text'
+        }
+        this.recordContent.push(message)
+        sendSock(JSON.stringify(message))
+        // this.recordContent.push({
+        //   from: this.user.nickname,
+        //   to: this.to.nickname,
+        //   content: this.newMessage,
+        //   time: new Date().toLocaleTimeString(),
+        // })
+        //
+        // this.recordContent.push({
+        //   from: this.user.nickname,
+        //   to: this.to.nickname,
+        //   content: this.newMessage,
+        //   time: new Date().toLocaleTimeString(),
+        // })
+        //
+        // //滚动到最后
+        // this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
         this.newMessage = ''
       }
     }
+  },
+  beforeDestroy(){
+    closeSock()
   }
 }
 </script>

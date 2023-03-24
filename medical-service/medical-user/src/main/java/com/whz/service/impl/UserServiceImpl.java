@@ -11,6 +11,7 @@ import com.whz.exception.ServiceException;
 import com.whz.mapper.UserMapper;
 import com.whz.service.*;
 import com.whz.utils.MD5Util;
+import com.whz.utils.NickNameUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -76,10 +77,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if(!list.isEmpty()){
             throw new ServiceException("该账号已经被注册");
         }
+
+        //随机一个昵称
+        User one;
+        String chineseName;
+        do{
+            chineseName = NickNameUtil.getRandomChineseName();
+            one = this.getOne(new QueryWrapper<User>().eq("nickname", chineseName));
+        }while (null != one);
+
         User user = User.builder()
                 .username(userDTO.getUsername())
                 .password(md5Util.getMd5AndSalt(userDTO.getPassword()))
                 .phone(userDTO.getTel())
+                .nickname(chineseName)
                 .role("ROLE_USER")
                 .build();
         this.save(user);//存数据库

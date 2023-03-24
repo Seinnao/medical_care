@@ -20,6 +20,6 @@ public class ChatData {
 
     private String id;
 
-    private String username;
+    private String nickname;
 
 }

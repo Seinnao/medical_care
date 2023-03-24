@@ -23,7 +23,6 @@
 <script>
 import Aside from "@/components/sys/Aside";
 import Header from "@/components/sys/Header";
-
 export default {
   name: "Manage",
   components: {
@@ -58,17 +57,16 @@ export default {
       }
     },
     getUser() {
-      let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
-      if (username) {
+      this.user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+      if (this.username) {
         // 从后台获取User数据
-        this.http.get("user-service/user/username/" + username).then(res => {
+        this.http.get("user-service/user/username/" + this.username).then(res => {
           // 重新赋值后台的最新User数据
           this.user = res.data
-          //console.log(this.user)
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
