@@ -24,7 +24,8 @@
     <el-table :data="tableData" border stripe
               v-loading="loading"
               :header-cell-class-name="'headerBg'"
-              row-key="id" default-expand-all @selection-change="handleSelectionChange">
+              row-key="id" @selection-change="handleSelectionChange">
+<!--      default-expand-all-->
       <el-table-column align="center" type="selection" width="55"></el-table-column>
 <!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
       <el-table-column prop="name" align="center" label="名称"></el-table-column>

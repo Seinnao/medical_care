@@ -19,19 +19,19 @@ public class MybatisPlusGenertor {
                     builder.author("文辉正") // 设置作者
                             //.enableSwagger() // 开启 swagger 模式
                             .fileOverride() // 覆盖已生成文件
-                            .outputDir("medical-service\\medical-chat\\src\\main\\java"); // 指定输出目录
+                            .outputDir("medical-service\\medical-user\\src\\main\\java"); // 指定输出目录
                     //
                 })
                 .packageConfig(builder -> {
                     builder.parent("com.whz") // 设置父包名
                             //.moduleName("/") // 设置父包模块名
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml
-                                    , "medical-service\\medical-chat\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
+                                    , "medical-service\\medical-user\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("chat_message"); // 设置需要生成的表名
+                    builder.addInclude("doctor_evaluate") // 设置需要生成的表名
                             //.addInclude("medicine_symptom")
-                            //.addTablePrefix("sys_"); // 设置过滤表前缀
+                            .addTablePrefix("sys_"); // 设置过滤表前缀
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();

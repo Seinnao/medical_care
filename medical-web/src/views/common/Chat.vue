@@ -8,14 +8,14 @@
         <div class="word" v-if="item.come === to.nickname">
           <img :src="imagesUrl(to.avatarUrl)">
           <div class="info">
-            <p class="time">{{to.nickname}}  {{item.time}}</p>
+            <p class="time">{{to.nickname}}  {{$moment(item.time).calendar()}}</p>
             <div class="info-content">{{item.content}}</div>
           </div>
         </div>
         <!-- 我的 -->
         <div class="word-my" v-else>
           <div class="info">
-            <p class="time">{{user.nickname}}  {{item.time}}</p>
+            <p class="time">{{user.nickname}}  {{$moment(item.time).calendar()}}</p>
             <div class="info-content">{{item.content}}</div>
           </div>
           <img :src="imagesUrl(user.avatarUrl)">
@@ -54,7 +54,7 @@ export default {
       to: {nickname:"小花",avatarUrl:"group1/M00/00/00/wKhYg2Qd3DOAc8QrABLXzlpi1xU485.jpg"},
       user:{},
       recordContent: [],
-      newMessage: ''
+      newMessage: '',
     }
   },
   created() {
@@ -86,26 +86,11 @@ export default {
           type:'text'
         }
         this.recordContent.push(message)
+        this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
         sendSock(JSON.stringify(message))
-        // this.recordContent.push({
-        //   from: this.user.nickname,
-        //   to: this.to.nickname,
-        //   content: this.newMessage,
-        //   time: new Date().toLocaleTimeString(),
-        // })
-        //
-        // this.recordContent.push({
-        //   from: this.user.nickname,
-        //   to: this.to.nickname,
-        //   content: this.newMessage,
-        //   time: new Date().toLocaleTimeString(),
-        // })
-        //
-        // //滚动到最后
-        // this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
         this.newMessage = ''
       }
-    }
+    },
   },
   beforeDestroy(){
     closeSock()

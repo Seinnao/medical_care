@@ -1,6 +1,10 @@
 package com.whz.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.whz.entity.ChatMessage;
+import com.whz.entity.User;
+import com.whz.exception.ServiceException;
+import com.whz.feign.ChatUserFeign;
 import com.whz.service.IChatMessageService;
 import com.whz.storage.ChatData;
 import com.whz.storage.SessionMap;
@@ -28,6 +32,7 @@ public class ChatController {
 
 
     private static IChatMessageService chatMessageService;
+    private static ChatUserFeign chatUserFeign;
 
     //只能如此装配 因为webSocket会启动多线程
     @Resource
@@ -36,15 +41,27 @@ public class ChatController {
     }
 
 
+    @Resource
+    public void setChatUserFeign(ChatUserFeign chatUserFeign){
+        ChatController.chatUserFeign = chatUserFeign;
+    }
+
+
     //处理连接建立
     @OnOpen
     public void opOpen(Session session,@PathParam("nickname") String nickname) {
         log.info("【有新的客户端连接了】：{}", session.getId());
 
+        User user = chatUserFeign.findByNickname(nickname);
+        if(null == user){
+            throw new ServiceException("连接异常");
+        }
+
         ChatData chatData = ChatData.builder().
                 session(session)
                 .id(session.getId())
                 .nickname(nickname)
+                .role(user.getRole())
                 .build();
 
         SessionMap.sessionMap.put(nickname,chatData);

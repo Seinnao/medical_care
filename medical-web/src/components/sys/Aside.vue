@@ -2,6 +2,7 @@
   <el-menu style="min-height: 100%; overflow-x: hidden"
            background-color="rgb(48, 65, 86)"
            text-color="#fff"
+           unique-opened
            active-text-color="#ffd04b"
            :collapse-transition="false"
            :collapse="isCollapse"

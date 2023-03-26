@@ -36,9 +36,17 @@
         </template>
       </el-table-column>
       <el-table-column prop="nickname" align="center" label="昵称" width="120"></el-table-column>
-      <el-table-column prop="email" align="center" label="邮箱" width="150"></el-table-column>
+      <el-table-column prop="email" align="center" label="邮箱" width="150">
+        <template slot-scope="{row}">
+          {{ row.email || '空' }}
+        </template>
+      </el-table-column>
       <el-table-column prop="phone" align="center" label="电话"></el-table-column>
-      <el-table-column prop="address" align="center" label="地址"></el-table-column>
+      <el-table-column prop="address" align="center" label="地址">
+        <template slot-scope="{row}">
+          {{ row.address || '空' }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作"  width="200" align="center">
         <template slot-scope="scope">
           <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>

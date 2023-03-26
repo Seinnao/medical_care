@@ -11,7 +11,7 @@
     from chat_message
     where (reach=#{toNickname} and come=#{nickname})
        or (reach=#{nickname} and come=#{toNickname})
-    order by time asc
+    order by time asc limit 20
     </select>
 
 </mapper>

@@ -76,6 +76,12 @@ public class UserController implements ChatUserFeign {
         return R.ok().put(one);
     }
 
+    @Override
+    @GetMapping("/nickname/{nickname}")
+    public User findByNickname(@PathVariable String nickname){
+        return userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getNickname, nickname));
+    }
+
 
     @PostMapping("/register")
     public R register(@RequestBody UserDTO userDTO){

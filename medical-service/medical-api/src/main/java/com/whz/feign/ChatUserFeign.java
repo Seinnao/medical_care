@@ -1,7 +1,9 @@
 package com.whz.feign;
 
+import com.whz.entity.User;
 import com.whz.feign.hystrix.ChatUserFeignHystrix;
 import com.whz.utils.R;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,5 +17,8 @@ public interface ChatUserFeign {
 
     @GetMapping("/user/username/{username}")
     public R findByUsername(@PathVariable String username);
+
+    @GetMapping("/user/nickname/{nickname}")
+    User findByNickname(@PathVariable String nickname);
 
 }
