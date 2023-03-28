@@ -15,7 +15,7 @@
       <img src="@/assets/logo.png" alt="" style="width: 20px; position: relative; top: 5px;">
       <b style="color: white; margin-left: 1px" v-show="logoTextShow">医疗服务平台</b>
     </div>
-    <div v-for="item in menus" :key="item.id">
+    <div v-for="item in menus" :key="item.id" class="aside">
       <div v-if="item.path">
         <el-menu-item :index="item.path">
           <i :class="item.icon"></i>
@@ -61,7 +61,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-menu-item.is-active {
   background-color: rgb(38, 52, 69) !important;
 }
@@ -78,4 +78,13 @@ export default {
 .el-menu--collapse span {
   visibility: hidden;
 }
+
+//目前不起作用
+.aside{
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 </style>

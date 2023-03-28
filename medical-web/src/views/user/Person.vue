@@ -1,40 +1,44 @@
 <template xmlns="">
-  <el-card style="width: 500px;">
-    <el-form label-width="80px" size="small">
-      <el-upload
-          class="avatar-uploader"
-          action=""
-          :show-file-list="false"
-          :http-request="filesRequest"
-          :on-success="handleAvatarSuccess"
-      >
-        <img v-if="form.avatarUrl" :src="imagesUrl(form.avatarUrl)" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+  <div class="first">
+    <el-card style="width: 500px;">
+      <el-form label-width="80px" size="small">
+        <el-upload
+            class="avatar-uploader"
+            action=""
+            :show-file-list="false"
+            :http-request="filesRequest"
+            :on-success="handleAvatarSuccess"
+        >
+          <img v-if="form.avatarUrl" :src="imagesUrl(form.avatarUrl)" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
 
-      <el-form-item label="用户名">
-        <el-input v-model="form.username" disabled autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="昵称">
-        <el-input v-model="form.nickname" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="form.email" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="电话">
-        <el-input v-model="form.phone" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="地址">
-        <el-input type="textarea" v-model="form.address" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="save">确 定</el-button>
-      </el-form-item>
-    </el-form>
-  </el-card>
+        <el-form-item label="用户名">
+          <el-input v-model="form.username" disabled autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称">
+          <el-input v-model="form.nickname" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="form.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input type="textarea" v-model="form.address" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="save">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "Person",
   data() {
@@ -66,6 +70,9 @@ export default {
             data.token = JSON.parse(localStorage.getItem("user")).token
             localStorage.setItem("user", JSON.stringify(data))
           })
+
+          //跳转到主页,回退
+          router.back();
 
         } else {
           this.$message.error("保存失败")
@@ -124,5 +131,11 @@ export default {
   width: 138px;
   height: 138px;
   display: block;
+}
+.first{
+  position: relative;
+  top:50%;
+  left: 50%;
+  transform:translateY(-50%) translateX(-25%);
 }
 </style>

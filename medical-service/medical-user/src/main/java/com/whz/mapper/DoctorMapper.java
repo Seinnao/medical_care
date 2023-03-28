@@ -15,6 +15,6 @@ import com.whz.entity.Doctor;
  */
 public interface DoctorMapper extends BaseMapper<Doctor> {
 
-    IPage<Doctor> getDoctorList(Page<Doctor> page);
+    IPage<Doctor> getDoctorList(Page<Doctor> page,String name);
 
 }

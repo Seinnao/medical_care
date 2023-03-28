@@ -4,11 +4,16 @@
 
 <!--    core round()函数取小数点后几位-->
     <select id="getDoctorList" resultType="com.whz.entity.Doctor">
-        select s.id,s.name,s.is_online,s.avatar_url,s.introduce,ifnull(round(avg(d.score),1),5) as score
+        select s.id,s.name,s.education,s.is_online,s.avatar_url,s.introduce,ifnull(round(avg(d.score),1),4) as score
         from sys_doctor s
         left join
              doctor_evaluate d
-        on s.id = d.doctor_id group by s.id
+        on s.id = d.doctor_id
+        where s.state = 1
+        <if test="name != null and name != ''">
+            and name LIKE concat('%',#{name},'%')
+        </if>
+        group by s.id
     </select>
 
 </mapper>

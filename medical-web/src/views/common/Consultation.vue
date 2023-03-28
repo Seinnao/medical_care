@@ -12,7 +12,7 @@
                <h1>{{ item.name }}</h1>
              </el-col>
              <el-col :span="6" style="top: 0">
-               <el-button :disabled="!item.isOnline" style="float: right; padding: 3px 0" type="text">向它咨询</el-button>
+               <el-button style="float: right; padding: 3px 0" type="text" @click="toInquiry(item)">向它咨询</el-button>
              </el-col>
            </el-row>
          </div>
@@ -26,11 +26,22 @@
          -webkit-line-clamp: 2;
          -webkit-box-orient: vertical;
           overflow: hidden;">
-           <p style="font-size: 12px;color: #909399;"> {{item.describe}} </p>
+           <p style="font-size: 12px;color: #909399;"> {{item.introduce}} </p>
          </div>
        </el-card>
      </el-col>
     </el-row>
+    <div style="padding: 10px 0">
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageNum"
+          :page-sizes="[8, 16, 24, 40]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -40,27 +51,51 @@ export default {
   data() {
     return {
       value: 3.8,
-      doctors: [{
-        id: '9888888888845',
-        name: "李小华",
-        score: 3.7,
-        isOnline: true,
-        avatarUrl: "group1/M00/00/00/wKhYg2QcM2KAbkwWAAH6x2Bh11k242.jpg",
-        nickname: "",
-        describe: "该医生是一位。。。。。。。"
-      }, {
-        id: '9888888888843',
-        name: "李雯",
-        score: 3.9,
-        isOnline: false,
-        avatarUrl: "group1/M00/00/00/wKhYg2QcM2KAbkwWAAH6x2Bh11k242.jpg",
-        nickname: "",
-        describe: "该医生是一位。。。。。。。"
-      },]
+      total: 0,
+      pageNum: 1,
+      pageSize: 16,
+      loading: false,
+      doctors: []
     }
   },
+  created() {
+    this.load()
+  },
   methods: {
-
+    load() {
+      this.loading = true;
+      this.http.get("/user-service/doctor/getDoctors", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+        }
+      }).then(res => {
+        this.doctors = res.data.records
+        this.total = res.data.total
+        this.loading = false;
+      })
+    },
+    handleSizeChange(pageSize) {
+      console.log(pageSize)
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {
+      console.log(pageNum)
+      this.pageNum = pageNum
+      this.load()
+    },
+    toInquiry(data){
+      this.$router.push({
+        name:"chat",
+        params:{
+          id:data.id,
+          name:data.name,
+          avatarUrl:data.avatarUrl
+        }
+      })
+    }
   }
 }
 </script>

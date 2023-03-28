@@ -1,48 +1,76 @@
 <template>
-  <div class="chat-content">
-    <el-button @click="doIt">点击</el-button>
-    <div class="chat-text" ref="chatText">
-      <!-- recordContent 聊天记录数组-->
-      <div v-for="(item,index) in recordContent" :key="index">
-        <!-- 对方 -->
-        <div class="word" v-if="item.come === to.nickname">
-          <img :src="imagesUrl(to.avatarUrl)">
-          <div class="info">
-            <p class="time">{{to.nickname}}  {{$moment(item.time).calendar()}}</p>
-            <div class="info-content">{{item.content}}</div>
-          </div>
-        </div>
-        <!-- 我的 -->
-        <div class="word-my" v-else>
-          <div class="info">
-            <p class="time">{{user.nickname}}  {{$moment(item.time).calendar()}}</p>
-            <div class="info-content">{{item.content}}</div>
-          </div>
-          <img :src="imagesUrl(user.avatarUrl)">
-        </div>
+  <el-container style="height: 100%">
+    <el-header height="40px" style="padding: 0 10px 0 0;">
+      <div style="background-color: #409EFF;height: 100%">
+        <h4 style="color: #fff;line-height:40px;text-align: center;">{{ to.nickname }}</h4>
       </div>
-      <div class="text-bottom"></div>
-    </div>
+    </el-header>
+    <el-container style="height: calc(100% - 40px)">
+      <el-aside width="120px" class="aside-left">
+<!--        <div class="seize_a_seat"></div>-->
+        <div :class="selectId !== item.id ? 'incoming_letter':'incoming_letter_active'"
+             @click="switchChat(item)"
+             v-for="item in chatList" :key="item.id">
+          <el-row align="middle" type="flex">
+            <el-col :span="12">
+              <el-badge :value="item.unreadMsg" :hidden="item.unreadMsg === 0">
+                <el-avatar :src="imagesUrl(item.avatarUrl)"></el-avatar>
+              </el-badge>
+            </el-col>
+            <el-col :span="12">
+              <p class="info_msg">{{item.otherParty}}</p>
+            </el-col>
+          </el-row>
+        </div>
+      </el-aside>
+      <el-main style="padding: 0 10px 0 0;height: calc(100% - 40px)">
+        <div class="chat-content" v-if="selectId !== 0">
+          <div class="chat-text" ref="chatText">
+            <!-- recordContent 聊天记录数组-->
+            <div v-for="(item,index) in recordContent" :key="index">
+              <!-- 对方 -->
+              <div class="word" v-if="item.come === to.nickname">
+                <img :src="imagesUrl(to.avatarUrl)">
+                <div class="info">
+                  <p class="time">{{to.nickname}}  {{$moment(item.time).calendar()}}</p>
+                  <div class="info-content">{{item.content}}</div>
+                </div>
+              </div>
+              <!-- 我的 -->
+              <div class="word-my" v-else>
+                <div class="info">
+                  <p class="time">{{user.nickname}}  {{$moment(item.time).calendar()}}</p>
+                  <div class="info-content">{{item.content}}</div>
+                </div>
+                <img :src="imagesUrl(user.avatarUrl)">
+              </div>
+            </div>
+            <div class="text-bottom"></div>
+          </div>
 
-    <div class="chat-input">
-      <el-row :gutter="10">
-       <el-col :span="21">
-         <el-input
-             size="medium"
-             placeholder="请输入内容"
-             v-model="newMessage">
-         </el-input>
-       </el-col>
-        <el-col :span="1">
-          <el-button size="medium"
-                     @click="sendMessage"
-                     type="primary"
-                     icon="el-icon-s-promotion">发送</el-button>
-        </el-col>
-      </el-row>
-    </div>
+          <div class="chat-input">
+            <el-row :gutter="10">
+              <el-col :span="21">
+                <el-input
+                    size="medium"
+                    placeholder="请输入内容"
+                    v-model="newMessage">
+                </el-input>
+              </el-col>
+              <el-col :span="1">
+                <el-button size="medium"
+                           @click="sendMessage"
+                           type="primary"
+                           icon="el-icon-s-promotion">发送</el-button>
+              </el-col>
+            </el-row>
+          </div>
 
-  </div>
+        </div>
+        <el-empty v-else description=""></el-empty>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -51,10 +79,17 @@ export default {
   name: "Chat",
   data() {
     return {
-      to: {nickname:"小花",avatarUrl:"group1/M00/00/00/wKhYg2Qd3DOAc8QrABLXzlpi1xU485.jpg"},
+      to: {},
       user:{},
       recordContent: [],
       newMessage: '',
+      selectId: 0,
+      chatList:[{
+        id:3,
+        otherParty:'李医生',
+        avatarUrl:"group1/M00/00/00/wKhYg2Qd3DOAc8QrABLXzlpi1xU485.jpg",
+        unreadMsg: 20
+      }]
     }
   },
   created() {
@@ -64,17 +99,44 @@ export default {
     init(){
       this.user = JSON.parse(localStorage.getItem("user"));
       //查历史记录
-
-      //
       createWebSocket(this.callback, this.user.nickname)
+      if(this.$route.params.id){
+        this.selectId = this.$route.params.id
+        this.to.nickname = this.$route.params.name
+        this.to.avatarUrl = this.$route.params.avatarUrl
+
+        this.http.post("/user-service/chat-people", {
+          nickname:this.user.nickname,
+          otherParty:this.to.nickname,
+          time:new Date()
+        }).then(res => {
+          if (res.code === 200) {
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+      }else {
+        this.selectId = 0
+        this.to.nickname = ""
+        this.to.avatarUrl = ""
+      }
+      this.load()
+    },
+    load(){
+      this.http.get("/user-service/chat-people/"+this.user.nickname).then(res => {
+        this.chatList = res.data
+      })
     },
     callback(data) {
       this.recordContent.push(data)
       //滚动到最后
       this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
     },
-    doIt(){
-      this.to = {nickname:"圣耀",avatarUrl:"group1/M00/00/00/wKhYg2QcM2KAbkwWAAH6x2Bh11k242.jpg"}
+    switchChat(item){
+      this.selectId = item.id;
+      this.to.nickname = item.otherParty;
+      this.to.avatarUrl = item.avatarUrl;
+      item.unreadMsg = 0;
     },
     sendMessage() {
       if (this.newMessage) {
@@ -103,10 +165,11 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 0;
   background-color: #F2F6FC;
   .chat-text{
     height: 100%;
+    padding: 20px 0 0 0;
     overflow: auto;
     &::-webkit-scrollbar {
       display: none;
@@ -114,6 +177,7 @@ export default {
     .word{
       display: flex;
       margin-bottom: 20px;
+      margin-left: 20px;
       img{
         width: 40px;
         height: 40px;
@@ -152,6 +216,7 @@ export default {
       display: flex;
       justify-content:flex-end;
       margin-bottom: 20px;
+      margin-right: 20px;
       img{
         width: 40px;
         height: 40px;
@@ -206,7 +271,38 @@ export default {
     right: 0;
     width: 100%;
   }
-
 }
-
+.aside-left{
+  padding:0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  background-color: #409EFF;
+  .seize_a_seat{
+    background-color:#409EFF;
+    height: 40px
+  }
+  .incoming_letter{
+    padding: 10px;
+    .info_msg{
+      font-size:16px;
+      font-weight:600;
+      color: #ffffff
+    }
+  }
+  .incoming_letter:hover{
+    background-color: #79bbff;
+  }
+  .incoming_letter_active{
+    background-color: #79bbff;
+    padding: 10px;
+    .info_msg{
+      font-size:16px;
+      font-weight:600;
+      color: #ffffff
+    }
+  }
+}
 </style>

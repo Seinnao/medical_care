@@ -82,6 +82,9 @@ public class ChatController {
 
         ChatMessage chatMessage = JsonUtils.fromJson(message, ChatMessage.class);
 
+
+
+
         if(chatMessage.getReach().equals("all")){
             Collection<ChatData> values = SessionMap.sessionMap.values();
             for (ChatData chatData: values){

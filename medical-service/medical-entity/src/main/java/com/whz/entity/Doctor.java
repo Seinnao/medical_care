@@ -27,6 +27,8 @@ public class Doctor implements Serializable {
 
     private String name;
 
+    private String education;
+
     private Boolean isOnline;
 
     private String avatarUrl;
@@ -36,6 +38,11 @@ public class Doctor implements Serializable {
      */
     private String introduce;
 
+    private Boolean state;
+
     @TableField(exist = false)
     private float score;
+
+    @TableField(exist = false)
+    private long userId;
 }
