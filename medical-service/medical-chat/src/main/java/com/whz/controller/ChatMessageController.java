@@ -43,6 +43,16 @@ public class ChatMessageController {
     public R getHistory(@PathVariable("nickname") String nickname,
                         @PathVariable("toNickname") String toNickname) {
         List<ChatMessage> history = chatMessageMapper.getHistory(nickname, toNickname);
+
+        //遍历消息当信息接收者为自己时，代表已经阅读信息
+        history.forEach(msg -> {
+            if(msg.getReach().equals(nickname)){
+                msg.setState(true);
+            }
+        });
+
+        chatMessageService.updateBatchById(history);
+
         return R.ok().put(history);
     }
 

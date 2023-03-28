@@ -3,7 +3,7 @@
 <mapper namespace="com.whz.mapper.ChatMessageMapper">
 
     <sql id="Base_Column_List">
-        id,come,reach,type,content,time,mediaUrl
+        id,come,reach,type,content,time,media_url
     </sql>
 
     <select id="getHistory" resultType="com.whz.entity.ChatMessage">
@@ -11,7 +11,7 @@
     from chat_message
     where (reach=#{toNickname} and come=#{nickname})
        or (reach=#{nickname} and come=#{toNickname})
-    order by time asc limit 20
+    order by time desc limit 50
     </select>
 
 </mapper>

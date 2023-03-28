@@ -75,6 +75,7 @@
 
 <script>
 import { sendSock, createWebSocket, closeSock} from "@/utils/webSocket"
+import user from "@/views/user/User";
 export default {
   name: "Chat",
   data() {
@@ -84,22 +85,29 @@ export default {
       recordContent: [],
       newMessage: '',
       selectId: 0,
-      chatList:[{
-        id:3,
-        otherParty:'李医生',
-        avatarUrl:"group1/M00/00/00/wKhYg2Qd3DOAc8QrABLXzlpi1xU485.jpg",
-        unreadMsg: 20
-      }]
+      chatList:[]
     }
   },
   created() {
     this.init();
   },
+  updated(){//数据更新时调用
+    //滚动到最后
+    this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
+  },
   methods: {
     init(){
       this.user = JSON.parse(localStorage.getItem("user"));
-      //查历史记录
-      createWebSocket(this.callback, this.user.nickname)
+
+      if(this.user.role === 'ROLE_DOCTOR'){
+        this.user.nickname = this.user.doctorName
+        this.http.get("/user-service/doctor/getDoctor/"+this.user.doctorName).then(res =>{
+          this.user.avatarUrl = res.data.avatarUrl
+        })
+      }
+
+      createWebSocket(this.callback, this.user.nickname,this.user.role)
+
       if(this.$route.params.id){
         this.selectId = this.$route.params.id
         this.to.nickname = this.$route.params.name
@@ -108,6 +116,8 @@ export default {
         this.http.post("/user-service/chat-people", {
           nickname:this.user.nickname,
           otherParty:this.to.nickname,
+          myUrl:this.user.avatarUrl,
+          toUrl:this.to.avatarUrl,
           time:new Date()
         }).then(res => {
           if (res.code === 200) {
@@ -121,22 +131,38 @@ export default {
         this.to.avatarUrl = ""
       }
       this.load()
+      if(this.selectId !== 0){
+        this.loadMsg();
+      }
     },
     load(){
-      this.http.get("/user-service/chat-people/"+this.user.nickname).then(res => {
+      let name = this.user.nickname;
+      this.http.get("/user-service/chat-people/"+name).then(res => {
         this.chatList = res.data
       })
     },
+    loadMsg(){
+      this.http.get(`/chat-service/chat-message/history/${this.user.nickname}/${this.to.nickname}`).then(res => {
+        this.recordContent = res.data
+        this.recordContent.reverse()
+      })
+    },
     callback(data) {
-      this.recordContent.push(data)
-      //滚动到最后
-      this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
+      if(data.come === this.to.nickname) {
+        this.recordContent.push(data)
+        //滚动到最后
+        this.$refs.chatText.scrollTop = this.$refs.chatText.scrollHeight
+        //修改状态
+      }else {
+        this.load();
+      }
     },
     switchChat(item){
       this.selectId = item.id;
       this.to.nickname = item.otherParty;
       this.to.avatarUrl = item.avatarUrl;
       item.unreadMsg = 0;
+      this.loadMsg();
     },
     sendMessage() {
       if (this.newMessage) {

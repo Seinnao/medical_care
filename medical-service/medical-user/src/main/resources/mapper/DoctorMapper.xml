@@ -16,4 +16,13 @@
         group by s.id
     </select>
 
+    <select id="getNameByUser" resultType="java.lang.String">
+        select d.name from sys_doctor d
+            join user_for_doctor f
+            on d.id = f.doctor_id
+            join sys_user u
+            on u.id = f.user_id
+            where u.nickname = #{nickname}
+    </select>
+
 </mapper>

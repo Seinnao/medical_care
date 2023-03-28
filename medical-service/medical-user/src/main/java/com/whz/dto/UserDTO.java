@@ -26,6 +26,7 @@ public class UserDTO {
     private String captcha;
     private String nickname;
     private String avatarUrl;
+    private String doctorName;
     private String role;
     private List<Menu> menus;
 }

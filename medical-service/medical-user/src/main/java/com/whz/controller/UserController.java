@@ -1,17 +1,17 @@
 package com.whz.controller;
 
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whz.dto.UserDTO;
 import com.whz.dto.UserPasswordDTO;
+import com.whz.entity.Doctor;
 import com.whz.entity.User;
 import com.whz.exception.ServiceException;
 import com.whz.feign.ChatUserFeign;
 import com.whz.service.CaptchaService;
+import com.whz.service.IDoctorService;
 import com.whz.service.IUserService;
 import com.whz.utils.R;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +42,9 @@ public class UserController implements ChatUserFeign {
     @Resource
     CaptchaService captchaService;
 
+    @Resource
+    IDoctorService doctorService;
+
     /**
      * 获取验证码
      */
@@ -62,7 +65,7 @@ public class UserController implements ChatUserFeign {
     @PostMapping("/login")
     public R login(@RequestBody UserDTO userDTO) {
         UserDTO dto = userService.login(userDTO);
-        System.out.println(userDTO);
+        //System.out.println(userDTO);
         return R.ok().put(dto);
     }
 
@@ -104,6 +107,8 @@ public class UserController implements ChatUserFeign {
     @PostMapping
     public R save(@RequestBody User user) {
         User one = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getId, user.getId()));
+        //防止密码被覆盖
+        one.setPassword(null);
 
         if(!user.getNickname().equals(one.getNickname())){
             User temp = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getNickname, user.getNickname()));
@@ -154,6 +159,12 @@ public class UserController implements ChatUserFeign {
         }
         Page<User> page = userService.page(new Page<>(pageNum, pageSize), queryWrapper);
         return R.ok().put("data",page);
+    }
+
+    @Override
+    @GetMapping("/doctorName/{name}")
+    public Doctor findByName(@PathVariable String name){
+        return doctorService.getOne(Wrappers.<Doctor>lambdaQuery().eq(Doctor::getName,name));
     }
 
 }

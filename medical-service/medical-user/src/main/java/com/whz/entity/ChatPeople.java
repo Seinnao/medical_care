@@ -1,5 +1,6 @@
 package com.whz.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -35,8 +36,17 @@ public class ChatPeople implements Serializable {
 
     private String otherParty;
 
-    private Integer unreadMsg;
+    private String avatarUrl;
 
     private Date time;
+
+    @TableField(exist = false)
+    private Integer unreadMsg;
+
+    @TableField(exist = false)
+    private String myUrl;
+
+    @TableField(exist = false)
+    private String toUrl;
 
 }

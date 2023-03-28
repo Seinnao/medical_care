@@ -8,6 +8,7 @@ import com.whz.dto.UserPasswordDTO;
 import com.whz.entity.Menu;
 import com.whz.entity.User;
 import com.whz.exception.ServiceException;
+import com.whz.mapper.DoctorMapper;
 import com.whz.mapper.UserMapper;
 import com.whz.service.*;
 import com.whz.utils.MD5Util;
@@ -42,6 +43,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private CaptchaService captchaService;
 
     @Resource
+    private DoctorMapper doctorMapper;
+
+    @Resource
     private MD5Util md5Util;
 
     @Override
@@ -61,6 +65,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             List<Menu> roleMenus = getRoleMenus(role);
             userDTO.setMenus(roleMenus);
             userDTO.setPassword("");
+
+            if(role.equals("ROLE_DOCTOR")){
+                userDTO.setDoctorName(doctorMapper.getNameByUser(userDTO.getNickname()));
+            }
+
             return userDTO;
         }else{
             throw new ServiceException("用户名或密码错误");

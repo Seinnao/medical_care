@@ -5,16 +5,16 @@ let rec; //断线重连后，延迟5秒重新创建WebSocket连接  rec用来存
 
 let wsUri = `ws://${location.host}/api/chat-service/socket`;
 
-function createWebSocket(callback,nickname) {
+function createWebSocket(callback,nickname,role) {
     if (websock == null || typeof websock !== WebSocket) {
-        initWebSocket(callback,nickname);
+        initWebSocket(callback,nickname,role);
     }
 }
 
-function initWebSocket(callback,nickname) {
+function initWebSocket(callback,nickname,role) {
     global_callback = callback;
     // 初始化websocket
-    websock = new WebSocket(wsUri+'/'+nickname);
+    websock = new WebSocket(`${wsUri}/${nickname}/${role}`);
     websock.onmessage = function (e) {
         websocketonmessage(e);
     };

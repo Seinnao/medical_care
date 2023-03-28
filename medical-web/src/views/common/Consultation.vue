@@ -88,7 +88,7 @@ export default {
     },
     toInquiry(data){
       this.$router.push({
-        name:"chat",
+        name:"聊天",
         params:{
           id:data.id,
           name:data.name,

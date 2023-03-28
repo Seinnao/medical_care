@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/doctor")
-public class DoctorController {
+public class DoctorController{
 
     @Resource
     DoctorMapper doctorMapper;
@@ -37,6 +37,13 @@ public class DoctorController {
 
     @Resource
     IUserForDoctorService userForDoctorService;
+
+
+    @GetMapping("/getDoctor/{name}")
+    public R getDoctor(@PathVariable String name){
+        return R.ok().put(doctorService.getOne(Wrappers.<Doctor>lambdaQuery().eq(Doctor::getName,name)));
+    }
+
 
     @GetMapping("/getDoctors")
     public R getDoctors(@RequestParam Integer pageNum,
@@ -163,8 +170,5 @@ public class DoctorController {
         }
         return R.ok().put(one);
     }
-
-
-
 
 }

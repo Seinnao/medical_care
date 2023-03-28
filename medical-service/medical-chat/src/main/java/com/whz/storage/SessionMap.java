@@ -10,4 +10,8 @@ public class SessionMap {
 
     public static final ConcurrentHashMap<String,ChatData> sessionMap = new ConcurrentHashMap<>();
 
+    public static final ConcurrentHashMap<String,ChatData> sessionUserMap = new ConcurrentHashMap<>();
+
+    public static final ConcurrentHashMap<String,ChatData> sessionDoctorMap = new ConcurrentHashMap<>();
+
 }

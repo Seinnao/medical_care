@@ -3,7 +3,9 @@ package com.whz.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.whz.dto.UserDTO;
 import com.whz.entity.Doctor;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -16,5 +18,7 @@ import com.whz.entity.Doctor;
 public interface DoctorMapper extends BaseMapper<Doctor> {
 
     IPage<Doctor> getDoctorList(Page<Doctor> page,String name);
+
+    String getNameByUser(@Param("nickname") String nickname);
 
 }

@@ -108,7 +108,8 @@ export default {
                 username:user.username,
                 nickname:user.nickname,
                 avatarUrl:user.avatarUrl,
-                role:user.role
+                role:user.role,
+                doctorName:user.doctorName
               }))  // 存储用户信息到浏览器
 
               // 动态设置当前用户的路由

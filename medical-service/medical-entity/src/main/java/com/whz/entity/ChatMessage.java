@@ -27,6 +27,8 @@ public class ChatMessage {
     private String type;
     private String content;
     private Date   time;
+    private Boolean state;
     private String mediaUrl; //媒体图片的路径
+
 
 }
