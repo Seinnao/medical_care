@@ -18,3 +18,5 @@ spring:
             group: dev
             refresh: true
 debug: true
+server:
+  port: 8032

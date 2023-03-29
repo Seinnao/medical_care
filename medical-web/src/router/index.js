@@ -17,7 +17,7 @@ const routes = [
     },]
 
 const router = new VueRouter({
-    mode: 'history',
+    //mode: 'history',
     routes
 })
 
@@ -25,7 +25,7 @@ const router = new VueRouter({
 // 重置路由
 export const resetRouter = () => {
     router.matcher = new VueRouter({
-        mode: 'history',
+       // mode: 'history',
         routes
     })
 }

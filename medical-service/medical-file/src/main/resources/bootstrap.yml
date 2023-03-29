@@ -15,4 +15,6 @@ spring:
           - dataId: datasource.yml
             group: dev
             refresh: true
-debug: true
+# debug: true
+server:
+  port: 8033

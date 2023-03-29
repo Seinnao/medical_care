@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       config: # 加载配置文件的配置
-        server-addr: 192.168.88.131:8848 #往这个服务进行注册
+        server-addr: 101.132.45.183:8848 #往这个服务进行注册
         username: nacos
         password: nacos
         file-extension: yml
