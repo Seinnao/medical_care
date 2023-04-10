@@ -1,21 +1,21 @@
 import App from './App'
-
-// #ifndef VUE3
+import http from './utils/http'
+import uView from 'uview-ui';
 import Vue from 'vue'
+import cuCustom from './colorui/components/cu-custom.vue'
+import {imagesUrl,calendar} from "./utils/index"
+
+Vue.use(uView);
+Vue.component('cu-custom',cuCustom)
+
 Vue.config.productionTip = false
+Vue.prototype.http=http
+Vue.prototype.imagesUrl = imagesUrl
+Vue.prototype.$calendar = calendar; //时间处理
+
 App.mpType = 'app'
 const app = new Vue({
     ...App
 })
 app.$mount()
-// #endif
-
-// #ifdef VUE3
-import { createSSRApp } from 'vue'
-export function createApp() {
-  const app = createSSRApp(App)
-  return {
-    app
-  }
-}
-// #endif
+ 

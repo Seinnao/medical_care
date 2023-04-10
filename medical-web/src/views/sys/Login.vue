@@ -96,12 +96,14 @@ export default {
     login() {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
+          localStorage.setItem("token", "");
           this.http.post("/user-service/user/login",this.dataForm
           ).then(res => {
             if(res.code === 200 ){
               //console.log(res.data.data)
               let user = res.data;
               localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储菜单信息到浏览器
+              localStorage.setItem("token", user.token);
 
               localStorage.setItem("user", JSON.stringify({
                 id:user.id,

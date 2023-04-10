@@ -17,6 +17,8 @@ public interface IUserService extends IService<User> {
 
     UserDTO login(UserDTO userDTO);
 
+    UserDTO appLogin(UserDTO userDTO);
+
     void doRegister(UserDTO userDTO);
 
     void updatePassword(UserPasswordDTO userPasswordDTO);

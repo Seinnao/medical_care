@@ -11,9 +11,9 @@
         <Header :collapseBtnClass="collapseBtnClass" @asideCollapse="collapse" :user="user" />
       </el-header>
 
-      <el-main>
+      <el-main style="background-color: rgb(252,252,252);">
         <!--        表示当前页面的子路由会在 <router-view /> 里面展示-->
-        <router-view @refreshUser="getUser" />
+        <router-view @refreshUser="getUser"/>
       </el-main>
 
     </el-container>

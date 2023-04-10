@@ -1,12 +1,106 @@
 {
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //不显示标题栏
+				}
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/index/medical",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/index/chat",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/index/me",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/chat/chat",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
 			}
 		}
 	],
+	"tabBar": {
+		"color": "#7a7a7a",
+		"selectedColor": "#000000",
+		"backgroundColor": "#fffdff",
+		"borderStyle": "black",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/tabBar/index.png",
+				"selectedIconPath": "static/tabBar/index_cur.png"
+			},
+			{
+				"pagePath": "pages/index/medical",
+				"text": "医疗服务",
+				"iconPath": "static/tabBar/order.png",
+				"selectedIconPath": "static/tabBar/order_cur.png"
+			},
+			{
+				"pagePath": "pages/index/chat",
+				"text": "交流问诊",
+				"iconPath": "static/tabBar/chat.png",
+				"selectedIconPath": "static/tabBar/chat_cur.png"
+			},
+			{
+				"pagePath": "pages/index/me",
+				"text": "个人中心",
+				"iconPath": "static/tabBar/me.png",
+				"selectedIconPath": "static/tabBar/me_cur.png"
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
