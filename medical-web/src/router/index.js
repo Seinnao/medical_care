@@ -14,7 +14,13 @@ const routes = [
         path: '/register',
         name: 'register',
         component: () => import('@/views/sys/Register')
-    },]
+    },
+    {
+        path: '/markdown',
+        name: 'markdown',
+        component: () => import('@/components/commom/Markdown.vue')
+    },
+]
 
 const router = new VueRouter({
     //mode: 'history',

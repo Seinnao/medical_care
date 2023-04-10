@@ -5,6 +5,7 @@
       <el-col :span="6"><el-button type="primary" icon="el-icon-search">搜索</el-button></el-col>
     </el-row>
     <el-row :gutter="10">
+      <el-divider></el-divider>
      <el-col :span="22">
        <div style="background-color: #b9b9b9">
          <h1>标题</h1>
@@ -19,7 +20,6 @@
 
 <script>
 import { sendSock, createWebSocket, closeSock} from '@/utils/webSocket'
-import {timeFormate} from "@/utils";
 export default {
   name: "Home",
   created(){

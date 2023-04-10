@@ -10,6 +10,8 @@ import com.whz.mapper.FileMapper;
 import com.whz.utils.FastDfsUtils;
 import com.whz.utils.R;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +41,6 @@ public class FileController {
 
     @Resource
     FastDfsUtils dfsUtils;
-
     /**
      * 文件上传接口
      * @param file 前端传递过来的文件

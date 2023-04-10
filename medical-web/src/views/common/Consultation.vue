@@ -19,7 +19,7 @@
          <el-row :gutter="10" style="margin-bottom: 10px">
            <el-col :span="8" v-if="item.isOnline"><el-tag type="success" effect="dark">在线</el-tag></el-col>
            <el-col :span="8" v-else><el-tag type="info" effect="dark">离线</el-tag></el-col>
-           <el-col :span="16"><el-rate v-model="value" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate></el-col>
+           <el-col :span="16"><el-rate v-model="item.score" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate></el-col>
          </el-row>
          <div style="height: 30px;
          display: -webkit-box;
@@ -31,6 +31,7 @@
        </el-card>
      </el-col>
     </el-row>
+    <el-divider></el-divider>
     <div style="padding: 10px 0">
       <el-pagination
           @size-change="handleSizeChange"
@@ -50,7 +51,6 @@ export default {
   name: "Consultation",
   data() {
     return {
-      value: 3.8,
       total: 0,
       pageNum: 1,
       pageSize: 16,
@@ -87,12 +87,25 @@ export default {
       this.load()
     },
     toInquiry(data){
-      this.$router.push({
-        name:"聊天",
-        params:{
-          id:data.id,
-          name:data.name,
-          avatarUrl:data.avatarUrl
+      let user = JSON.parse(localStorage.getItem("user"));
+      this.http.post("/user-service/chat-people", {
+        nickname: user.nickname,
+        otherParty: data.name,
+        myUrl: user.avatarUrl,
+        toUrl: data.avatarUrl,
+        time:new Date()
+      }).then(res => {
+        if (res.code === 200) {
+          this.$router.push({
+            name:"聊天",
+            params:{
+              id:data.id,
+              name:data.name,
+              avatarUrl:data.avatarUrl
+            }
+          })
+        } else {
+          this.$message.error(res.msg)
         }
       })
     }
