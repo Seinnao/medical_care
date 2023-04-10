@@ -112,19 +112,6 @@ export default {
         this.selectId = this.$route.params.id
         this.to.nickname = this.$route.params.name
         this.to.avatarUrl = this.$route.params.avatarUrl
-
-        this.http.post("/user-service/chat-people", {
-          nickname:this.user.nickname,
-          otherParty:this.to.nickname,
-          myUrl:this.user.avatarUrl,
-          toUrl:this.to.avatarUrl,
-          time:new Date()
-        }).then(res => {
-          if (res.code === 200) {
-          } else {
-            this.$message.error(res.msg)
-          }
-        })
       }else {
         this.selectId = 0
         this.to.nickname = ""

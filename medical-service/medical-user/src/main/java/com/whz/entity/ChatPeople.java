@@ -47,6 +47,9 @@ public class ChatPeople implements Serializable {
     private String myUrl;
 
     @TableField(exist = false)
+    private String content;
+
+    @TableField(exist = false)
     private String toUrl;
 
 }

@@ -1,9 +1,6 @@
 package com.whz.controller;
 
 import com.whz.entity.ChatMessage;
-import com.whz.entity.Doctor;
-import com.whz.entity.User;
-import com.whz.exception.ServiceException;
 import com.whz.feign.ChatUserFeign;
 import com.whz.service.IChatMessageService;
 import com.whz.storage.ChatData;
