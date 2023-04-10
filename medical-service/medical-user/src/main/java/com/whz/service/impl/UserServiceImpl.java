@@ -3,6 +3,7 @@ package com.whz.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.whz.config.JwtGenerator;
 import com.whz.dto.UserDTO;
 import com.whz.dto.UserPasswordDTO;
 import com.whz.entity.Menu;
@@ -48,8 +49,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private MD5Util md5Util;
 
+    @Resource
+    private JwtGenerator jwtGenerator;
+
     @Override
     public UserDTO login(UserDTO userDTO) {
+
         if(!captchaService.validate(userDTO)){
             throw new ServiceException("验证码错误");
         }
@@ -70,11 +75,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 userDTO.setDoctorName(doctorMapper.getNameByUser(userDTO.getNickname()));
             }
 
+            userDTO.setToken(jwtGenerator.generateJwt(userDTO));
+
             return userDTO;
         }else{
             throw new ServiceException("用户名或密码错误");
         }
 
+    }
+
+    @Override
+    public UserDTO appLogin(UserDTO userDTO) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", userDTO.getUsername());
+        queryWrapper.eq("password", md5Util.getMd5AndSalt(userDTO.getPassword()));
+        User one = this.getOne(queryWrapper);
+        if(one != null){
+            BeanUtil.copyProperties(one, userDTO, true);//将one上相同属性拷贝到userDTO
+            userDTO.setPassword("");
+            if(one.getRole().equals("ROLE_DOCTOR")){
+                userDTO.setDoctorName(doctorMapper.getNameByUser(userDTO.getNickname()));
+            }
+            userDTO.setToken(jwtGenerator.generateJwt(userDTO));
+            return userDTO;
+        }else{
+            throw new ServiceException("用户名或密码错误");
+        }
     }
 
     @Override

@@ -28,5 +28,6 @@ public class UserDTO {
     private String avatarUrl;
     private String doctorName;
     private String role;
+    private String token;
     private List<Menu> menus;
 }

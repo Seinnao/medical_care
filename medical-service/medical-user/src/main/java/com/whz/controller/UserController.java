@@ -69,6 +69,14 @@ public class UserController implements ChatUserFeign {
         return R.ok().put(dto);
     }
 
+
+    @PostMapping("/app-login")
+    public R appLogin(@RequestBody UserDTO userDTO) {
+        UserDTO dto = userService.appLogin(userDTO);
+        return R.ok().put(dto);
+    }
+
+
     @Override
     @GetMapping("/username/{username}")
     public R findByUsername(@PathVariable String username) {
@@ -165,6 +173,12 @@ public class UserController implements ChatUserFeign {
     @GetMapping("/doctorName/{name}")
     public Doctor findByName(@PathVariable String name){
         return doctorService.getOne(Wrappers.<Doctor>lambdaQuery().eq(Doctor::getName,name));
+    }
+
+    //用来判断token是否有效
+    @GetMapping("/isToken")
+    public R isToken(){
+        return R.ok();
     }
 
 }
