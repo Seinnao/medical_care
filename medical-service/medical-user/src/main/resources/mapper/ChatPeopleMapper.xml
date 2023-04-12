@@ -3,15 +3,22 @@
 <mapper namespace="com.whz.mapper.ChatPeopleMapper">
 
     <select id="findAllByNickname" resultType="com.whz.entity.ChatPeople">
-    select p.id,p.nickname,p.other_party,avatar_url,max(m.content) as content,max(m.time) as time,
-           count(case when m.state=0
-                   then 1
-                   else null
-                   end) as unread_msg
-    from chat_people p
-    left join chat_message m
-    on p.nickname = m.reach and p.other_party = m.come
-    where p.nickname = #{name}
-    group by p.id order by max(m.time) desc
+        select p.id,p.nickname,p.other_party,p.avatar_url,
+               max(new_m.time) as time,
+               max(new_m.content) as content,
+               count(case when m.state=0 then 1
+                          else null end) as unread_msg
+        from chat_people p
+        left join (select m.come,m.reach,m.id,m.time,m.content
+                    from (select max(time) as time,come,reach from chat_message GROUP BY come,reach) as n
+                    join chat_message as m
+                    on n.come = m.come and n.reach = m.reach and m.time = n.time
+        ) as new_m
+        on p.nickname = new_m.reach and p.other_party = new_m.come
+        left join chat_message m
+        on p.nickname = m.reach and p.other_party = m.come
+        where p.nickname = #{name} or p.other_party = #{name}
+        group by p.id
+        order by time desc
     </select>
 </mapper>

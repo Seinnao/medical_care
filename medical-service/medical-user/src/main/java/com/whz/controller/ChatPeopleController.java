@@ -3,7 +3,6 @@ package com.whz.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.whz.entity.ChatPeople;
-import com.whz.mapper.ChatPeopleMapper;
 import com.whz.service.IChatPeopleService;
 import com.whz.utils.R;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +24,6 @@ public class ChatPeopleController {
 
     @Resource
     IChatPeopleService chatPeopleService;
-
-    @Resource
-    ChatPeopleMapper chatPeopleMapper;
 
     @PostMapping
     public R save(@RequestBody ChatPeople chatPeople) {
@@ -76,11 +72,8 @@ public class ChatPeopleController {
 
     @GetMapping("/{name}")
     public R findAll(@PathVariable(value = "name") String name) {
-
-        List<ChatPeople> list = chatPeopleMapper.findAllByNickname(name);
-
+        List<ChatPeople> list = chatPeopleService.findAllByNickname(name);
         return R.ok().put(list);
     }
-
 
 }

@@ -30,7 +30,6 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login",
                         "/user/captcha",
                         "/user/register",
-//                        "/user/isToken",
                         "/user/app-login").permitAll()
                 .antMatchers("/**").hasAnyRole("USER","ADMIN","DOCTOR")
                 .and()

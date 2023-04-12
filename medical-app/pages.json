@@ -42,7 +42,7 @@
 			}
 		},
 		{
-			"path": "pages/index/chat",
+			"path": "pages/index/chatList",
 			"style": {
 				"navigationBarTitleText": "uni-app",
 				"navigationStyle": "custom", //微信小程序隐藏标题栏
@@ -88,7 +88,7 @@
 				"selectedIconPath": "static/tabBar/order_cur.png"
 			},
 			{
-				"pagePath": "pages/index/chat",
+				"pagePath": "pages/index/chatList",
 				"text": "交流问诊",
 				"iconPath": "static/tabBar/chat.png",
 				"selectedIconPath": "static/tabBar/chat_cur.png"

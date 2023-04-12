@@ -63,11 +63,6 @@ public class ChatController {
                 .role(role)
                 .build();
 
-//        User user = chatUserFeign.findByNickname(nickname);
-//        if(null == user){
-//            throw new ServiceException("连接异常");
-//        }
-
         if(role.equals("ROLE_DOCTOR")){
             //Doctor doctor = chatUserFeign.findByName(nickname);
             SessionMap.sessionDoctorMap.put(nickname,chatData);
@@ -110,9 +105,10 @@ public class ChatController {
 
         if(null != chatData){
             forwardMessage(chatData,message);
+            chatMessage.setState(true);
+        }else{
+            chatMessage.setState(false);
         }
-
-        chatMessage.setState(false);
         chatMessageService.save(chatMessage);
     }
 

@@ -97,6 +97,9 @@
 			// 初始化towerSwiper 传已有的数组名即可
 		},
 		methods: {
+			goCategorieslist(){
+				
+			},
 			DotStyle(e) {
 				this.dotStyle = e.detail.value
 			},

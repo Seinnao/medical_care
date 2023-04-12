@@ -1,9 +1,11 @@
 import moment from 'moment'
+import http from './http'
+
 
 moment.locale('zh-cn');
 
 export function imagesUrl(url) {
-	return `http://127.0.0.1/api/file-service/images/${url}`
+	return `${http.bastUrl}file-service/images/${url}`
 }
 
 export function calendar(time) {
@@ -13,6 +15,6 @@ export function calendar(time) {
 		nextWeek: 'dddd',
 		lastDay: '[昨天] hh:mm',
 		lastWeek: 'dddd',
-		sameElse: 'YYYY-MM-DD'
+		sameElse: 'YYYY/MM/DD'
 	});
 }

@@ -1,13 +1,13 @@
 <template>
 	<view>
 		<uni-nav-bar dark :fixed="true" shadow background-color="#007AFF" status-bar left-icon="left" left-text="返回"
-					title="聊天" @clickLeft="back" />
+			title="聊天" @clickLeft="back" />
 		<view class="content" @touchstart="hideDrawer">
-			<scroll-view class="msg-list" :class="popupLayerClass" scroll-y="true"
+			<scroll-view class="msg-list" style="top:144rpx" :class="popupLayerClass" scroll-y="true"
 				:scroll-with-animation="scrollAnimation" :scroll-top="scrollTop" :scroll-into-view="scrollToView"
 				@scrolltoupper="loadHistory" upper-threshold="50">
 				<!-- 加载历史数据waitingUI -->
-				<view class="loading">
+				<view class="loading" v-show="isHistoryLoading">
 					<view class="spinner">
 						<view class="rect1"></view>
 						<view class="rect2"></view>
@@ -16,39 +16,34 @@
 						<view class="rect5"></view>
 					</view>
 				</view>
-				<view class="row" v-for="(row,index) in msgList" :key="index" :id="'msg'+row.msg.id">
+				<view class="row" v-for="(row,index) in msgList" :key="index" :id="'msg'+row.id">
 					<!-- 系统消息 -->
-					<block v-if="row.type=='system'">
+					<block v-if="row.type === 'system'">
 						<view class="system">
 							<!-- 文字消息 -->
-							<view v-if="row.msg.type=='text'" class="text">
-								{{row.msg.content.text}}
-							</view>
-							<!-- 领取红包消息 -->
-							<view v-if="row.msg.type=='redEnvelope'" class="red-envelope">
-								<image src="/static/chat/red-envelope-chat.png"></image>
-								{{row.msg.content.text}}
+							<view class="text">
+								{{row.content}}
 							</view>
 						</view>
 					</block>
 					<!-- 用户消息 -->
-					<block v-if="row.type=='user'">
+					<block v-else>
 						<!-- 自己发出的消息 -->
-						<view class="my" v-if="row.msg.userinfo.uid==myuid">
+						<view class="my" v-if="row.come !== to.name ">
 							<!-- 左-消息 -->
 							<view class="left">
 								<!-- 文字消息 -->
-								<view v-if="row.msg.type=='text'" class="bubble">
-									<rich-text :nodes="row.msg.content.text"></rich-text>
+								<view v-if="row.type === 'text'" class="bubble">
+									<rich-text :nodes="row.content"></rich-text>
 								</view>
 								<!-- 语言消息 -->
-								<view v-if="row.msg.type=='voice'" class="bubble voice" @tap="playVoice(row.msg)"
+								<view v-if="row.type=='voice'" class="bubble voice" @tap="playVoice(row.msg)"
 									:class="playMsgid == row.msg.id?'play':''">
 									<view class="length">{{row.msg.content.length}}</view>
 									<view class="icon my-voice"></view>
 								</view>
 								<!-- 图片消息 -->
-								<view v-if="row.msg.type=='img'" class="bubble img" @tap="showPic(row.msg)">
+								<view v-if="row.type=='img'" class="bubble img" @tap="showPic(row.msg)">
 									<image :src="row.msg.content.url"
 										:style="{'width': row.msg.content.w+'px','height': row.msg.content.h+'px'}">
 									</image>
@@ -56,33 +51,33 @@
 							</view>
 							<!-- 右-头像 -->
 							<view class="right">
-								<image :src="row.msg.userinfo.face"></image>
+								<image :src="imagesUrl(user.avatarUrl)"></image>
 							</view>
 						</view>
 						<!-- 别人发出的消息 -->
-						<view class="other" v-if="row.msg.userinfo.uid!=myuid">
+						<view class="other" v-if="row.come === to.name ">
 							<!-- 左-头像 -->
 							<view class="left">
-								<image :src="row.msg.userinfo.face"></image>
+								<image :src="imagesUrl(to.avatarUrl)"></image>
 							</view>
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
 								<view class="username">
-									<view class="name">{{row.msg.userinfo.username}}</view>
-									<view class="time">{{row.msg.time}}</view>
+									<view class="name">{{to.name}}</view>
+									<view class="time">{{$calendar(row.time)}}</view>
 								</view>
 								<!-- 文字消息 -->
-								<view v-if="row.msg.type=='text'" class="bubble">
-									<rich-text :nodes="row.msg.content.text"></rich-text>
+								<view v-if="row.type=='text'" class="bubble">
+									<rich-text :nodes="row.content"></rich-text>
 								</view>
 								<!-- 语音消息 -->
-								<view v-if="row.msg.type=='voice'" class="bubble voice" @tap="playVoice(row.msg)"
+								<view v-if="row.type=='voice'" class="bubble voice" @tap="playVoice(row.msg)"
 									:class="playMsgid == row.msg.id?'play':''">
 									<view class="icon other-voice"></view>
 									<view class="length">{{row.msg.content.length}}</view>
 								</view>
 								<!-- 图片消息 -->
-								<view v-if="row.msg.type=='img'" class="bubble img" @tap="showPic(row.msg)">
+								<view v-if="row.type=='img'" class="bubble img" @tap="showPic(row.msg)">
 									<image :src="row.msg.content.url"
 										:style="{'width': row.msg.content.w+'px','height': row.msg.content.h+'px'}">
 									</image>
@@ -95,7 +90,7 @@
 		</view>
 		<!-- 抽屉栏 -->
 		<view class="popup-layer" :class="popupLayerClass" @touchmove.stop.prevent="discard">
-			<!-- 更多功能 相册-拍照-红包 -->
+			<!-- 更多功能 相册-拍照 -->
 			<view class="more-layer" :class="{hidden:hideMore}">
 				<view class="list">
 					<view class="box" @tap="chooseImage">
@@ -152,6 +147,7 @@
 	</view>
 </template>
 <script>
+	import websocket from '../../utils/webSocket'
 	export default {
 		data() {
 			return {
@@ -191,12 +187,26 @@
 				popupLayerClass: '',
 				// more参数
 				hideMore: true,
+				user: {},
+				to: {}
 			};
 		},
 		onLoad(option) {
+			this.user = JSON.parse(uni.getStorageSync("user"));
+
+			if (this.user.role === 'ROLE_DOCTOR') {
+				this.user.nickname = this.user.doctorName
+				this.http.get("/user-service/doctor/getDoctor/" + this.user.doctorName).then(res => {
+					this.user.avatarUrl = res.data.avatarUrl
+				})
+			}
+
+			websocket.createWebSocket(this.callback, this.user.nickname, this.user.role)
+
 			const data = JSON.parse(decodeURIComponent(option.data));
-			
 			console.log(data)
+			this.to = data
+
 			this.getMsgList();
 			//语音自然播放结束
 			this.AUDIO.onEnded((res) => {
@@ -215,48 +225,25 @@
 		},
 		onShow() {
 			this.scrollTop = 9999999;
-
-			//模板借由本地缓存实现发红包效果，实际应用中请不要使用此方法。
-			//
-			uni.getStorage({
-				key: 'redEnvelopeData',
-				success: (res) => {
-					console.log(res.data);
-					let nowDate = new Date();
-					let lastid = this.msgList[this.msgList.length - 1].msg.id;
-					lastid++;
-					let row = {
-						type: "user",
-						msg: {
-							id: lastid,
-							type: "redEnvelope",
-							time: nowDate.getHours() + ":" + nowDate.getMinutes(),
-							userinfo: {
-								uid: 0,
-								username: "大黑哥",
-								face: "https://zhoukaiwen.com/img/kevinLogo.png"
-							},
-							content: {
-								blessing: res.data.blessing,
-								rid: Math.floor(Math.random() * 1000 + 1),
-								isReceived: false
-							}
-						}
-					};
-					this.screenMsg(row);
-					uni.removeStorage({
-						key: 'redEnvelopeData'
-					});
-				}
-			});
+		},
+		beforeDestroy(){
+			console.log("beforeDestroy")
+			websocket.closeSock()
 		},
 		methods: {
+			callback(data) {
+				console.log(data.type)
+				this.screenMsg(data)
+			},
 			// 接受消息(筛选处理)
 			screenMsg(msg) {
+				let lastid = this.msgList[this.msgList.length - 1].id;
+				lastid += 100;
+				msg.id = lastid;
 				//从长连接处转发给这个方法，进行筛选处理
-				if (msg.type == 'system') {
+				if (msg.type === 'system') {
 					// 系统消息
-					switch (msg.msg.type) {
+					switch (msg.type) {
 						case 'text':
 							this.addSystemTextMsg(msg);
 							break;
@@ -264,9 +251,9 @@
 							this.addSystemRedEnvelopeMsg(msg);
 							break;
 					}
-				} else if (msg.type == 'user') {
+				} else {
 					// 用户消息
-					switch (msg.msg.type) {
+					switch (msg.type) {
 						case 'text':
 							this.addTextMsg(msg);
 							break;
@@ -282,19 +269,19 @@
 					}
 					console.log('用户消息');
 					//非自己的消息震动
-					if (msg.msg.userinfo.uid != this.myuid) {
+					if (msg.come != this.user.nickname) {
 						console.log('振动');
 						uni.vibrateLong();
 					}
 				}
 				this.$nextTick(function() {
 					// 滚动到底
-					this.scrollToView = 'msg' + msg.msg.id
+					this.scrollToView = 'msg' + msg.id
 				});
 			},
 
 
-			back(){
+			back() {
 				uni.navigateBack({
 					delta: 1
 				});
@@ -307,86 +294,28 @@
 				}
 				this.isHistoryLoading = true; //参数作为进入请求标识，防止重复请求
 				this.scrollAnimation = false; //关闭滑动动画
-				let Viewid = this.msgList[0].msg.id; //记住第一个信息ID
-				//本地模拟请求历史记录效果
+				let Viewid = this.msgList[0].id; //记住第一个信息ID
+
+				//本地模拟请求历史记录效果				
 				setTimeout(() => {
 					// 消息列表
-					let list = [{
-							type: "user",
-							msg: {
-								id: 1,
-								type: "text",
-								time: "12:56",
-								userinfo: {
-									uid: 0,
-									username: "大黑哥",
-									face: "https://zhoukaiwen.com/img/kevinLogo.png"
-								},
-								content: {
-									text: "web前端开发该怎么学习？"
-								}
-							}
-						},
-						{
-							type: "user",
-							msg: {
-								id: 2,
-								type: "text",
-								time: "12:57",
-								userinfo: {
-									uid: 1,
-									username: "售后客服008",
-									face: "https://zhoukaiwen.com/img/qdpz/face/face_2.jpg"
-								},
-								content: {
-									text: "按照基本路线，从html、css、js三大基础开始，然后ajax、vue进阶学习，最后学习小程序、node、react。"
-								}
-							}
-						},
-						{
-							type: "user",
-							msg: {
-								id: 3,
-								type: "voice",
-								time: "12:59",
-								userinfo: {
-									uid: 1,
-									username: "售后客服008",
-									face: "https://zhoukaiwen.com/img/qdpz/face/face_2.jpg"
-								},
-								content: {
-									url: "/static/voice/1.mp3",
-									length: "00:06"
-								}
-							}
-						},
-						{
-							type: "user",
-							msg: {
-								id: 4,
-								type: "voice",
-								time: "13:05",
-								userinfo: {
-									uid: 0,
-									username: "大黑哥",
-									face: "https://zhoukaiwen.com/img/kevinLogo.png"
-								},
-								content: {
-									url: "/static/voice/2.mp3",
-									length: "00:06"
-								}
-							}
-						},
-					]
+					let list = []
+					console.log("红红火火恍恍惚惚或或")
+
+					this.http.get(`chat-service/chat-message/history/${this.user.nickname}/${this.to.name}`).then(
+						res => {
+							this.msgList = res.data
+							this.msgList.reverse()
+						})
 					// 获取消息中的图片,并处理显示尺寸
-					for (let i = 0; i < list.length; i++) {
-						if (list[i].type == 'user' && list[i].msg.type == "img") {
-							list[i].msg.content = this.setPicSize(list[i].msg.content);
-							this.msgImgList.unshift(list[i].msg.content.url);
-						}
-						list[i].msg.id = Math.floor(Math.random() * 1000 + 1);
-						this.msgList.unshift(list[i]);
-					}
+					// for (let i = 0; i < list.length; i++) {
+					// 	if (list[i].type == 'user' && list[i].msg.type == "img") {
+					// 		list[i].msg.content = this.setPicSize(list[i].msg.content);
+					// 		this.msgImgList.unshift(list[i].msg.content.url);
+					// 	}
+					// 	list[i].msg.id = Math.floor(Math.random() * 1000 + 1);
+					// 	this.msgList.unshift(list[i]);
+					// }
 
 					//这段代码很重要，不然每次加载历史数据都会跳到顶部
 					this.$nextTick(function() {
@@ -402,156 +331,26 @@
 			},
 			// 加载初始页面消息
 			getMsgList() {
+				this.isHistoryLoading = true;
 				// 消息列表
-				let list = [{
-						type: "system",
-						msg: {
-							id: 0,
-							type: "text",
-							content: {
-								text: "欢迎进入Kevin聊天室"
-							}
-						}
-					},
-					{
-						type: "user",
-						msg: {
-							id: 1,
-							type: "text",
-							time: "12:56",
-							userinfo: {
-								uid: 0,
-								username: "大黑哥",
-								face: "https://zhoukaiwen.com/img/kevinLogo.png"
-							},
-							content: {
-								text: "web前端开发该怎么学习？"
-							}
-						}
-					},
-					{
-						type: "user",
-						msg: {
-							id: 2,
-							type: "text",
-							time: "12:57",
-							userinfo: {
-								uid: 1,
-								username: "售后客服008",
-								face: "https://zhoukaiwen.com/img/qdpz/face/face_2.jpg"
-							},
-							content: {
-								text: "按照基本路线，从html、css、js三大基础开始，然后ajax、vue进阶学习，最后学习小程序、node、react。"
-							}
-						}
-					},
-					{
-						type: "user",
-						msg: {
-							id: 3,
-							type: "voice",
-							time: "12:59",
-							userinfo: {
-								uid: 1,
-								username: "售后客服008",
-								face: "https://zhoukaiwen.com/img/qdpz/face/face_2.jpg"
-							},
-							content: {
-								url: "/static/voice/1.mp3",
-								length: "00:06"
-							}
-						}
-					},
-					{
-						type: "user",
-						msg: {
-							id: 4,
-							type: "voice",
-							time: "13:05",
-							userinfo: {
-								uid: 0,
-								username: "大黑哥",
-								face: "https://zhoukaiwen.com/img/kevinLogo.png"
-							},
-							content: {
-								url: "/static/voice/2.mp3",
-								length: "00:06"
-							}
-						}
-					},
-					{
-						type: "user",
-						msg: {
-							id: 5,
-							type: "img",
-							time: "13:05",
-							userinfo: {
-								uid: 0,
-								username: "大黑哥",
-								face: "https://zhoukaiwen.com/img/kevinLogo.png"
-							},
-							content: {
-								url: "https://zhoukaiwen.com/img/Design/logo/psketch3.png",
-								w: 200,
-								h: 200
-							}
-						}
-					},
-					{
-						type: "user",
-						msg: {
-							id: 6,
-							type: "img",
-							time: "12:59",
-							userinfo: {
-								uid: 1,
-								username: "售后客服008",
-								face: "https://zhoukaiwen.com/img/qdpz/face/face_2.jpg"
-							},
-							content: {
-								url: "https://zhoukaiwen.com/img/Design/pc/ybss_jt.png",
-								w: 1920,
-								h: 1080
-							}
-						}
-					},
-					{
-						type: "system",
-						msg: {
-							id: 7,
-							type: "text",
-							content: {
-								text: "欢迎进入Kevin聊天室"
-							}
-						}
-					},
-					{
-						type: "system",
-						msg: {
-							id: 9,
-							type: "redEnvelope",
-							content: {
-								text: "售后客服008领取了你的红包"
-							}
-						}
-					}
-				]
-				// 获取消息中的图片,并处理显示尺寸
-				for (let i = 0; i < list.length; i++) {
-					if (list[i].type == 'user' && list[i].msg.type == "img") {
-						list[i].msg.content = this.setPicSize(list[i].msg.content);
-						this.msgImgList.push(list[i].msg.content.url);
-					}
-				}
-				this.msgList = list;
-				// 滚动到底部
-				this.$nextTick(function() {
-					//进入页面滚动到底部
-					this.scrollTop = 9999;
+				let list = []
+
+				this.http.get(`chat-service/chat-message/history/${this.user.nickname}/${this.to.name}`).then(res => {
+					list = res.data
+					list.reverse()
+					console.log(list)
+					this.msgList = list;
+					// 滚动到底部
 					this.$nextTick(function() {
-						this.scrollAnimation = true;
+						//进入页面滚动到底部
+						this.scrollTop = 9999;
+						this.$nextTick(function() {
+							this.scrollAnimation = true;
+						});            
 					});
-				});
+					this.isHistoryLoading = false;
+				})
+
 			},
 			//处理图片尺寸，如果不处理宽高，新进入页面加载图片时候会闪
 			setPicSize(content) {
@@ -635,52 +434,24 @@
 				if (!this.textMsg) {
 					return;
 				}
+				console.log(this.textMsg)
 				this.sendMsg(this.textMsg, 'text');
 				this.textMsg = ''; //清空输入框
 			},
 			// 发送消息
 			sendMsg(content, type) {
 				//实际应用中，此处应该提交长连接，模板仅做本地处理。
-				var nowDate = new Date();
-				let lastid = this.msgList[this.msgList.length - 1].msg.id;
-				lastid++;
+				let nowDate = new Date();
 				let msg = {
-					type: 'user',
-					msg: {
-						id: lastid,
-						time: nowDate.getHours() + ":" + nowDate.getMinutes(),
-						type: type,
-						userinfo: {
-							uid: 0,
-							username: "大黑哥",
-							face: "https://zhoukaiwen.com/img/kevinLogo.png"
-						},
-						content: content
-					}
+					type: type,
+					come: this.user.nickname,
+					reach: this.to.name,
+					content: content,
+					time: nowDate,
 				}
+				websocket.sendSock(JSON.stringify(msg))
 				// 发送消息
 				this.screenMsg(msg);
-				// 定时器模拟对方回复,三秒
-				setTimeout(() => {
-					lastid = this.msgList[this.msgList.length - 1].msg.id;
-					lastid++;
-					msg = {
-						type: 'user',
-						msg: {
-							id: lastid,
-							time: nowDate.getHours() + ":" + nowDate.getMinutes(),
-							type: type,
-							userinfo: {
-								uid: 1,
-								username: "售后客服008",
-								face: "https://zhoukaiwen.com/img/qdpz/face/face_2.jpg"
-							},
-							content: content
-						}
-					}
-					// 本地模拟发送消息
-					this.screenMsg(msg);
-				}, 3000)
 			},
 
 			// 添加文字消息到列表

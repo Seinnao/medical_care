@@ -1,5 +1,22 @@
-//let bastUrl="https://www.jcoolish.top/network/api/"
-let bastUrl="http://127.0.0.1/api/"
+let bastUrl="https://www.jcoolish.top/network/api/"
+//let bastUrl="http://127.0.0.1/api/"
+
+
+function isTimeout(res,resolve){
+	if(res.statusCode === 401){
+		uni.showToast({
+			title: '登录超时',
+			icon: 'error'
+		});	
+		uni.setStorageSync('token', null)
+		uni.navigateTo({
+			url: '/pages/login/index'
+		});
+	}else if(res.statusCode === 200){
+		resolve(res.data)
+	}
+}
+
 
 const request={}
 
@@ -17,14 +34,7 @@ request.get = function(url,data){
 		    data:data,
 		    header:header,
 		    success: (res) => {
-				if(res.statusCode === 401){
-					uni.showToast({
-						title: '登录超时',
-						icon: 'error'
-					});	
-				}else if(res.statusCode === 200){
-					resolve(res.data)
-				}
+				isTimeout(res,resolve)
 		    },
 			fail: (err) =>{
 				reject(err)
@@ -49,15 +59,7 @@ request.post = function(url,data){
 			method:'POST',
 		    header:header,
 		    success: (res) => {
-				//console.log(res)
-				if(res.statusCode === 401){
-					uni.showToast({
-						title: '登录超时',
-						icon: 'error'
-					});	
-				}else if(res.statusCode === 200){
-					resolve(res.data)
-				}
+				isTimeout(res,resolve)
 		    },
 			fail: (err) =>{
 				reject(err)
@@ -65,5 +67,7 @@ request.post = function(url,data){
 		});
 	})
 }
+
+request.bastUrl = bastUrl;
 
 export default request 
