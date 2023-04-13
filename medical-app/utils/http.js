@@ -1,5 +1,5 @@
-let bastUrl="https://www.jcoolish.top/network/api/"
-//let bastUrl="http://127.0.0.1/api/"
+//let bastUrl="https://www.jcoolish.top/network/api/"
+let bastUrl="http://127.0.0.1/api/"
 
 
 function isTimeout(res,resolve){

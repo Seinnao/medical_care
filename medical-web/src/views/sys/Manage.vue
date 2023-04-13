@@ -57,6 +57,7 @@ export default {
       }
     },
     getUser() {
+      console.log("refreshUser==")
       this.user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
       if (this.username) {
         // 从后台获取User数据

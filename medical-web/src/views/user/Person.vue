@@ -38,7 +38,7 @@
 
 <script>
 import router from "@/router";
-
+import {compress} from "@/utils";
 export default {
   name: "Person",
   data() {
@@ -62,38 +62,40 @@ export default {
         if (res.code === 200) {
           this.$message.success("保存成功")
 
-          // 触发父级更新User的方法
-          this.$emit("refreshUser")
-
           // 更新浏览器存储的用户信息
           this.getUser().then(data => {
-            data.token = JSON.parse(localStorage.getItem("user")).token
             localStorage.setItem("user", JSON.stringify(data))
+            // 触发父级更新User的方法
+            console.log("user====",data)
+            this.load()
+            //跳转到主页,回退
+            router.back();
           })
-
-          //跳转到主页,回退
-          router.back();
 
         } else {
           this.$message.error("保存失败")
         }
       })
     },
+    load(){
+      this.$emit("refreshUser")
+    },
     filesRequest(data){
-      const form = new FormData()
-      form.append('file', data.file);
-      //console.log('22222222222222',form)
-      this.http({
-        url: 'file-service/file/upload',
-        method:'post',
-        data: form,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }).then((res) => {
-        if (res.code === 200) {
-          this.form.avatarUrl = res.url
-        } else {
-          this.$message.error(res.msg)
-        }
+      compress(data.file).then(rst =>{
+        const form = new FormData()
+        form.append('file', rst);
+        this.http({
+          url: 'file-service/file/upload',
+          method:'post',
+          data: form,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((res) => {
+          if (res.code === 200) {
+            this.form.avatarUrl = res.url
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       })
     },
     handleAvatarSuccess(res) {
@@ -130,6 +132,7 @@ export default {
 .avatar {
   width: 138px;
   height: 138px;
+  object-fit: cover;
   display: block;
 }
 .first{

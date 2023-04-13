@@ -53,7 +53,7 @@ export default {
             this.$message.error("2次输入的新密码不相同")
             return false
           }
-          this.request.post("/user/password", this.form).then(res => {
+          this.http.post("/user-service/user/password", this.form).then(res => {
             if (res.code === 200) {
               this.$message.success("修改成功")
               this.$store.commit("logout")

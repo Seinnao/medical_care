@@ -2,6 +2,7 @@ package com.whz.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.whz.config.JwtGenerator;
 import com.whz.dto.UserDTO;
@@ -134,9 +135,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public void updatePassword(UserPasswordDTO userPasswordDTO) {
 
-        User user = this.getOne(new QueryWrapper<User>()
-                .eq("password", md5Util.getMd5AndSalt(userPasswordDTO.getPassword()))
-                .eq("", userPasswordDTO.getUsername()));
+//        User user = this.getOne(new QueryWrapper<User>()
+//                .eq("password", md5Util.getMd5AndSalt(userPasswordDTO.getPassword()))
+//                .eq("", userPasswordDTO.getUsername()));
+
+        User user = this.getOne(Wrappers.<User>lambdaQuery()
+                .eq(User::getPassword,md5Util.getMd5AndSalt(userPasswordDTO.getPassword()))
+                .eq(User::getUsername,userPasswordDTO.getUsername()));
 
         if(user != null){
             user.setPassword(md5Util.getMd5AndSalt(userPasswordDTO.getNewPassword()));

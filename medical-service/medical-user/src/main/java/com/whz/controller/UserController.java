@@ -116,7 +116,7 @@ public class UserController implements ChatUserFeign {
     public R save(@RequestBody User user) {
         User one = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getId, user.getId()));
         //防止密码被覆盖
-        one.setPassword(null);
+        user.setPassword(null);
 
         if(!user.getNickname().equals(one.getNickname())){
             User temp = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getNickname, user.getNickname()));

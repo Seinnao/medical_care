@@ -70,4 +70,9 @@ public class File implements Serializable {
      */
     private Boolean enable;
 
+    /**
+     * 用途
+     * */
+    private String purpose;
+
 }

@@ -79,7 +79,7 @@
 
 <script>
 import user from "@/views/user/User";
-
+import {compress} from "@/utils";
 export default {
   name: "BecomeDoctor",
   data() {
@@ -110,19 +110,21 @@ export default {
       })
     },
     filesRequest(data){
-      const form = new FormData()
-      form.append('file', data.file);
-      this.http({
-        url: 'file-service/file/upload',
-        method:'post',
-        data: form,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }).then((res) => {
-        if (res.code === 200) {
-          this.form.avatarUrl = res.url
-        } else {
-          this.$message.error(res.msg)
-        }
+      compress(data.file).then(rst =>{
+        const form = new FormData()
+        form.append('file', rst);
+        this.http({
+          url: 'file-service/file/upload',
+          method:'post',
+          data: form,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((res) => {
+          if (res.code === 200) {
+            this.form.avatarUrl = res.url
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       })
     },
     handleAvatarSuccess(res) {
@@ -180,6 +182,7 @@ export default {
 .avatar {
   width: 138px;
   height: 138px;
+  object-fit: cover;
   display: block;
 }
 .first{

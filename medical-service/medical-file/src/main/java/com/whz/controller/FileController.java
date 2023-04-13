@@ -47,8 +47,8 @@ public class FileController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/upload")
-    public R upload(@RequestParam MultipartFile file) throws IOException {
+    @PostMapping("/upload/{purpose}")
+    public R upload(@RequestParam MultipartFile file,@PathVariable String purpose) throws IOException {
         String originalFilename = file.getOriginalFilename();
         String type = FileUtil.extName(originalFilename);
 
@@ -78,6 +78,7 @@ public class FileController {
             saveFile.setSize(size/1024); // 单位 kb
             saveFile.setUrl(url);
             saveFile.setMd5(md5);
+            saveFile.setPurpose(purpose);
             fileMapper.insert(saveFile);
         }
 
