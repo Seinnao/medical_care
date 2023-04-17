@@ -10,7 +10,7 @@
 		</view>
 		<view class="cu-list menu sm-border margin-top">
 			<view class="cu-item">
-				<button class="cu-btn content">
+				<button class="cu-btn content" @click="perfectMsg()">
 					<image src="/static/me/item/perfect_msg.png" class="png"></image>
 					<text class="text-grey">完善信息</text>
 				</button>
@@ -23,7 +23,7 @@
 				</button>
 			</view>
 			<view class="cu-item">
-				<button class="cu-btn content">
+				<button class="cu-btn content" @click="setUp">
 					<image src="/static/me/item/set_up.png" class="png"></image>
 					<text class="text-grey">设置</text>
 				</button>
@@ -48,6 +48,10 @@
 		onLoad(option) {
 			this.user = JSON.parse(uni.getStorageSync("user"));
 		},
+		onShow() {
+			//console.log("show---chatList")
+			this.user = JSON.parse(uni.getStorageSync("user"));
+		},
 		methods: {
 			aboutMe(){
 				uni.navigateTo({
@@ -62,6 +66,22 @@
 					animationType: 'slide-in-left',
 					animationDuration: 500,
 				});
+			},
+			perfectMsg(){
+				uni.navigateTo({
+					url: '/pages/me/perfectMsg',
+					animationType: 'slide-in-left',
+					animationDuration: 500,
+				});
+			},
+			setUp(){
+				uni.setStorageSync("user",null)
+				uni.setStorageSync("token",null)
+				setTimeout(() => {
+					uni.reLaunch({
+						url: '/pages/login/index',
+					});
+				}, 500);
 			}
 		}
 	}

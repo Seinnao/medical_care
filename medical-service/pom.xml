@@ -10,6 +10,7 @@
         <module>medical-user</module>
         <module>medical-file</module>
         <module>medical-chat</module>
+        <module>medical-care</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

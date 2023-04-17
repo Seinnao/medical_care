@@ -40,11 +40,6 @@
 					this.$refs.likeFx.likeClick()
 				}, 300)
 			},
-			back() {
-				uni.navigateBack({
-					delta: 1
-				});
-			},
 		}
 	}
 </script>

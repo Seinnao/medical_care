@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar dark fixed shadow background-color="#007AFF" status-bar title="修改密码" left-icon="left"
+		<uni-nav-bar dark fixed shadow background-color="#00aaff" status-bar title="修改密码" left-icon="left"
 			left-text="返回" @clickLeft="back">
 		</uni-nav-bar>
 		<view class="padding">
@@ -105,11 +105,6 @@
 						})
 					}
 				});
-			},
-			back() {
-				uni.navigateBack({
-					delta: 1
-				})
 			},
 		}
 	}

@@ -86,6 +86,15 @@
 					"titleNView": false //手机app不显示标题栏
 				}
 			}
+		},
+		{
+			"path": "pages/me/perfectMsg",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
 		}
 	],
 	"tabBar": {

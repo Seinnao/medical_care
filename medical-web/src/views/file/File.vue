@@ -160,7 +160,7 @@ export default {
       const form = new FormData()
       form.append('file', data.file);
       this.http({
-        url: 'file-service/file/upload',
+        url: 'file-service/file/upload/ordinary',
         method:'post',
         data: form,
         headers: { 'Content-Type': 'multipart/form-data' }

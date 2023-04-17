@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar dark :fixed="true" shadow background-color="#007AFF" status-bar left-icon="left" left-text="返回"
+		<uni-nav-bar dark :fixed="true" shadow background-color="#00aaff" status-bar left-icon="left" left-text="返回"
 			title="聊天" @clickLeft="back" />
 		<view class="content" @touchstart="hideDrawer">
 			<scroll-view class="msg-list" style="top:144rpx" :class="popupLayerClass" scroll-y="true"
@@ -277,13 +277,6 @@
 				this.$nextTick(function() {
 					// 滚动到底
 					this.scrollToView = 'msg' + msg.id
-				});
-			},
-
-
-			back() {
-				uni.navigateBack({
-					delta: 1
 				});
 			},
 
