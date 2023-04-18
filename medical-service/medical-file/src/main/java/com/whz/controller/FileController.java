@@ -65,13 +65,7 @@ public class FileController {
             // 上传文件到FastDfs
             url = dfsUtils.uploadFile(file);
             log.info("上传地址：[{}]",url);
-        }
-
-        //如果文件存在则不加入数据库
-        File twoFile = fileMapper.selectOne(new QueryWrapper<File>().eq("url",url));
-
-        if(null == twoFile){
-            // 存储数据库
+            //如果文件不存在则加入数据库
             File saveFile = new File();
             saveFile.setName(originalFilename);
             saveFile.setType(type);

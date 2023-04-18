@@ -84,8 +84,21 @@
         <el-form-item label="名字">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
+
+        <el-form-item label="头像">
+          <el-upload
+              class="images-uploader"
+              action=""
+              :show-file-list="false"
+              :http-request="filesRequest"
+              :on-success="handleImagesSuccess">
+            <i v-if="!form.avatarUrl" class="el-icon-plus images-uploader-icon"></i>
+            <img v-else :src="imagesUrl(form.avatarUrl)" class="images">
+          </el-upload>
+        </el-form-item>
+
         <el-form-item label="自我描述">
-          <el-input v-model="form.introduce" autocomplete="off"></el-input>
+          <el-input v-model="form.introduce" autocomplete="off" type="textarea" :rows="2"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -145,6 +158,8 @@
 </template>
 
 <script>
+import {compress} from "@/utils";
+
 export default {
   name: "Doctor",
   data() {
@@ -294,6 +309,29 @@ export default {
     openDoctor(){
       this.dialogFromDoctor = true
       this.loadTwo()
+    },
+    filesRequest(data){
+      compress(data.file).then(rst =>{
+        const form = new FormData()
+        form.append('file', rst);
+        this.http({
+          url: 'file-service/file/upload/avatar',
+          method:'post',
+          data: form,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((res) => {
+          if (res.code === 200) {
+            console.log(res)
+            this.form.avatarUrl = res.url
+            this.$forceUpdate() //强制渲染组件
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+      })
+    },
+    handleImagesSuccess(res){
+      this.form.avatarUrl = res
     }
   }
 }
@@ -303,5 +341,35 @@ export default {
 <style>
 .headerBg {
   background: #eee!important;
+}
+.images-uploader {
+  /*text-align: center;*/
+  padding-bottom: 10px;
+}
+.images-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.images-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.images-uploader-icon {
+  font-size: 20px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+.images {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  display: block;
 }
 </style>

@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.whz.mapper.DrugsSymptomMapper">
 
+
+    <insert id="insertBatch">
+        insert into drugs_symptom (id,drugs_id,symptom_id) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.id},#{item.drugsId},#{item.symptomId})
+        </foreach>
+    </insert>
 </mapper>

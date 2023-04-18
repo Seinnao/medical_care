@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISymptomService extends IService<Symptom> {
 
+    void saveOrUpdateChange(Symptom symptom);
+
 }

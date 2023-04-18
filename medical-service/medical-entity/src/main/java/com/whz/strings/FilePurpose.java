@@ -6,8 +6,9 @@ package com.whz.strings;
  */
 public class FilePurpose {
 
-    public static String avatar="avatar";
-    public static String ordinary="ordinary";
-    public static String swiper="swiper";
+    public static String avatar="avatar";//头像图片
+    public static String ordinary="ordinary";//一般图片
+    public static String drugs = "drugs"; //药品图片
+    public static String swiper="swiper";//轮播图图片
 
 }
