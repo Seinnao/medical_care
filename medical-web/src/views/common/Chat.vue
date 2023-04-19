@@ -75,7 +75,6 @@
 
 <script>
 import { sendSock, createWebSocket, closeSock} from "@/utils/webSocket"
-import user from "@/views/user/User";
 export default {
   name: "Chat",
   data() {

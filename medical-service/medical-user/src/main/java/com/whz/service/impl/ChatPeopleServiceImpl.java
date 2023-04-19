@@ -31,7 +31,6 @@ public class ChatPeopleServiceImpl extends ServiceImpl<ChatPeopleMapper, ChatPeo
                     if (chatPeople.getOtherParty().equals(people.getNickname())) {
                         if (null == chatPeople.getTime() ||
                                 (null != people.getTime() && chatPeople.getTime().compareTo(people.getTime()) < 0)) {
-
                             chatPeople.setTime(people.getTime());
                             chatPeople.setContent(people.getContent());
                         }

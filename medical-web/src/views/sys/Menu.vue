@@ -30,7 +30,7 @@
 <!--      <el-table-column prop="id" label="ID" width="80"></el-table-column>-->
       <el-table-column prop="name" align="center" label="名称"></el-table-column>
       <el-table-column prop="path" align="center" label="路径"></el-table-column>
-      <el-table-column prop="pagePath" align="center" label="页面路径"></el-table-column>
+      <el-table-column prop="pagePath" align="center" label="页面路径" show-overflow-tooltip></el-table-column>
       <el-table-column label="图标" class-name="fontSize18" align="center" label-class-name="fontSize12">
         <template slot-scope="scope">
           <span :class="scope.row.icon" />

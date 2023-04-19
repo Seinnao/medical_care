@@ -13,7 +13,6 @@
       </el-tooltip>
       <br/>
       <el-tooltip effect="dark" content="回到顶部" placement="bottom">
-<!--        $emit('runBack')-->
         <el-button icon="el-icon-caret-top" circle size="small" @click=""></el-button>
       </el-tooltip>
     </div>

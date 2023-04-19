@@ -29,8 +29,7 @@ public class MybatisPlusGenertor {
                                     , "medical-service\\medical-care\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("medicine_disease","medicine_drugs"
-                                    ,"medicine_symptom","drugs_symptom","doctor_evaluate","disease_symptom") // 设置需要生成的表名
+                    builder.addInclude("case_record") // 设置需要生成的表名
                             //.addInclude("medicine_symptom")
                             .addTablePrefix("medicine_"); // 设置过滤表前缀
                 })

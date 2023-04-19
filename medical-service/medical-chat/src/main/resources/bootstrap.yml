@@ -1,4 +1,15 @@
 spring:
+  profiles:
+    active: dev
+debug: true
+server:
+  port: 8032
+
+
+---
+
+spring:
+  profiles: dev
 #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 #    time-zone: GMT+8
@@ -17,6 +28,23 @@ spring:
           - dataId: datasource.yml
             group: dev
             refresh: true
-debug: true
-server:
-  port: 8032
+
+---
+
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      config: # 加载配置文件的配置
+        server-addr: 101.132.45.183:8848 #往这个服务进行注册
+        username: nacos
+        password: wfz123
+        file-extension: yml
+        namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
+        extension-configs: # 读取多个配置文件
+          - dataId: chat-service.yml
+            group: dev
+            refresh: true    # 是否可以刷新
+          - dataId: datasource.yml
+            group: dev
+            refresh: true

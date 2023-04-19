@@ -29,9 +29,9 @@
     <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="name" align="center" label="文件名称"></el-table-column>
+      <el-table-column prop="name" align="center" label="文件名称" show-overflow-tooltip></el-table-column>
       <el-table-column prop="type" align="center" label="文件类型" width="80"></el-table-column>
-      <el-table-column prop="size" align="center" label="文件大小(kb)"></el-table-column>
+      <el-table-column prop="size" align="center" label="文件大小(kb)" width="140"></el-table-column>
       <el-table-column label="预览" width="100" align="center">
         <template slot-scope="scope">
           <el-button type="primary" @click="preview(scope.row)">预览</el-button>

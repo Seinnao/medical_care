@@ -1,4 +1,14 @@
 spring:
+  profiles:
+    active: dev
+server:
+  port: 8030
+debug: true
+
+---
+
+spring:
+  profiles: dev
   cloud:
     nacos:
       config: # 加载配置文件的配置
@@ -9,6 +19,18 @@ spring:
         file-extension: yml
         namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
         group: dev
-server:
-  port: 8030
-debug: true
+
+---
+
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      config: # 加载配置文件的配置
+        server-addr: 101.132.45.183:8848 #往这个服务进行注册
+        username: nacos
+        password: wfz123
+        prefix: gateway.yml
+        file-extension: yml
+        namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
+        group: dev
