@@ -1,11 +1,13 @@
 package com.whz.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -31,5 +33,8 @@ public class Drugs implements Serializable {
     private String introduce;
 
     private String imagesUrl;
+
+    @TableField(exist = false)
+    private List<Symptom> symptoms;
 
 }

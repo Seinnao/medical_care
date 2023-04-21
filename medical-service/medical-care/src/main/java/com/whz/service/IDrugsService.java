@@ -2,6 +2,9 @@ package com.whz.service;
 
 import com.whz.entity.Drugs;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDrugsService extends IService<Drugs> {
 
+    List<Drugs> selectListByName(String name);
+
+    Drugs selectListById(Long id);
 }

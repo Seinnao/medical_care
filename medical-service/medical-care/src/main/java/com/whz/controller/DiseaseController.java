@@ -57,7 +57,7 @@ public class DiseaseController {
     @GetMapping("/page")
     public R findPage(@RequestParam Integer pageNum,
                       @RequestParam Integer pageSize,
-                      @RequestParam String name){
+                      @RequestParam(defaultValue = "") String name){
 
         LambdaQueryWrapper<Disease> wrapper = Wrappers.lambdaQuery();
         wrapper.like(!StringUtils.isEmpty(name),Disease::getName,name);
@@ -69,5 +69,7 @@ public class DiseaseController {
         });
         return R.ok().put("data",page);
     }
+
+
 
 }

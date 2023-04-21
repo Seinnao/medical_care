@@ -55,7 +55,7 @@
 				}
 				
 				uni.navigateTo({
-					url: '/pages/chat/chat?data='+encodeURIComponent(JSON.stringify(item)),
+					url: '/pages_chat/chat/chat?data='+encodeURIComponent(JSON.stringify(item)),
 					animationType: 'slide-in-right',
 					animationDuration: 500,
 				});

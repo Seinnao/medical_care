@@ -6,6 +6,8 @@ import com.whz.service.IDrugsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -17,4 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DrugsServiceImpl extends ServiceImpl<DrugsMapper, Drugs> implements IDrugsService {
 
+    @Override
+    public List<Drugs> selectListByName(String name) {
+        return this.baseMapper.selectListByName(name);
+    }
+
+    @Override
+    public Drugs selectListById(Long id) {
+        return this.baseMapper.selectListById(id);
+    }
 }

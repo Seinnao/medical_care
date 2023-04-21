@@ -1,9 +1,10 @@
 spring:
   profiles:
-    active: dev
+    active: @profiles.active@
 debug: true
 server:
   port: 8034
+
 ---
 spring:
   profiles: dev

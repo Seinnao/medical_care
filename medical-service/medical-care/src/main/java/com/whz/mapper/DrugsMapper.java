@@ -18,4 +18,7 @@ public interface DrugsMapper extends BaseMapper<Drugs> {
 
     List<Drugs> selectListBySymptom(@Param("symptomId") Long symptomId);
 
+    List<Drugs> selectListByName(@Param("name") String name);
+
+    Drugs selectListById(@Param("id") Long id);
 }

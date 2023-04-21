@@ -61,15 +61,6 @@
 			}
 		},
 		{
-			"path": "pages/chat/chat",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
 			"path": "pages/me/aboutMe",
 			"style": {
 				"navigationStyle": "custom", //微信小程序隐藏标题栏
@@ -95,8 +86,49 @@
 					"titleNView": false //手机app不显示标题栏
 				}
 			}
+		},
+		{
+			"path": "pages/home/consultation",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/home/drugs",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		},
+		{
+			"path": "pages/home/drugsItem",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
 		}
 	],
+	"subPackages": [{
+		"root": "pages_chat",
+		"pages": [
+			{
+				"path": "chat/chat",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			}
+		]
+	}],
 	"tabBar": {
 		"color": "#7a7a7a",
 		"selectedColor": "#000000",

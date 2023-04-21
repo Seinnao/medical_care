@@ -88,8 +88,6 @@
 </template>
 
 <script>
-import {compress} from "@/utils";
-
 export default {
   name: "Drugs",
   data() {

@@ -97,7 +97,7 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           this.$router.push({
-            name:"聊天",
+            name:"问诊交流",
             params:{
               id:data.id,
               name:data.name,

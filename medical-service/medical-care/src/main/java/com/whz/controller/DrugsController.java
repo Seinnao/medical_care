@@ -52,8 +52,8 @@ public class DrugsController {
     @GetMapping("/page")
     public R findPage(@RequestParam Integer pageNum,
                       @RequestParam Integer pageSize,
-                      @RequestParam String label,
-                      @RequestParam String name){
+                      @RequestParam(defaultValue = "") String label,
+                      @RequestParam(defaultValue = "") String name){
 
         LambdaQueryWrapper<Drugs> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(!StringUtils.isEmpty(label),Drugs::getLabel,label);
@@ -67,11 +67,14 @@ public class DrugsController {
 
     @GetMapping("/findLinkName/{name}")
     public R findLinkName(@PathVariable String name){
-        LambdaQueryWrapper<Drugs> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(!StringUtils.isEmpty(name),Drugs::getName,name);
-        wrapper.orderByDesc(Drugs::getId);
-        List<Drugs> list = drugsService.list(wrapper);
+        List<Drugs> list = drugsService.selectListByName(name);
         return R.ok().put(list);
+    }
+
+    @GetMapping("/findById/{id}")
+    public R findById(@PathVariable Long id) {
+        Drugs drugs = drugsService.selectListById(id);
+        return R.ok().put(drugs);
     }
 
 }

@@ -6,9 +6,9 @@
 			indicator-active-color="#0081ff">
 			<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur==index?'cur':''">
 				<view class="swiper-item">
-					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false"
-						objectFit="cover" v-if="item.type=='video'"></video>
+					<image :src="imagesUrl(item.url)" mode="aspectFill" v-if="true || item.type=='image'"></image>
+<!-- 					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false"
+						objectFit="cover" v-if="item.type=='video'"></video> -->
 				</view>
 			</swiper-item>
 		</swiper>
@@ -19,9 +19,6 @@
 				:style="[{ animation: 'show ' + ((index + 1) * 0.2 + 1) + 's 1' }]" @click="goCategorieslist"
 				:data-mid="item.mid">
 				<view :class="['cuIcon-' + item.cuIcon, 'text-' + item.color]">
-					<view class="cu-tag badge" v-if="item.count != 0">
-						<block v-if="item.badge != 1">{{ item.badge > 99 ? '99+' : item.badge }}</block>
-					</view>
 				</view>
 				<text>{{ item.name }}</text>
 			</view>
@@ -42,63 +39,62 @@
 				title: 'Hello',
 				keyword: '',
 				cardCur: 0,
-				swiperList: [{
-						id: 0,
-						url: require("../../static/banner/banner1.jpg"),
-						type: 'image',
-					},
-					{
-						id: 1,
-						url: require("../../static/banner/banner2.jpg"),
-						type: 'image'
-					},
-					{
-						id: 2,
-						url: require("../../static/banner/banner3.jpg"),
-						type: 'image'
-					}
-				],
+				swiperList: [],
 				dotStyle: false,
 				towerStart: 0,
 				direction: '',
 				categories: [{
 						cuIcon: 'hotfill',
 						color: 'red',
-						badge: '优惠',
 						mid: '1',
 						name: '学习技术'
 					},
 					{
 						cuIcon: 'colorlens',
 						color: 'orange',
-						badge: 1,
 						mid: '2',
 						name: '需求定制'
 					},
 					{
-						cuIcon: 'goodsnewfill',
+						cuIcon: 'baby',
 						color: 'yellow',
-						badge: 12,
 						mid: '3',
-						name: '客户定制'
+						name: '药品查找'
 					},
 					{
-						cuIcon: 'calendar',
-						color: 'cyan',
-						badge: 22,
+						cuIcon: 'message',
+						color: 'blue',
 						mid: '4',
-						name: '文章资讯'
+						name: '资讯医生'
 					}
 				],
 			}
 		},
 		onLoad() {
-			this.TowerSwiper('swiperList');
-			// 初始化towerSwiper 传已有的数组名即可
+			this.http.get("file-service/file/swiperImages").then(res => {
+			     this.swiperList = res.data
+				 this.TowerSwiper('swiperList');
+				 // 初始化towerSwiper 传已有的数组名即可
+			})
 		},
 		methods: {
-			goCategorieslist(){
-				
+			goCategorieslist(e){
+				console.log(e.currentTarget.dataset.mid)
+				if (e.currentTarget.dataset.mid == 1 || e.currentTarget.dataset.mid == 2) {
+					
+				} else if (e.currentTarget.dataset.mid == 3) {
+					uni.navigateTo({
+						url: '/pages/home/drugs',
+						animationType: 'slide-in-left',
+						animationDuration: 500,
+					});
+				} else if (e.currentTarget.dataset.mid == 4) {
+					uni.navigateTo({
+						url: '/pages/home/consultation',
+						animationType: 'slide-in-left',
+						animationDuration: 500,
+					});
+				}
 			},
 			DotStyle(e) {
 				this.dotStyle = e.detail.value

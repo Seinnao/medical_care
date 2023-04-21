@@ -3,10 +3,12 @@ package com.whz.controller;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whz.entity.File;
 import com.whz.exception.ServiceException;
 import com.whz.mapper.FileMapper;
+import com.whz.strings.FilePurpose;
 import com.whz.utils.FastDfsUtils;
 import com.whz.utils.R;
 import lombok.extern.slf4j.Slf4j;
@@ -178,7 +180,12 @@ public class FileController {
         return R.ok().put(fileMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper));
     }
 
-
+    @GetMapping("/swiperImages")
+    public R swiperImages(){
+        List<File> files = fileMapper.selectList(Wrappers.<File>lambdaQuery()
+                .eq(File::getPurpose, FilePurpose.swiper));
+        return R.ok().put(files);
+    }
 
 
 }

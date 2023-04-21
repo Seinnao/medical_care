@@ -43,7 +43,6 @@
         direction="rtl"
         :before-close="handleClose">
       <span>我来啦!</span>
-
     </el-drawer>
   </div>
 </template>

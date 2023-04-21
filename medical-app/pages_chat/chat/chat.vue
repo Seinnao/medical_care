@@ -237,8 +237,14 @@
 			},
 			// 接受消息(筛选处理)
 			screenMsg(msg) {
-				let lastid = this.msgList[this.msgList.length - 1].id;
+				let lastid;
+				if(this.msgList.length <= 0){
+					lastid = 1;
+				}else{
+					lastid = this.msgList[this.msgList.length - 1].id;
+				}
 				lastid += 100;
+				
 				msg.id = lastid;
 				//从长连接处转发给这个方法，进行筛选处理
 				if (msg.type === 'system') {

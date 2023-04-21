@@ -57,7 +57,7 @@ public class SymptomController {
     @GetMapping("/page")
     public R findPage(@RequestParam Integer pageNum,
                       @RequestParam Integer pageSize,
-                      @RequestParam String name){
+                      @RequestParam(defaultValue = "") String name){
 
         LambdaQueryWrapper<Symptom> wrapper = Wrappers.lambdaQuery();
         wrapper.orderByDesc(Symptom::getId);

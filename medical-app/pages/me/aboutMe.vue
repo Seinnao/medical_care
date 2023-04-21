@@ -4,20 +4,12 @@
 		<view class="titleZ text-center align-center">
 			<text class="text-bold">关于作者</text>
 			<view class="contentZ">
-				<text class="text-xl">项目作者:文辉正，一名6年经验乌黑秀发的九零后web前端程序员，坐标西安，自研项目：「宅家学IT」、「易凯科技」</text>
+				<text class="text-xl">项目作者:文辉正，作者是一名充满激情、有着坚实编程基础的程序员。</text>
 			</view>
 		</view>
 
 		<view class="titleZ text-center align-center margin-top-xl">
-			<text class="text-bold">想学习？有需求？有项目？</text>
-			<view class="contentZ margin-top-lg">
-				<text class="text-xl text-bold">「宅家学」</text>
-				<text class="text-xl">：软件技术开发培训（实战项目），1至4个月课程可随意选择，课程包含：UI设计、Web前端、Java后台等，挑战万元月薪，快来宅家学吧～</text>
-			</view>
-			<view class="contentZ" style="margin-top: 40rpx;">
-				<text class="text-xl text-bold">「易凯科技」</text>
-				<text class="text-xl">：承接电商/OA/分销/财务/进销存/ERP系统/H5页面/网站建设/小程序/公众号/App定制开发/名片设计...</text>
-			</view>
+			<text class="text-bold">他熟练掌握多种编程语言和技术框架，对软件工程、数据结构、算法等领域有着较为深入的理解和实践经验</text>
 		</view>
 	</view>
 </template>
