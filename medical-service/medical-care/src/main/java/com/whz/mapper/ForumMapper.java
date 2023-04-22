@@ -6,6 +6,8 @@ import com.whz.entity.Forum;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Set;
+
 /**
  * <p>
  *  Mapper 接口
@@ -19,4 +21,6 @@ public interface ForumMapper extends BaseMapper<Forum> {
     IPage<Forum> pageList(@Param("page") Page<Forum> page, @Param("forum") Forum forum);
 
     Forum queryById(@Param("id") Long id);
+
+    Set<Forum> selectByTitle(@Param("title") String title);
 }

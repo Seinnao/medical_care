@@ -4,6 +4,7 @@ package com.whz.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.whz.entity.Drugs;
 import com.whz.service.IDrugsService;
 import com.whz.utils.R;
@@ -30,6 +31,7 @@ public class DrugsController {
 
     @PostMapping
     public R save(@RequestBody Drugs drugs) {
+        CustomDictionary.add(drugs.getName());
         drugsService.saveOrUpdate(drugs);
         return R.ok();
     }

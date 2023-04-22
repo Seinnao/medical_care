@@ -21,6 +21,14 @@
             <artifactId>medical-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <!--用于词性分析 汉语言处理库-->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.8.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>

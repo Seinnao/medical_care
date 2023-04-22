@@ -2,10 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.whz.mapper.SymptomMapper">
 
+    <resultMap id="symptomAll" type="com.whz.entity.Symptom">
+        <id column="m_id" property="id"/>
+        <result column="m_name" property="name"/>
+        <result column="m_introduce" property="introduce"/>
+        <!-- column数据库中的名字， property 实体类名字    -->
+        <collection property="drugs" ofType="com.whz.entity.Drugs" javaType="java.util.List">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="label" property="label"/>
+            <result column="images_url" property="imagesUrl"/>
+            <result column="introduce" property="introduce"/>
+        </collection>
+    </resultMap>
+
     <select id="selectByDisease" resultType="com.whz.entity.Symptom">
         select s.name,s.id,s.introduce from medicine_symptom as s
         join disease_symptom as d
         on s.id = d.symptom_id
         where d.disease_id = #{disease.id}
     </select>
+
+    <select id="selectByName" resultMap="symptomAll">
+        select d.id,d.name,d.label,d.images_url,d.introduce,m.id as m_id,m.name as m_name,m.introduce as m_introduce
+        from medicine_symptom as m
+                 left join drugs_symptom as s
+                           on m.id = s.symptom_id
+                 left join medicine_drugs as d
+                           on d.id = s.drugs_id
+        where m.name like concat('%',#{name},'%')
+    </select>
+
+
 </mapper>

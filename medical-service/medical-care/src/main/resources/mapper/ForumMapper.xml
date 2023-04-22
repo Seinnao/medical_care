@@ -38,4 +38,10 @@
         group by f.id
     </select>
 
+    <select id="selectByTitle" resultType="com.whz.entity.Forum">
+        <include refid="forumAll"></include>
+        where f.title like concat('%',#{title},'%')
+        group by f.id
+    </select>
+
 </mapper>

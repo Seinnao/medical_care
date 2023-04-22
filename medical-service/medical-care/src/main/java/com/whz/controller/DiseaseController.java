@@ -4,6 +4,7 @@ package com.whz.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.whz.entity.Disease;
 import com.whz.mapper.SymptomMapper;
 import com.whz.service.IDiseaseService;
@@ -35,6 +36,7 @@ public class DiseaseController {
     
     @PostMapping
     public R save(@RequestBody Disease disease) {
+        CustomDictionary.add(disease.getName());
         diseaseService.saveOrUpdateChange(disease);
         return R.ok();
     }

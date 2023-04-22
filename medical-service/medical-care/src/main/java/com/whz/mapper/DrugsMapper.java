@@ -21,4 +21,5 @@ public interface DrugsMapper extends BaseMapper<Drugs> {
     List<Drugs> selectListByName(@Param("name") String name);
 
     Drugs selectListById(@Param("id") Long id);
+
 }

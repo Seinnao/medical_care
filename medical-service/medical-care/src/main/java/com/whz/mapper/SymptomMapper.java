@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -19,4 +20,5 @@ public interface SymptomMapper extends BaseMapper<Symptom> {
 
     List<Symptom> selectByDisease(@Param("disease") Disease disease);
 
+    Set<Symptom> selectByName(@Param("name") String name);
 }

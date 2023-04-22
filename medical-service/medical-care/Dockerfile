@@ -11,7 +11,7 @@ VOLUME /tmp
 ADD target/medical-care.jar app.jar
 
 # 这样写会以shell方式执行，会替换变量
-ENV JAVA_OPTS="-server -Xms128m -Xmx128m"
+ENV JAVA_OPTS="-server -Xms256m -Xmx256m"
 
 #-Xshareclasses -Xquickstar
 #启动容器时的进程
