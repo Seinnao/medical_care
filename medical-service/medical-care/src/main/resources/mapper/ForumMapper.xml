@@ -2,4 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.whz.mapper.ForumMapper">
 
+    <select id="pageList" resultType="com.whz.entity.Forum">
+        select f.id,f.title,f.collection,f.see,f.content,f.time,f.outline,u.nickname,u.avatar_url
+        from medicine_forum as f
+        left join sys_user as u
+        on f.user_id = u.id
+        <if test="forum != null">
+            <trim prefix="where" suffixOverrides="and">
+                <if test="forum.title != null and forum.title != ''">
+                    f.title like concat('%',#{forum.title},'%')
+                </if>
+                <if test="forum.nickname != null and forum.nickname != ''">
+                    u.nickname like concat('%',#{forum.nickname},'%')
+                </if>
+            </trim>
+        </if>
+    </select>
+    <select id="queryById" resultType="com.whz.entity.Forum">
+        select f.id,f.title,f.collection,f.see,f.content,f.time,f.outline,u.nickname,u.avatar_url
+        from medicine_forum as f
+                 left join sys_user as u
+                           on f.user_id = u.id
+        where f.id = #{id}
+    </select>
 </mapper>

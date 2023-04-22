@@ -100,7 +100,7 @@ export default {
           this.http.post("/user-service/user/login",this.dataForm
           ).then(res => {
             if(res.code === 200 ){
-              //console.log(res.data.data)
+              console.log(res.data)
               let user = res.data;
               localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储菜单信息到浏览器
               localStorage.setItem("token", user.token);

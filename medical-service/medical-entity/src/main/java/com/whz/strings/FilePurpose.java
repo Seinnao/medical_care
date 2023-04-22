@@ -10,5 +10,5 @@ public class FilePurpose {
     public static String ordinary="ordinary";//一般图片
     public static String drugs = "drugs"; //药品图片
     public static String swiper="swiper";//轮播图图片
-
+    public static String forum="forum";//论坛图片
 }

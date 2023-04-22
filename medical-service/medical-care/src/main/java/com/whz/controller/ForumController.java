@@ -1,8 +1,16 @@
 package com.whz.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.whz.entity.Forum;
+import com.whz.service.IForumService;
+import com.whz.utils.R;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -15,5 +23,49 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/forum")
 public class ForumController {
+
+    @Resource
+    IForumService forumService;
+
+    @PostMapping
+    public R save(@RequestBody Forum forum) {
+        if(null == forum.getId()){
+            forum.setTime(new Date());
+        }
+        forumService.saveOrUpdate(forum);
+        return R.ok();
+    }
+
+    @DeleteMapping("/{id}")
+    public R delete(@PathVariable String id) {
+        return R.ok().put(forumService.removeById(id));
+    }
+
+    @PostMapping("/del/batch")
+    public R deleteBatch(@RequestBody List<String> ids) {
+        return R.ok().put(forumService.removeByIds(ids));
+    }
+
+    @GetMapping
+    public R findAll() {
+        return R.ok().put(forumService.list());
+    }
+
+    @GetMapping("/getPost/{id}")
+    public R getPost(@PathVariable Long id){
+        Forum forum = forumService.queryById(id);
+        return R.ok().put(forum);
+    }
+
+
+    @GetMapping("/page")
+    public R findPage(@RequestParam Integer pageNum,
+                      @RequestParam Integer pageSize,
+                      @RequestParam(defaultValue = "") String nickname,
+                      @RequestParam(defaultValue = "") String title){
+        Forum forum = Forum.builder().title(title).nickname(nickname).build();
+        IPage<Forum> page = forumService.pageList(new Page<>(pageNum, pageSize), forum);
+        return R.ok().put("data",page);
+    }
 
 }

@@ -16,10 +16,10 @@ const routes = [
         component: () => import('@/views/sys/Register')
     },
     {
-        path: '/markdown',
-        name: 'markdown',
-        component: () => import('@/components/commom/Markdown.vue')
-    },
+        path: '/post',
+        name: 'post',
+        component: () => import('@/views/common/forum/Post'),
+    }
 ]
 
 const router = new VueRouter({
@@ -57,6 +57,10 @@ export const setRoutes = () => {
                 path: 'password',
                 name: '修改密码',
                 component: () => import('../views/user/Password')
+            }, {
+                path: '/AddForum',
+                name: '发布帖子',
+                component: () => import('../views/common/forum/AddForum')
             }]
         }
 

@@ -1,24 +1,28 @@
 <template>
   <div>
-    <div class="home">
-      <mavon-editor :codeStyle="codeStyle"
-                    :toolbars="toolbars"
-                    v-model="content"
-                    @imgAdd="imgAdd"
-                    :ishljs="true"
-                    style="width:700px;height: 400px"
-                    ref="md" @change="change"/>
-      <el-button @click="outputENter">输出</el-button>
-    </div>
+    <mavon-editor :codeStyle="codeStyle"
+                  :toolbars="toolbars"
+                  v-model="content"
+                  @imgAdd="imgAdd"
+                  :style="mak_class"
+                  :ishljs="true"
+                  ref="md" @change="change"/>
   </div>
 </template>
 
 <script>
+import {compress} from "@/utils";
 export default {
   name: "Markdown",
+  props: {   //父节点传的值
+    mak_class: String,
+    content:{
+      type:String,
+      default:'这里是markdown编辑的内容',
+    },
+  },
   data() {
     return {
-      content: "这里是markdown编辑的内容",
       page_article:undefined,
       html_content:undefined,
       md_content:undefined,
@@ -58,34 +62,33 @@ export default {
     };
   },
   methods:{
-    outputENter(){
-      console.log(JSON.stringify(this.test_html))   //就用这个存数据库  然后进行回显即可
-
-    },
     imgAdd(pos,file){
-      const form = new FormData()
-      form.append('file', file);
-      this.http({
-        url: 'file-service/file/upload',
-        method:'post',
-        data: form,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }).then(res => {
-        if (res.code === 200) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-          })
-          this.$refs.md.$img2Url(pos,this.imagesUrl(res.url))
-        } else {
-          this.$message.error(res.msg)
-        }
+      compress(file,{width:300}).then(rst =>{
+        const form = new FormData()
+        form.append('file', rst);
+        this.http({
+          url: 'file-service/file/upload/avatar',
+          method:'post',
+          data: form,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((res) => {
+          if (res.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+            })
+            this.$refs.md.$img2Url(pos,this.imagesUrl(res.url))
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       })
     },
     change(value, render){
-      // render 为 markdown 解析后的结果
+      console.log(this.mak_class)
       this.test_html = render;
+      this.$emit('change',this.test_html,this.content)
     }
   }
 }

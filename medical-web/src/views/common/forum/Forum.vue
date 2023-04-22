@@ -1,10 +1,11 @@
 <template>
   <div class="total">
     <el-row :gutter="10" class="header">
-      <el-col :span="18"><el-input v-model="query" placeholder="请输入关键字" size="small"></el-input></el-col>
-      <el-col :span="4"><el-button type="primary" icon="el-icon-search" size="small">搜索</el-button></el-col>
+      <el-col :span="18"><el-input v-model="query" placeholder="请输入关键字" size="small" clearable></el-input></el-col>
+      <el-col :span="4"><el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button></el-col>
 <!--      <el-col :span="2"><el-button type="success" icon="el-icon-position" size="small">发表</el-button></el-col>-->
     </el-row>
+
     <div class="float">
       <el-tooltip effect="dark" content="发表我的看法" placement="top-end" style="margin-bottom: 10px">
         <el-button type="success" icon="el-icon-position"
@@ -16,34 +17,28 @@
         <el-button icon="el-icon-caret-top" circle size="small" @click=""></el-button>
       </el-tooltip>
     </div>
+
     <div v-infinite-scroll="load" :infinite-scroll-disabled="isAll" class="main">
       <div class="item" v-for="item in forumDate" :key="item.id">
         <div class="text">
           <el-link class="title" @click="openArticle(item)">{{ item.title }}</el-link>
-          <!--        <span class="time">{{ $moment(item.time).calendar()}}</span>-->
-          <div class="info">{{item.content}}</div>
+          <div class="info">{{item.outline}}</div>
         </div>
         <div class="icon">
-          <i class="el-icon-view on" style="margin-right:15px">230</i>
-          <i class="el-icon-star-off on" style="margin-right:15px">345</i>
-          <i class="el-icon-chat-dot-square on">34</i>
+          <i class="el-icon-view on" style="margin-right:15px">{{item.see}}</i>
+          <i class="el-icon-star-off on" style="margin-right:15px">{{item.collection}}</i>
+          <i class="el-icon-chat-dot-square on">{{item.collection}}</i>
         </div>
         <div class="author">
           <div class="time">{{ $moment(item.time).calendar()}}</div>
-          <div>小明</div>
+          <div>{{item.nickname}}</div>
         </div>
-        <img class="image" :src="item.imageUrl" >
+        <img class="image" :src="imagesUrl(item.avatarUrl)" >
         <el-divider class="hrs"></el-divider>
       </div>
     </div>
 
-    <el-drawer
-        title="发表文章"
-        :visible.sync="drawer"
-        direction="rtl"
-        :before-close="handleClose">
-      <span>我来啦!</span>
-    </el-drawer>
+    <el-empty description="本界面空空如也" v-if="forumDate.length <= 0"></el-empty>
   </div>
 </template>
 
@@ -52,40 +47,46 @@ export default {
   name: "Forum",
   data(){
     return{
-      id:2,
       isAll:false,
-      drawer: false,
       query:'',
-      forumDate:[{
-        id:1,
-        imageUrl: require("../../assets/test/R-C.jpg"),
-        title:'震惊！真相竟然是这样',
-        content:'俗话说得好，一张图片胜过千言万语，尤其是对于能够通过图像清晰有效地说明检查结果的病例报告而言。但是，如果没有正当理由，请避免使用图片 - 只有当他们具备关联时才这样做。例如，一个新鉴定的致病微生物的宏观和微观图像是必不可少的， 而你在文中其他地方已经清楚地解释了模型的图片可能是过度的。',
-        time: new Date(),
-      }],
+      forumDate:[],
+      pageNum: 1,
+      pageSize: 10
     }
   },
   methods:{
     load(){
-      this.id ++;
-      if(this.id > 20){
-        this.isAll = true;
-      }
-      this.forumDate.push({
-        id: this.id,
-        imageUrl: require("../../assets/test/R-C (3).jpg"),
-        title: '震惊！真相竟然不是是这样',
-        time: new Date(),
+      this.http.get("/care-service/forum/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          title: this.query,
+        }
+      }).then(res => {
+        if(res.data.total <= this.pageNum*this.pageSize){
+          this.isAll = true;
+        }else {
+          this.pageNum = this.pageNum + 1;
+        }
+       res.data.records.forEach(record =>{
+         this.forumDate.push(record)
+       })
       })
     },
-    handleClose(){
-      this.drawer = false;
-    },
     publish(){
-      this.drawer = true;
+      this.$router.push({name:'发布帖子'})
     },
-    openArticle(){
-
+    openArticle(item){
+      this.$router.push({name:'post', params:{id:item.id}})
+    },
+    search(){
+      this.pageNum = 1
+      if(this.forumDate.length <= 0){
+        this.load()
+      }else {
+        this.forumDate = []
+        this.isAll = false;
+      }
     }
   }
 }

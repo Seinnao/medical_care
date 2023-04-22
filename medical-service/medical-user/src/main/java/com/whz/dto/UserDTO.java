@@ -1,5 +1,7 @@
 package com.whz.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.whz.entity.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
+
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private String username;
     private String password;
