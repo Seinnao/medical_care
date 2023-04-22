@@ -114,19 +114,7 @@ export default {
 }
 </script>
 
-<style>
-.swiper_images{
-  width: 100%;
-  height: 100px;
-}
-.swiper_name{
-  font-size:12px;
-  color: #E6A23C;
-}
-.images-uploader {
-  text-align: center;
-  padding-bottom: 10px;
-}
+<style lang="scss">
 .images-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   width: 220px;
@@ -138,6 +126,13 @@ export default {
 }
 .images-uploader .el-upload:hover {
   border-color: #409EFF;
+}
+</style>
+
+<style scoped>
+.images-uploader {
+  text-align: center;
+  padding-bottom: 10px;
 }
 .images-uploader-icon {
   font-size: 20px;
@@ -152,5 +147,13 @@ export default {
   height: 120px;
   object-fit: cover;
   display: block;
+}
+.swiper_images{
+  width: 100%;
+  height: 100px;
+}
+.swiper_name{
+  font-size:12px;
+  color: #E6A23C;
 }
 </style>

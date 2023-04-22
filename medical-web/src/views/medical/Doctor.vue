@@ -87,7 +87,7 @@
 
         <el-form-item label="头像">
           <el-upload
-              class="images-uploader"
+              class="doctor-uploader"
               action=""
               :show-file-list="false"
               :http-request="filesRequest"
@@ -338,15 +338,11 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss">
 .headerBg {
   background: #eee!important;
 }
-.images-uploader {
-  /*text-align: center;*/
-  padding-bottom: 10px;
-}
-.images-uploader .el-upload {
+.doctor-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   width: 100px;
   height: 100px;
@@ -355,8 +351,14 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.images-uploader .el-upload:hover {
+.doctor-uploader .el-upload:hover {
   border-color: #409EFF;
+}
+</style>
+
+<style scoped>
+.doctor-uploader {
+  padding-bottom: 10px;
 }
 .images-uploader-icon {
   font-size: 20px;
