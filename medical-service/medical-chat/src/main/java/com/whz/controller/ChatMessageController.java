@@ -12,10 +12,12 @@ import com.whz.storage.ChatData;
 import com.whz.storage.SessionMap;
 import com.whz.utils.R;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -96,14 +98,22 @@ public class ChatMessageController {
     @GetMapping("/page")
     public R findPage(@RequestParam Integer pageNum,
                       @RequestParam Integer pageSize,
-                      @RequestParam(defaultValue = "") String nickname){
+                      @RequestParam(defaultValue = "") String nickname,
+                      @RequestParam(defaultValue = "") String otherNickname){
 
         LambdaQueryWrapper<ChatMessage> wrapper = Wrappers.lambdaQuery();
         wrapper.orderByDesc(ChatMessage::getId);
 
-        if (!"".equals(nickname)) {
-            wrapper.like(ChatMessage::getCome,nickname).or().like(ChatMessage::getReach,nickname);
-        }
+        wrapper.and(StringUtils.isNotEmpty(nickname) || StringUtils.isNotEmpty(otherNickname),r ->{
+                    r.eq(StringUtils.isNotEmpty(nickname),ChatMessage::getCome,nickname);
+                    r.like(StringUtils.isNotEmpty(otherNickname),ChatMessage::getReach,otherNickname);
+        });
+        wrapper.or(StringUtils.isNotEmpty(nickname) || StringUtils.isNotEmpty(otherNickname),w->{
+            w.and(r ->{
+                r.eq(StringUtils.isNotEmpty(nickname),ChatMessage::getReach,nickname);
+                r.like(StringUtils.isNotEmpty(otherNickname),ChatMessage::getCome,otherNickname);
+            });
+        });
 
         Page<ChatMessage> page = chatMessageService.page(new Page<>(pageNum, pageSize),wrapper);
         return R.ok().put("data",page);

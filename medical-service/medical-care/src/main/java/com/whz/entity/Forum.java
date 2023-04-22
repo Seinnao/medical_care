@@ -37,8 +37,6 @@ public class Forum implements Serializable {
 
     private String title;
 
-    private Integer collection;
-
     private Integer see;
 
     private String content;
@@ -46,6 +44,12 @@ public class Forum implements Serializable {
     private String outline;
 
     private Date time;
+
+    @TableField(exist = false)
+    private Integer collection;
+
+    @TableField(exist = false)
+    private Integer commentSum;
 
     @TableField(exist = false)
     private String avatarUrl;

@@ -81,7 +81,7 @@ export default {
       form: {},
       multipleSelection: [],
       roles: [],
-      loading: false
+      loading: false,
     }
   },
   created() {

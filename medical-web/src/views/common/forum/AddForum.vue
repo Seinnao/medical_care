@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button @click="reset" v-if="!edit">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -28,18 +28,30 @@ export default {
   },
   data(){
     return{
-      form:{}
+      form:{},
+      edit:false
     }
   },
   created() {
+    console.log(this.$route)
+    if(this.$route.params.id){
+      this.edit = true;
+      this.http.get(`/care-service/forum/getPost/${this.$route.params.id}`).then(res =>{
+        if(res.code === 200){
+          this.form = res.data
+        }
+      })
+    }
     this.init()
   },
   methods:{
     init(){
-      this.form = {}
-      let user = JSON.parse(localStorage.getItem("user"));
-      this.form.userId = user.id
-      this.form.content = '这里是markdown编辑的内容'
+      if(!this.edit){
+        this.form = {}
+        let user = JSON.parse(localStorage.getItem("user"));
+        this.form.userId = user.id
+        this.form.content = '这里是markdown编辑的内容'
+      }
     },
     change(data,content){
       this.form.content = content
@@ -50,7 +62,7 @@ export default {
     submit(){
       this.http.post("/care-service/forum", this.form).then(res => {
         if (res.code === 200) {
-          this.$message.success("发布成功")
+          this.$message.success(this.edit ? "修改成功":"发布成功")
           this.dialogFormVisible = false
           this.goBack();
         } else {

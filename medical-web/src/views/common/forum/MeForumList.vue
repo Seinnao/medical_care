@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin: 10px 0">
-      <el-input style="width: 200px" placeholder="请输入查询昵称" suffix-icon="el-icon-search" v-model="otherNickname"></el-input>
+      <el-input style="width: 200px" clearable placeholder="请输入标题" suffix-icon="el-icon-search" v-model="title"></el-input>
       <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
@@ -25,19 +25,18 @@
               :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55"></el-table-column>
-      <el-table-column prop="come" align="center" label="发送者" width="100"></el-table-column>
-      <el-table-column prop="reach" align="center" label="接收者" width="100"></el-table-column>
-      <el-table-column prop="type" align="center" label="类型" width="100"></el-table-column>
-      <el-table-column prop="content" align="center" label="内容" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="title" align="center" label="主题" width="140" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="outline" align="center" label="概要" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="nickname" align="center" label="发帖昵称" width="100"></el-table-column>
       <el-table-column align="center" label="时间" width="160">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ $moment(scope.row.time).calendar() }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column prop="address" align="center" label="其他"></el-table-column>-->
-      <el-table-column label="操作"  width="160" align="center">
+      <el-table-column label="操作"  width="200" align="center">
         <template slot-scope="scope">
+          <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='确定'
@@ -63,48 +62,41 @@
           :total="total">
       </el-pagination>
     </div>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: "MessageList",
+  name: "MeForumList",
   data() {
     return {
       tableData: [],
       total: 0,
       pageNum: 1,
       pageSize: 10,
+      title: "",
       nickname: "",
-      otherNickname:"",
-      email: "",
-      address: "",
       form: {},
-      dialogFormVisible: false,
       multipleSelection: [],
       roles: [],
-      loading: false
+      loading: false,
     }
   },
   created() {
     let user = JSON.parse(localStorage.getItem("user"));
-    if(user.role === 'ROLE_USER'){
-      this.nickname = user.nickname;
-    }
-    if(user.role === 'ROLE_DOCTOR'){
-      this.nickname = user.doctorName
-    }
+    this.nickname = user.nickname;
     this.load()
   },
   methods: {
     load() {
       this.loading = true;
-      this.http.get("/chat-service/chat-message/page", {
+      this.http.get("/care-service/forum/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          nickname: this.nickname,
-          otherNickname: this.otherNickname
+          title: this.title,
+          nickname: this.nickname
         }
       }).then(res => {
         this.tableData = res.data.records
@@ -112,27 +104,8 @@ export default {
         this.loading = false;
       })
     },
-    save() {
-      this.http.post("/chat-service/chat-message", this.form).then(res => {
-        if (res.code === 200) {
-          this.$message.success("保存成功")
-          this.dialogFormVisible = false
-          this.load()
-        } else {
-          this.$message.error("保存失败")
-        }
-      })
-    },
-    handleAdd() {
-      this.dialogFormVisible = true
-      this.form = {}
-    },
-    handleEdit(row) {
-      this.form = JSON.parse(JSON.stringify(row))
-      this.dialogFormVisible = true
-    },
     del(id) {
-      this.http.delete("/chat-service/chat-message/" + id).then(res => {
+      this.http.delete("/care-service/forum/" + id).then(res => {
         if (res.code === 200) {
           this.$message.success("删除成功")
           this.load()
@@ -146,8 +119,8 @@ export default {
       this.multipleSelection = val
     },
     delBatch() {
-      let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
-      this.http.post("/chat-service/chat-message/del/batch", ids).then(res => {
+      let ids = this.multipleSelection.map(v => v.id)
+      this.http.post("/care-service/forum/del/batch", ids).then(res => {
         if (res.code === 200) {
           this.$message.success("批量删除成功")
           this.load()
@@ -163,15 +136,26 @@ export default {
       this.load()
     },
     handleSizeChange(pageSize) {
-      console.log(pageSize)
       this.pageSize = pageSize
       this.load()
     },
     handleCurrentChange(pageNum) {
-      console.log(pageNum)
       this.pageNum = pageNum
       this.load()
     },
+    see(data){
+      this.$router.push({
+        name:'post',
+        params: {id:data.id}
+      })
+    },
+    handleEdit(data){
+      //console.log(data,"2")
+      this.$router.push({
+        name:'编辑帖子',
+        params: {id:data.id}
+      })
+    }
   }
 }
 </script>

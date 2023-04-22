@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store";
+import http from "@/utils/http";
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,11 @@ const routes = [
         path: '/register',
         name: 'register',
         component: () => import('@/views/sys/Register')
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: () => import('@/views/sys/404'),
     },
     {
         path: '/post',
@@ -61,6 +67,10 @@ export const setRoutes = () => {
                 path: '/AddForum',
                 name: '发布帖子',
                 component: () => import('../views/common/forum/AddForum')
+            },{
+                path: '/editForum',
+                name: '编辑帖子',
+                component: () => import('../views/common/forum/AddForum')
             }]
         }
 
@@ -105,7 +115,8 @@ setRoutes()
 router.beforeEach((to, from, next) => {
     localStorage.setItem("currentPathName", to.name)  // 设置当前的路由名称
     store.commit("setPath")
-    if (!to.matched.length) {
+    //console.log(to)
+    if (!to.matched.length) { //判断路由是否存在
         const menus = localStorage.getItem("menus")
         if (!menus) {
             next("/login")
@@ -113,6 +124,9 @@ router.beforeEach((to, from, next) => {
             next("/404")
         }
     } else {
+        if(to.path !== '/login' && to.path !== '/register' && to.path !== '/404'){
+            http.get('user-service/user/isToken');
+        }
         next()
     }
 })

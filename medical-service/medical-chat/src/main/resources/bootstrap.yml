@@ -28,6 +28,9 @@ spring:
           - dataId: datasource.yml
             group: dev
             refresh: true
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 ---
 

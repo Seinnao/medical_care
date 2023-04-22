@@ -25,9 +25,9 @@
           <div class="info">{{item.outline}}</div>
         </div>
         <div class="icon">
-          <i class="el-icon-view on" style="margin-right:15px">{{item.see}}</i>
-          <i class="el-icon-star-off on" style="margin-right:15px">{{item.collection}}</i>
-          <i class="el-icon-chat-dot-square on">{{item.collection}}</i>
+          <i class="el-icon-view on" style="margin-right:15px"> {{item.see}}</i>
+          <i class="el-icon-star-off on" style="margin-right:15px"> {{ item.collection}}</i>
+          <i class="el-icon-chat-dot-square on"> {{ item.commentSum}}</i>
         </div>
         <div class="author">
           <div class="time">{{ $moment(item.time).calendar()}}</div>

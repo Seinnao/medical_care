@@ -31,6 +31,7 @@ public class ForumController {
     public R save(@RequestBody Forum forum) {
         if(null == forum.getId()){
             forum.setTime(new Date());
+            forum.setSee(0);
         }
         forumService.saveOrUpdate(forum);
         return R.ok();
@@ -54,6 +55,8 @@ public class ForumController {
     @GetMapping("/getPost/{id}")
     public R getPost(@PathVariable Long id){
         Forum forum = forumService.queryById(id);
+        forum.setSee(forum.getSee()+1);
+        forumService.updateById(forum);
         return R.ok().put(forum);
     }
 
