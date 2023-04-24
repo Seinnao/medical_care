@@ -1,7 +1,8 @@
 spring:
   profiles:
     active: @profiles.active@
-
+server:
+  port: 8031
 
 ---
 
@@ -22,7 +23,10 @@ spring:
           - dataId: datasource.yml
             group: dev
             refresh: true
-
+debug: true
+jwt:
+  subject: user # 主题
+  issuer: whz # 发行人
 ---
 
 spring:
@@ -37,8 +41,8 @@ spring:
         namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
         extension-configs: # 读取多个配置文件
           - dataId: user-service.yml
-            group: dev
+            group: prod
             refresh: true    # 是否可以刷新
           - dataId: datasource.yml
-            group: dev
+            group: prod
             refresh: true

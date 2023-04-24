@@ -143,10 +143,13 @@ export default {
       this.load()
     },
     see(data){
-      this.$router.push({
-        name:'post',
-        params: {id:data.id}
-      })
+      const { href } = this.$router.resolve({
+        path: `/post`,
+        query: {
+          id: data.id
+        }
+      });
+      window.open(href, '_blank');
     }
   }
 }

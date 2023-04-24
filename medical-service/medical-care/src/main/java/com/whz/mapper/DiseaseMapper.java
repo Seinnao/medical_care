@@ -18,4 +18,6 @@ public interface DiseaseMapper extends BaseMapper<Disease> {
 
     Set<Disease> getSetByName(@Param("name") String name);
 
+    Set<Disease> getSearchByName(@Param("name") String name);
+
 }

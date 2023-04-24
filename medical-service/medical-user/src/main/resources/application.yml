@@ -1,6 +1,0 @@
-debug: true
-server:
-  port: 8031
-jwt:
-  subject: user # 主题
-  issuer: whz # 发行人

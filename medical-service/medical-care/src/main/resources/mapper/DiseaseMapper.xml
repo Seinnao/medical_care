@@ -23,19 +23,50 @@
     </resultMap>
 
 
-    <select id="getSetByName" resultMap="diseaseAll">
+    <resultMap id="diseaseSearch" type="com.whz.entity.Disease">
+        <!-- column数据库中的名字， property 实体类名字    -->
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="introduce" property="introduce"/>
+        <collection property="symptom" ofType="com.whz.entity.Symptom" javaType="java.util.List">
+            <id column="m_id" property="id"/>
+            <result column="m_name" property="name"/>
+            <result column="m_introduce" property="introduce"/>
+        </collection>
+        <collection property="drugs" ofType="com.whz.entity.Drugs" javaType="java.util.Set">
+            <id column="d_id" property="id"/>
+            <result column="d_name" property="name"/>
+            <result column="d_label" property="label"/>
+            <result column="d_images_url" property="imagesUrl"/>
+            <result column="d_introduce" property="introduce"/>
+        </collection>
+    </resultMap>
+
+    <sql id="selectAll">
         select s.id,s.name,s.introduce,m.id as m_id,m.name as m_name,m.introduce as m_introduce,
                d.id as d_id,d.name as d_name,d.introduce as d_introduce,d.label as d_label,
                d.images_url as d_images_url
         from medicine_disease as s
-            left join disease_symptom as ds
-                on ds.disease_id = s.id
-            left join medicine_symptom as m
-                on m.id = ds.symptom_id
-            left join drugs_symptom as drs
-                on drs.symptom_id = m.id
-            left join medicine_drugs as d
-                on d.id = drs.drugs_id
+                 left join disease_symptom as ds
+                           on ds.disease_id = s.id
+                 left join medicine_symptom as m
+                           on m.id = ds.symptom_id
+                 left join drugs_symptom as drs
+                           on drs.symptom_id = m.id
+                 left join medicine_drugs as d
+                           on d.id = drs.drugs_id
+    </sql>
+
+
+    <select id="getSetByName" resultMap="diseaseAll">
+        <include refid="selectAll"></include>
         where s.name like concat('%',#{name},'%')
     </select>
+
+
+    <select id="getSearchByName" resultMap="diseaseSearch">
+        <include refid="selectAll"></include>
+        where s.name like concat('%',#{name},'%')
+    </select>
+
 </mapper>

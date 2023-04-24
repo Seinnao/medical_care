@@ -20,7 +20,9 @@
                         :scrollStyle="true"
                         :ishljs="true"/>
           <div class="foot">
-            <el-button type="text" icon="el-icon-star-off" size="medium">收藏</el-button>
+            <el-button type="text" :icon="!isCollection? 'el-icon-star-off':'el-icon-star-on'"
+                       @click="toCollection"
+                       size="medium">收藏</el-button>
             <el-button type="text" icon="el-icon-chat-dot-square" size="medium" @click="comment">评论</el-button>
           </div>
         </el-card>
@@ -37,6 +39,8 @@
 </template>
 
 <script>
+import user from "@/views/user/User";
+
 export default {
   name: "Post",
   data(){
@@ -44,8 +48,12 @@ export default {
       post:{
         avatarUrl:''
       },
+      forumId:'',
       drawer: false,
-      form:{}
+      form:{},
+      user:{},
+      isCollection:false,
+      collectionId:''
     }
   },
   created(){
@@ -53,18 +61,44 @@ export default {
   },
   methods:{
     init(){
-      this.http.get(`/care-service/forum/getPost/${this.$route.params.id}`).then(res =>{
+      let id = this.$route.params.id;
+      if(!id){
+        id = this.$route.query.id;
+      }
+      this.forumId = id;
+      this.user = JSON.parse(localStorage.getItem("user"));
+      this.http.get(`/care-service/forum/getPost/${id}`).then(res =>{
         if(res.code === 200){
           this.post = res.data
           this.$forceUpdate() //强制渲染组件
         }
       })
+      this.http.get(`/care-service/forum/collection/${this.user.id}/${id}`).then(res =>{
+        if(res.code === 200 && res.data){
+          this.isCollection = res.data.collection
+          this.collectionId = res.data.id
+        }
+      })
+
     },
     handleClose(){
       this.drawer = false;
     },
     comment(){
       this.drawer = true;
+    },
+    toCollection(){
+      this.isCollection = !this.isCollection;
+      this.http.post('/care-service/forum/collection',{
+        id:this.collectionId,
+        collection:this.isCollection,
+        userId:this.user.id,
+        forumId:this.forumId
+      }).then(res =>{
+        if(res.code === 200){
+          this.$message.info(this.isCollection? '收藏成功':'取消收藏')
+        }
+      })
     }
   }
 }
@@ -112,7 +146,7 @@ export default {
   }
 }
 .foot{
-  margin: 20px 0;
+  margin: 30px 10px;
   height: 30px
 }
 </style>

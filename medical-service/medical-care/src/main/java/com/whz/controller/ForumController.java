@@ -2,8 +2,11 @@ package com.whz.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whz.entity.Forum;
+import com.whz.entity.ForumCollection;
+import com.whz.mapper.ForumCollectionMapper;
 import com.whz.service.IForumService;
 import com.whz.utils.R;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,9 @@ public class ForumController {
 
     @Resource
     IForumService forumService;
+
+    @Resource
+    ForumCollectionMapper collectionMapper;
 
     @PostMapping
     public R save(@RequestBody Forum forum) {
@@ -70,5 +76,26 @@ public class ForumController {
         IPage<Forum> page = forumService.pageList(new Page<>(pageNum, pageSize), forum);
         return R.ok().put("data",page);
     }
+
+    @PostMapping("/collection")
+    public R collection(@RequestBody ForumCollection collection){
+        if(null == collection.getId()){
+            collectionMapper.insert(collection);
+        }else {
+            collectionMapper.updateById(collection);
+        }
+        return R.ok();
+    }
+
+    @GetMapping("/collection/{userId}/{forumId}")
+    public R getCollection(@PathVariable String userId,
+                           @PathVariable String forumId){
+        ForumCollection collection = collectionMapper.selectOne(Wrappers
+                .<ForumCollection>lambdaQuery()
+                .eq(ForumCollection::getUserId, userId)
+                .eq(ForumCollection::getForumId, forumId));
+        return R.ok().put(collection);
+    }
+
 
 }

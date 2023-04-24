@@ -3,7 +3,6 @@ spring:
     active: @profiles.active@
 server:
   port: 8030
-debug: true
 
 ---
 
@@ -19,6 +18,7 @@ spring:
         file-extension: yml
         namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
         group: dev
+debug: true
 
 ---
 
@@ -33,4 +33,4 @@ spring:
         prefix: gateway.yml
         file-extension: yml
         namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
-        group: dev
+        group: prod

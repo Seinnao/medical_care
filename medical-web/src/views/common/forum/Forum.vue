@@ -77,7 +77,13 @@ export default {
       this.$router.push({name:'发布帖子'})
     },
     openArticle(item){
-      this.$router.push({name:'post', params:{id:item.id}})
+      const { href } = this.$router.resolve({
+        path: `/post`,
+        query: {
+          id: item.id
+        }
+      });
+      window.open(href, '_blank');
     },
     search(){
       this.pageNum = 1

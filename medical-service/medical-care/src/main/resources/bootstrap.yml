@@ -1,7 +1,6 @@
 spring:
   profiles:
     active: @profiles.active@
-debug: true
 server:
   port: 8034
 
@@ -23,6 +22,16 @@ spring:
           - dataId: datasource.yml
             group: dev
             refresh: true
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    com.whz.controller: debug
+    com.whz.service: debug
+    com.whz.mapper: debug
+debug: true
+
 ---
 spring:
   profiles: prod
@@ -36,8 +45,8 @@ spring:
         namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
         extension-configs: # 读取多个配置文件
           - dataId: care-service.yml
-            group: dev
+            group: prod
             refresh: true    # 是否可以刷新
           - dataId: datasource.yml
-            group: dev
+            group: prod
             refresh: true

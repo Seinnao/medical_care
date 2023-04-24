@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -35,5 +36,8 @@ public class Disease implements Serializable {
 
     @TableField(exist = false)
     private List<Symptom> symptom;
+
+    @TableField(exist = false)
+    private Set<Drugs> drugs;
 
 }

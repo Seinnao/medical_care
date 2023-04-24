@@ -1,6 +1,6 @@
 //let wsUri = `wss://www.jcoolish.top/api/chat-service/socket`;
 //let wsUri = `wss://www.jcoolish.top/network/api/chat-service/socket`;
-let wsUri = `ws://127.0.0.1/api/chat-service/socket`;
+let wsUri = `ws://192.168.137.1/api/chat-service/socket`;
 
 let socketOpen = false;
 

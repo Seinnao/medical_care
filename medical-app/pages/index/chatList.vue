@@ -3,7 +3,7 @@
 		<uni-nav-bar dark :fixed="true" shadow background-color="#00aaff" status-bar title="交流问诊" />
 		<view class="cu-bar bg-white solid-bottom">
 			<view class="action">
-				<text class="cuIcon-title text-orange "></text> 消息列表
+				<text class="cuIcon-title text-orange "></text> 我的消息
 			</view>
 		</view>
 		<view class="cu-list menu-avatar">

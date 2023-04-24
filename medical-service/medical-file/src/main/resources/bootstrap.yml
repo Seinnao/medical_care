@@ -26,7 +26,7 @@ spring:
           - dataId: datasource.yml
             group: dev
             refresh: true
-
+# debug: true
 
 ---
 
@@ -42,8 +42,8 @@ spring:
         namespace: 459dc9a7-a450-4265-bb97-a7ca2ca9bf12
         extension-configs: # 读取多个配置文件
           - dataId: file-service.yml
-            group: dev
+            group: prod
             refresh: true    # 是否可以刷新
           - dataId: datasource.yml
-            group: dev
+            group: prod
             refresh: true

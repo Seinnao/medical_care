@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<uni-nav-bar dark :fixed="true" shadow background-color="#00aaff" status-bar title="首页" leftIcon="search" />
+		<uni-nav-bar dark :fixed="true" shadow background-color="#00aaff" status-bar title="首页" leftIcon="search" @clickLeft="search()"/>
 		<swiper class="card-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 			:autoplay="true" interval="5000" duration="500" @change="cardSwiper" indicator-color="#8799a3"
 			indicator-active-color="#0081ff">
@@ -95,6 +95,13 @@
 						animationDuration: 500,
 					});
 				}
+			},
+			search(){
+				uni.navigateTo({
+					url: '/pages/home/search',
+					animationType: 'slide-in-left',
+					animationDuration: 500,
+				});
 			},
 			DotStyle(e) {
 				this.dotStyle = e.detail.value
