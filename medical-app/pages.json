@@ -46,6 +46,7 @@
 			"style": {
 				"navigationBarTitleText": "uni-app",
 				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"enablePullDownRefresh":true,
 				"app-plus": {
 					"titleNView": false //手机app不显示标题栏
 				}
@@ -59,76 +60,104 @@
 					"titleNView": false //手机app不显示标题栏
 				}
 			}
-		},
-		{
-			"path": "pages/me/aboutMe",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
-			"path": "pages/me/changePassword",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
-			"path": "pages/me/perfectMsg",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
-			"path": "pages/home/consultation",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
-			"path": "pages/home/drugs",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
-			"path": "pages/home/drugsItem",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
-		},
-		{
-			"path": "pages/home/search",
-			"style": {
-				"navigationStyle": "custom", //微信小程序隐藏标题栏
-				"app-plus": {
-					"titleNView": false //手机app不显示标题栏
-				}
-			}
 		}
 	],
 	"subPackages": [{
 		"root": "pages_chat",
-		"pages": [
+		"pages": [{
+			"path": "chat/chat",
+			"style": {
+				"navigationStyle": "custom", //微信小程序隐藏标题栏
+				"app-plus": {
+					"titleNView": false //手机app不显示标题栏
+				}
+			}
+		}]
+	}, {
+		"root": "pages_home",
+		"pages": [{
+				"path": "home/forum/Post",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
 			{
-				"path": "chat/chat",
+				"path": "home/forum/forumList",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "home/consultation",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "home/drugs",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "home/drugsItem",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "me/aboutMe",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "me/changePassword",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "me/perfectMsg",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "me/setUp",
+				"style": {
+					"navigationStyle": "custom", //微信小程序隐藏标题栏
+					"app-plus": {
+						"titleNView": false //手机app不显示标题栏
+					}
+				}
+			},
+			{
+				"path": "home/forum/collection",
 				"style": {
 					"navigationStyle": "custom", //微信小程序隐藏标题栏
 					"app-plus": {

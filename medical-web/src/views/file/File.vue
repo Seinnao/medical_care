@@ -27,7 +27,7 @@
 
     </div>
     <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'"
-              @selection-change="handleSelectionChange">
+              @selection-change="handleSelectionChange" v-loading="loading">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="name" align="center" label="文件名称" show-overflow-tooltip></el-table-column>
       <el-table-column prop="type" align="center" label="文件类型" width="80"></el-table-column>
@@ -91,7 +91,8 @@ export default {
       multipleSelection: [],
       pageNum: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      loading:false
     }
   },
   created() {
@@ -99,6 +100,7 @@ export default {
   },
   methods: {
     load() {
+      this.loading = true
       this.http.get("file-service/file/page", {
         params: {
           pageNum: this.pageNum,
@@ -106,6 +108,7 @@ export default {
           name: this.name,
         }
       }).then(res => {
+        this.loading = false
         this.tableData = res.data.records
         this.total = res.data.total
       })

@@ -1,5 +1,5 @@
 <template>
-  <div class="total">
+  <div class="total" v-loading="loading">
     <el-row :gutter="10" class="header">
       <el-col :span="18"><el-input v-model="query" placeholder="请输入关键字" size="small" clearable></el-input></el-col>
       <el-col :span="4"><el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button></el-col>
@@ -51,11 +51,20 @@ export default {
       query:'',
       forumDate:[],
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+      loading:false,
+      toTwo:false
     }
   },
   methods:{
     load(){
+      if(!this.toTwo){
+        this.loading = true;
+        this.toTwo = true;
+      }else {
+        this.toTwo = false;
+        return;
+      }
       this.http.get("/care-service/forum/page", {
         params: {
           pageNum: this.pageNum,
@@ -68,9 +77,10 @@ export default {
         }else {
           this.pageNum = this.pageNum + 1;
         }
-       res.data.records.forEach(record =>{
-         this.forumDate.push(record)
-       })
+        res.data.records.forEach(record => {
+          this.forumDate.push(record)
+        })
+        this.loading = false
       })
     },
     publish(){

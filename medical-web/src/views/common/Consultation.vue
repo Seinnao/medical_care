@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <el-row :gutter="10">
      <el-col :span="6" v-for="item in doctors" :key="item.id" style="margin-top: 10px">
        <el-card>

@@ -4,7 +4,7 @@
       <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
       <el-button type="warning" @click="reset">刷新 <i class="el-icon-refresh"></i></el-button>
     </div>
-    <el-row :gutter="10" v-if="list.length > 0">
+    <el-row :gutter="10" v-if="list.length > 0" v-loading="loading">
      <el-col :span="6" v-for="item in list" :key="item.id" style="margin-bottom: 10px">
        <el-card class="box-card" body-style="padding:8px">
          <el-image :src="imagesUrl(item.url)" class="swiper_images"
@@ -45,6 +45,7 @@ export default {
       url:'',
       list:[],
       dialogFormVisible: false,
+      loading:false
     }
   },
   created() {
@@ -53,7 +54,9 @@ export default {
   },
   methods:{
     load() {
+      this.loading = true
       this.http.get("file-service/file/swiperImages").then(res => {
+        this.loading = false
         this.list = res.data
       })
     },

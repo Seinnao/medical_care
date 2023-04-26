@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 100%">
+  <el-container style="height: 100%" v-loading="loadingMain">
     <el-header height="40px" style="padding: 0 10px 0 0;">
       <div style="background-color: #409EFF;height: 100%">
         <h4 style="color: #fff;line-height:40px;text-align: center;">{{ to.nickname }}</h4>
@@ -23,7 +23,7 @@
           </el-row>
         </div>
       </el-aside>
-      <el-main style="padding: 0 10px 0 0;height: calc(100% - 40px)">
+      <el-main style="padding: 0 10px 0 0;height: calc(100% - 40px)" v-loading="loading">
         <div class="chat-content" v-if="selectId !== 0">
           <div class="chat-text" ref="chatText">
             <!-- recordContent 聊天记录数组-->
@@ -84,7 +84,9 @@ export default {
       recordContent: [],
       newMessage: '',
       selectId: 0,
-      chatList:[]
+      chatList:[],
+      loading:false,
+      loadingMain:false
     }
   },
   created() {
@@ -122,15 +124,19 @@ export default {
       }
     },
     load(){
+      this.loadingMain = true
       let name = this.user.nickname;
       this.http.get("/user-service/chat-people/"+name).then(res => {
         this.chatList = res.data
+        this.loadingMain = false
       })
     },
     loadMsg(){
+      this.loading = true;
       this.http.get(`/chat-service/chat-message/history/${this.user.nickname}/${this.to.nickname}`).then(res => {
         this.recordContent = res.data
         this.recordContent.reverse()
+        this.loading = false
       })
     },
     callback(data) {

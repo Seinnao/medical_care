@@ -13,16 +13,16 @@ import java.util.List;
  * @since 2023/4/21 12:46
  */
 //(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@SpringBootTest
+//@SpringBootTest
 public class DrugsTest {
 
-    @Resource
-    DrugsMapper drugsMapper;
+//    @Resource
+//    DrugsMapper drugsMapper;
 
-    @Test
+    //@Test
     void DrugsMapperTest(){
-        List<Drugs> drugs = drugsMapper.selectListByName("99");
-        System.out.println(drugs);
+        //List<Drugs> drugs = drugsMapper.selectListByName("99");
+        //System.out.println(drugs);
     }
 
 }

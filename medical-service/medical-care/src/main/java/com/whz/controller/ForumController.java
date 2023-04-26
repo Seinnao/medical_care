@@ -36,9 +36,9 @@ public class ForumController {
     @PostMapping
     public R save(@RequestBody Forum forum) {
         if(null == forum.getId()){
-            forum.setTime(new Date());
             forum.setSee(0);
         }
+        forum.setTime(new Date());
         forumService.saveOrUpdate(forum);
         return R.ok();
     }

@@ -1,11 +1,15 @@
 <template>
 	<viwe>
-		<uni-nav-bar dark :fixed="true" shadow background-color="#00aaff" status-bar title="交流问诊" />
-		<view class="cu-bar bg-white solid-bottom">
-			<view class="action">
-				<text class="cuIcon-title text-orange "></text> 我的消息
+		<uni-nav-bar dark :fixed="true" shadow background-color="#00aaff" status-bar title="交流问诊" leftIcon="chatboxes-filled"
+		left-text="去资讯" @clickLeft="realTime()"/>
+		
+		<view class="cu-bar bg-white margin-top-xs">
+			<view class="action sub-title">
+				<text class="text-xl text-bold text-blue text-shadow">医疗资讯</text>
+				<text class="text-ABC text-blue">Medical</text>
 			</view>
 		</view>
+		
 		<view class="cu-list menu-avatar">
 			<view class="cu-item" @click="openChat(item)" v-for="(item) in chatList" :key="item.id">
 				<view class="cu-avatar round lg"
@@ -45,6 +49,10 @@
 			console.log("show---chatList")
 			this.load()
 		},
+		onPullDownRefresh(){
+			console.log("36373")
+			this.load()
+		},
 		methods: {
 			openChat(data) {
 				console.log("打开聊天")
@@ -68,7 +76,15 @@
 				}
 				this.http.get("/user-service/chat-people/" + name).then(res => {
 					this.chatList = res.data
+					uni.stopPullDownRefresh();
 				})
+			},
+			realTime(){
+				uni.navigateTo({
+					url: '/pages_home/home/consultation',
+					animationType: 'slide-in-left',
+					animationDuration: 500,
+				});
 			}
 		}
 	}

@@ -1,11 +1,11 @@
 <template>
-  <div class="content">
+  <div class="content" v-loading="loading">
     <el-row :gutter="10" style="margin-bottom: 30px">
      <el-col :span="18"><el-input v-model="query" placeholder="您有什么问题可以问我!" size="small"></el-input></el-col>
       <el-col :span="6"><el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button></el-col>
     </el-row>
     <el-empty description="请搜索" v-if="sear"></el-empty>
-    <div v-for="(item,index) in dataList" :key="index">
+    <div v-for="(item,index) in dataList" :key="index" >
       <div v-if="item.type === 'drugs'" class="drugs">
         <el-card shadow="hover">
           <el-image :src="imagesUrl(item.data.imagesUrl)" class="images images_border" lazy fit="contain"/>
@@ -28,10 +28,10 @@
           <span class="title_all syName">{{item.data.name}}</span>
           <div class="text sy_introduce">介绍：{{item.data.introduce }}</div>
           <el-tag effect="dark" class="isUse">可用药品</el-tag>
-          <el-row :gutter="10" class="sy_drugs">
-            <el-col :span="8" v-for="(drugs,index) in item.data.drugs" :key="index" class="sy_drug">
+          <el-row :gutter="2" class="sy_drugs">
+            <el-col :span="3" v-for="(drugs,index) in item.data.drugs" :key="index" class="sy_drug">
               <el-image :src="imagesUrl(drugs.imagesUrl)" class="drugs_images images_border" lazy fit="contain"/>
-              <el-tag type="success" class="sy_drugs_name">{{drugs.name}}</el-tag>
+              <el-tag class="sy_drugs_name">{{drugs.name}}</el-tag><!--type="success"-->
             </el-col>
           </el-row>
         </el-card>
@@ -50,9 +50,9 @@
           </div>
           <el-tag effect="dark" class="isGin">参考药品</el-tag>
           <el-row :gutter="2" class="dis_drugs">
-            <el-col :span="4" v-for="(drugs,index) in item.data.drugs" :key="index" class="sy_drug">
+            <el-col :span="3" v-for="(drugs,index) in item.data.drugs" :key="index" class="sy_drug">
               <el-image :src="imagesUrl(drugs.imagesUrl)" class="drugs_images images_border" lazy fit="contain"/>
-              <el-tag type="success" class="sy_drugs_name">{{drugs.name}}</el-tag>
+              <el-tag class="sy_drugs_name">{{drugs.name}}</el-tag><!-- type="success"-->
             </el-col>
           </el-row>
         </el-card>
@@ -84,13 +84,15 @@ export default {
     return{
       query:'感冒999感冒灵颗和头疼',
       dataList:[],
-      sear:true
+      sear:true,
+      loading:false
     }
   },
   methods:{
     init(){
     },
     search() {
+      this.loading = true
       this.http.post('care-service/ai/search',{
         data:this.query
       }).then(res =>{
@@ -98,6 +100,7 @@ export default {
           this.dataList = res.data;
           this.sear = this.dataList.length <= 0;
         }
+        this.loading = false
       })
     },
     openArticle(item){
@@ -182,6 +185,7 @@ export default {
     .sy_drugs{
       position: absolute;
       top: 110px;
+      width: 100%;
       .sy_drug{
         display: inline;
         text-align: center;
@@ -218,6 +222,7 @@ export default {
     }
     .dis_drugs{
       position: absolute;
+      width: 100%;
       top: 136px;
       .sy_drug{
         display: inline;

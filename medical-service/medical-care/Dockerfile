@@ -21,4 +21,4 @@ ENV JAVA_OPTS="-server -Xms256m -Xmx256m"
 ENTRYPOINT java ${JAVA_OPTS} -Xshareclasses -Xquickstar -jar ./app.jar
 
 #暴露8080端口
-EXPOSE 8031
+EXPOSE 8034

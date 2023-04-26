@@ -24,9 +24,43 @@
 			</view>
 		</view>
 		
-		<view class="cu-bar bg-white">
-			<view class="action">
-				<text class="cuIcon-title text-orange"></text> Gif动画
+		
+		<view class="cu-bar bg-white margin-top-xs">
+			<view class="action sub-title">
+				<text class="text-xl text-bold text-blue text-shadow">论坛资讯</text>
+				<text class="text-ABC text-blue">information</text>
+			</view>
+		</view>
+		
+		
+		
+		<view class="cu-card case no-card margin-bottom-sm my-card"
+			v-for="(item) in forumDate" :key="item.id">
+			<view class="cu-item shadow" @tap="openPost(item.id)">
+				<view class="padding forum" style="padding-bottom: 0;">
+					<view class="title">
+						<view class="text-cut text-bold text-blue">{{item.title}}</view>
+					</view>
+					<view class="text-content padding-top-sm text-grey">{{item.outline}}</view>
+				</view>
+				<view class="cu-list menu-avatar">
+					<view class="cu-item">
+						<view class="cu-avatar round lg"
+							:style="'background-image:url('+imagesUrl(item.avatarUrl)+');'">
+						</view>
+						<view class="content flex-sub">
+							<view class="text-grey">{{item.nickname}}</view>
+							<view class="text-gray text-sm flex justify-between">
+								{{$calendar(item.time,false)}}
+								<view class="text-gray text-sm">
+									<text class="cuIcon-attentionfill margin-lr-xs"></text> {{item.see}}
+									<text class="cuIcon-favorfill margin-lr-xs"></text> {{ item.collection}}
+									<text class="cuIcon-messagefill margin-lr-xs"></text> {{ item.commentSum}}
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -40,32 +74,34 @@
 				keyword: '',
 				cardCur: 0,
 				swiperList: [],
+				forumDate: [],
 				dotStyle: false,
 				towerStart: 0,
 				direction: '',
-				categories: [{
-						cuIcon: 'hotfill',
-						color: 'red',
-						mid: '1',
-						name: '学习技术'
-					},
-					{
-						cuIcon: 'colorlens',
-						color: 'orange',
-						mid: '2',
-						name: '需求定制'
-					},
+				categories: [
 					{
 						cuIcon: 'baby',
 						color: 'yellow',
-						mid: '3',
+						mid: '1',
 						name: '药品查找'
 					},
 					{
 						cuIcon: 'message',
 						color: 'blue',
-						mid: '4',
+						mid: '2',
 						name: '资讯医生'
+					},
+					{
+						cuIcon: 'hotfill',
+						color: 'red',
+						mid: '3',
+						name: '医疗论坛'
+					},
+					{
+						cuIcon: 'colorlens',
+						color: 'orange',
+						mid: '4',
+						name: '我的收藏'
 					}
 				],
 			}
@@ -76,32 +112,56 @@
 				 this.TowerSwiper('swiperList');
 				 // 初始化towerSwiper 传已有的数组名即可
 			})
+			this.http.get("/care-service/forum/page",{
+				pageNum: 1,
+				pageSize: 8
+			}).then(res => {
+				this.forumDate = res.data.records
+			})
 		},
 		methods: {
 			goCategorieslist(e){
 				console.log(e.currentTarget.dataset.mid)
-				if (e.currentTarget.dataset.mid == 1 || e.currentTarget.dataset.mid == 2) {
-					
-				} else if (e.currentTarget.dataset.mid == 3) {
+				if (e.currentTarget.dataset.mid == 1) {
 					uni.navigateTo({
-						url: '/pages/home/drugs',
+						url: '/pages_home/home/drugs',
 						animationType: 'slide-in-left',
 						animationDuration: 500,
 					});
+				}else if(e.currentTarget.dataset.mid == 2){
+					uni.navigateTo({
+						url: '/pages_home/home/consultation',
+						animationType: 'slide-in-left',
+						animationDuration: 500,
+					});
+				} else if (e.currentTarget.dataset.mid == 3) {
+					uni.navigateTo({
+						url: '/pages_home/home/forum/forumList'
+					});
 				} else if (e.currentTarget.dataset.mid == 4) {
 					uni.navigateTo({
-						url: '/pages/home/consultation',
+						url: '/pages_home/home/forum/collection',
 						animationType: 'slide-in-left',
 						animationDuration: 500,
 					});
 				}
 			},
-			search(){
+			openPost(id){
+				//console.log("hhhhhh")
 				uni.navigateTo({
-					url: '/pages/home/search',
-					animationType: 'slide-in-left',
-					animationDuration: 500,
+					url: "/pages_home/home/forum/Post?id="+id
 				});
+			},
+			search(){
+				
+				uni.switchTab({
+					url: '/pages/index/medical'
+				});
+				// uni.navigateTo({
+				// 	url: '/pages/home/search',
+				// 	animationType: 'slide-in-left',
+				// 	animationDuration: 500,
+				// });
 			},
 			DotStyle(e) {
 				this.dotStyle = e.detail.value
@@ -161,7 +221,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.tower-swiper .tower-item {
 		transform: scale(calc(0.5 + var(--index) / 10));
 		margin-left: calc(var(--left) * 100upx - 150upx);
@@ -170,5 +230,19 @@
 
 	.content {
 		background-color: #ffffff;
+	}
+	
+	.forum {
+		font-size: 26rpx;
+	
+		.title {
+			font-size: 32rpx;
+		}
+	}
+	.my-card{
+		opacity: 1;
+	}
+	.my-card:hover{
+		opacity: 0.8;
 	}
 </style>

@@ -55,33 +55,31 @@
 		methods: {
 			aboutMe(){
 				uni.navigateTo({
-					url: '/pages/me/aboutMe',
+					url: '/pages_home/me/aboutMe',
 					animationType: 'slide-in-left',
 					animationDuration: 500,
 				});
 			},
 			changePass(){
 				uni.navigateTo({
-					url: '/pages/me/changePassword',
+					url: '/pages_home/me/changePassword',
 					animationType: 'slide-in-left',
 					animationDuration: 500,
 				});
 			},
 			perfectMsg(){
 				uni.navigateTo({
-					url: '/pages/me/perfectMsg',
+					url: '/pages_home/me/perfectMsg',
 					animationType: 'slide-in-left',
 					animationDuration: 500,
 				});
 			},
 			setUp(){
-				uni.setStorageSync("user",null)
-				uni.setStorageSync("token",null)
-				setTimeout(() => {
-					uni.reLaunch({
-						url: '/pages/login/index',
-					});
-				}, 500);
+				uni.navigateTo({
+					url: '/pages_home/me/setUp',
+					animationType: 'slide-in-left',
+					animationDuration: 500,
+				});
 			}
 		}
 	}

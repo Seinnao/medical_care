@@ -147,6 +147,7 @@ export default {
 }
 .foot{
   margin: 30px 10px;
-  height: 30px
+  height: 30px;
+  //width: 30px;
 }
 </style>

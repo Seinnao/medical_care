@@ -8,15 +8,19 @@ export function imagesUrl(url) {
 	return `${http.bastUrl}file-service/images/${url}`
 }
 
-export function calendar(time) {
-	return moment(time).calendar(null, {
-		sameDay: '[今天] hh:mm',
-		nextDay: '[明天] hh:mm',
-		nextWeek: 'dddd',
-		lastDay: '[昨天] hh:mm',
-		lastWeek: 'dddd',
-		sameElse: 'YYYY/MM/DD'
-	});
+export function calendar(time,isUse = true) {
+	if(isUse){
+		return moment(time).calendar(null, {
+			sameDay: '[今天] hh:mm',
+			nextDay: '[明天] hh:mm',
+			nextWeek: 'dddd',
+			lastDay: '[昨天] hh:mm',
+			lastWeek: 'dddd',
+			sameElse: 'YYYY/MM/DD'
+		});
+	}else{
+		return moment(time).calendar();
+	}
 }
 
 export function back() {
