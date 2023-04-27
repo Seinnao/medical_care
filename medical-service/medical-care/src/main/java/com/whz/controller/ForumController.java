@@ -97,5 +97,11 @@ public class ForumController {
         return R.ok().put(collection);
     }
 
+    @GetMapping("/myCollection/{userId}")
+    public R getMyCollection(@PathVariable String userId){
+        List<Forum> forums = forumService.getMyCollection(userId);
+        return R.ok().put(forums);
+    }
+
 
 }

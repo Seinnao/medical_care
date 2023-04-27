@@ -6,6 +6,7 @@ import com.whz.entity.Forum;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,4 +24,6 @@ public interface ForumMapper extends BaseMapper<Forum> {
     Forum queryById(@Param("id") Long id);
 
     Set<Forum> selectByTitle(@Param("title") String title);
+
+    List<Forum> getMyCollection(@Param("userId") String userId);
 }

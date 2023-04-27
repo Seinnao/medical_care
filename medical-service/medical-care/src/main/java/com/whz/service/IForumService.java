@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.whz.entity.Forum;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -19,4 +21,5 @@ public interface IForumService extends IService<Forum> {
 
     Forum queryById(Long id);
 
+    List<Forum> getMyCollection(String userId);
 }

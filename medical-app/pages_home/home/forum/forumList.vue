@@ -46,7 +46,6 @@
 	export default {
 		data() {
 			return {
-				loading: false,
 				forumDate: [],
 				pageNum: 1,
 				pageSize: 10,

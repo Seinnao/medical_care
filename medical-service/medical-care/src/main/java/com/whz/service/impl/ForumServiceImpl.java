@@ -8,6 +8,8 @@ import com.whz.service.IForumService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -27,5 +29,10 @@ public class ForumServiceImpl extends ServiceImpl<ForumMapper, Forum> implements
     @Override
     public Forum queryById(Long id) {
         return this.baseMapper.queryById(id);
+    }
+
+    @Override
+    public List<Forum> getMyCollection(String userId) {
+        return this.baseMapper.getMyCollection(userId);
     }
 }

@@ -44,4 +44,10 @@
         group by f.id
     </select>
 
+    <select id="getMyCollection" resultType="com.whz.entity.Forum">
+        <include refid="forumAll"></include>
+        where c.user_id = #{userId} and c.collection = 1
+        group by f.id
+    </select>
+
 </mapper>
